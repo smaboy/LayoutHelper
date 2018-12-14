@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 类名: MainActivity
@@ -33,6 +35,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
         left.setOnClickListener(this);
         right.setOnClickListener(this);
         center.setOnClickListener(this);
+
+        myflowlayout.setOnChildViewClickListener(new MyFlowLayout.OnChildViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+
+                try {
+                    TextView textView= (TextView) v;
+                    textView.setText("我被改变了");
+                } catch (Exception e) {
+                   Toast.makeText(MainActivity.this, "不是TextView类型不能做相关操作", Toast.LENGTH_SHORT).show();
+                }
+
+                Toast.makeText(MainActivity.this, "您点击了我"+position, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public boolean onLongClick(View v, int position) {
+                Toast.makeText(MainActivity.this, "您长按了我"+position, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
     }
 
     @Override

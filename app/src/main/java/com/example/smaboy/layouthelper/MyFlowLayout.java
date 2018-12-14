@@ -27,7 +27,16 @@ public class MyFlowLayout extends ViewGroup {
     public static final int LEFT = 0;
     public static final int CENTER = 1;
     public static final int RIGHT = 2;
-    private   int curGravityType = LEFT;
+    private int curGravityType = LEFT;
+
+
+    interface OnChildViewClickListener{//子view的点击监听
+        void onClick(View v, int position);
+
+        boolean onLongClick(View v, int position);
+    }
+
+    private OnChildViewClickListener onChildViewClickListener;
 
 
     public MyFlowLayout(Context context) {
@@ -111,6 +120,22 @@ public class MyFlowLayout extends ViewGroup {
                 width = Math.max(width, lineWidth);//判别当前行宽和已经设置的宽度谁大，取值大的重新设置为宽度
                 height += lineHeight;
             }
+
+            final int temp=i;
+            //设置子view的点击监听
+            childView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onChildViewClickListener.onClick(v, temp);
+                }
+            });
+            //设置子view的长按监听
+            childView.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return onChildViewClickListener.onLongClick(v, temp);
+                }
+            });
 
 
         }
@@ -234,18 +259,17 @@ public class MyFlowLayout extends ViewGroup {
                 //子view需要的宽
                 int mChildNeedWidth = mChild.getMeasuredWidth() + layoutParams.leftMargin + layoutParams.rightMargin;
 
-                int cl = left+layoutParams.leftMargin;
-                int ct = top+layoutParams.topMargin;
+                int cl = left + layoutParams.leftMargin;
+                int ct = top + layoutParams.topMargin;
                 int cr = cl + mChild.getMeasuredWidth();
                 int cb = ct + mChild.getMeasuredHeight();
 
-                Log.e("MyFlowLayout",cl+"--"+ct+"--"+cr+"--"+cb);
+                Log.e("MyFlowLayout", cl + "--" + ct + "--" + cr + "--" + cb);
                 //设置子view的布局
                 mChild.layout(cl, ct, cr, cb);
 
                 //设置完一个后left须增加
                 left += mChildNeedWidth;
-
 
             }
             //换行之后，top须增加
@@ -271,9 +295,23 @@ public class MyFlowLayout extends ViewGroup {
         return new MarginLayoutParams(p);
     }
 
+    /**
+     * 向外界提供设置子view对齐方式的方法
+     *
+     * @param curGravityType 对齐方式
+     */
     public void setGravity(int curGravityType) {
         this.curGravityType = curGravityType;
         requestLayout();
 
+    }
+
+    /**
+     * 向外界提供设置子view点击监听的方法
+     *
+     * @param onChildViewClickListener
+     */
+    public void setOnChildViewClickListener(OnChildViewClickListener onChildViewClickListener) {
+        this.onChildViewClickListener = onChildViewClickListener;
     }
 }
