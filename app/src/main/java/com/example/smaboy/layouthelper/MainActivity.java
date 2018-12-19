@@ -1,11 +1,13 @@
 package com.example.smaboy.layouthelper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.smaboy.layouthelper.view.MyFlowLayout;
 
 /**
  * 类名: MainActivity
@@ -19,6 +21,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button left;
     private Button right;
     private Button center;
+    private Button second;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +34,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         left = findViewById(R.id.left);
         right = findViewById(R.id.right);
         center = findViewById(R.id.center);
+        second = findViewById(R.id.second);
 
         left.setOnClickListener(this);
         right.setOnClickListener(this);
         center.setOnClickListener(this);
+        second.setOnClickListener(this);
 
         myflowlayout.setOnChildViewClickListener(new MyFlowLayout.OnChildViewClickListener() {
             @Override
@@ -72,6 +77,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.center :
                 myflowlayout.setGravity(MyFlowLayout.CENTER);
+                break;
+            case R.id.second :
+                startActivity(new Intent(MainActivity.this,SecondActivity.class));
                 break;
         }
 

@@ -1,4 +1,4 @@
-package com.example.smaboy.layouthelper;
+package com.example.smaboy.layouthelper.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -15,6 +15,10 @@ import java.util.List;
  * 类作用描述: 流式布局
  * 作者: Smaboy
  * 创建时间: 2018/11/30 11:22
+ *
+ * 实现原理: 通过测量获取容器的宽高，再通过测量模式判断是否为精确模式，是的话就将当前测量的宽高作为容器的宽高，否则则需要通过取测量子view进行判别；
+ *          当当前子view所需要的尺寸加上已使用的行尺寸大于容器测量宽度尺寸的时候进行换行处理，取当前行的子view中所需的最大高度尺寸作为行高。
+ *
  */
 public class MyFlowLayout extends ViewGroup {
 
@@ -30,7 +34,7 @@ public class MyFlowLayout extends ViewGroup {
     private int curGravityType = LEFT;
 
 
-    interface OnChildViewClickListener{//子view的点击监听
+    public interface OnChildViewClickListener{//子view的点击监听
         void onClick(View v, int position);
 
         boolean onLongClick(View v, int position);
@@ -309,7 +313,7 @@ public class MyFlowLayout extends ViewGroup {
     /**
      * 向外界提供设置子view点击监听的方法
      *
-     * @param onChildViewClickListener
+     * @param onChildViewClickListener 监听器
      */
     public void setOnChildViewClickListener(OnChildViewClickListener onChildViewClickListener) {
         this.onChildViewClickListener = onChildViewClickListener;

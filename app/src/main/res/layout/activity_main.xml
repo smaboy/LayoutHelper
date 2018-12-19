@@ -8,7 +8,7 @@
         android:orientation="vertical">
 
 
-    <com.example.smaboy.layouthelper.MyFlowLayout
+    <com.example.smaboy.layouthelper.view.MyFlowLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/myflowlayout">
@@ -58,7 +58,7 @@
                 android:text="你好啊"/>
 
 
-    </com.example.smaboy.layouthelper.MyFlowLayout>
+    </com.example.smaboy.layouthelper.view.MyFlowLayout>
 
     <com.example.smaboy.layouthelper.FlowLayout
             android:layout_width="wrap_content"
@@ -116,6 +116,10 @@
             android:layout_height="wrap_content"
             android:text="居中对齐"
             android:id="@+id/center"/>
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="进入第二页面"
+            android:id="@+id/second"/>
 
 
 </LinearLayout>
