@@ -18,48 +18,52 @@ import com.example.smaboy.layouthelper.R;
  */
 public class QuickIndexView extends LinearLayout {
     private Context context;
+    private RecyclerView recyclerView;
+    private TextView tv_notice;
+    private QuicklIndexBar quickIndex;
 
     public QuickIndexView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
-    public QuickIndexView(Context context,  AttributeSet attrs) {
-        this(context, attrs,0);
+    public QuickIndexView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
     public QuickIndexView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        this.context=context;
+        this.context = context;
 
         init();
     }
 
     private void init() {
-        View inflate = LayoutInflater.from(context).inflate(R.layout.quick_index_view, this,false);
+        View inflate = LayoutInflater.from(context).inflate(R.layout.quick_index_view, this, false);
 
         initView(inflate);
-
 
 
         addView(inflate);
     }
 
     /**
-     *初始化view
+     * 初始化view
      *
      * @param inflate view
      */
     private void initView(View inflate) {
 
-        RecyclerView recyclerView = inflate.findViewById(R.id.recycler);
-        final TextView tv_notice = inflate.findViewById(R.id.tv_notice);
-        QuicklIndexBar quickIndex = inflate.findViewById(R.id.quickIndex);
+        recyclerView = inflate.findViewById(R.id.recycler);
+        tv_notice = inflate.findViewById(R.id.tv_notice);
+        quickIndex = inflate.findViewById(R.id.quickIndex);
 
         //设置索引数据
-        quickIndex.setData(new String[]{"☆","A", "B", "C", "D"
+        quickIndex.setData(new String[]{"☆", "A", "B", "C", "D"
                 , "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-                "U", "V", "W", "X", "Y", "Z","#"});
+                "U", "V", "W", "X", "Y", "Z", "#"});
+//        quickIndex.setData(new String[]{ "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+//                "U", "V", "W", "X", "Y", "Z", "#"});
 
         //设置索引监听
         quickIndex.setOnFocusChangeStatusListener(new QuicklIndexBar.OnFocusChangeStatusListener() {
@@ -72,7 +76,7 @@ public class QuickIndexView extends LinearLayout {
             @Override
             public void onScroll(int index, String indexString) {
 
-                if(tv_notice.getVisibility()!=View.VISIBLE) {
+                if (tv_notice.getVisibility() != View.VISIBLE) {
                     tv_notice.setVisibility(View.VISIBLE);
                 }
                 tv_notice.setText(indexString);
@@ -85,14 +89,13 @@ public class QuickIndexView extends LinearLayout {
                     public void run() {
                         tv_notice.setVisibility(View.GONE);
                     }
-                },1000);
+                }, 1000);
 
             }
         });
 
 
         //设置内容数据
-
 
 
     }

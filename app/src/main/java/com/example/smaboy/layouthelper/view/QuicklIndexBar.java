@@ -16,6 +16,8 @@ import java.util.List;
 /**
  * 类名: QuicklIndexBar
  * 类作用描述: 快速索引
+ * 增加需求 ： 考虑到我们在使用过程中，索引可能比较少，这是我们需要对这个进行居中排列，
+ * 这边我们可以设置默认为26，大于等于26的时候，我们设置充满高度，小于的时候进行居中排列
  * 作者: Smaboy
  * 创建时间: 2018/12/14 16:21
  */
@@ -33,8 +35,9 @@ public class QuicklIndexBar extends View {
     private List<Float> childNeedHeights = new ArrayList<>();//存储每个字符顶部的坐标值
     private int childMaxWidth;//字符最大宽度
     private int childMaxHeight;//字符最大高度
-    private int textSize=40;//字体大小默认40
-    private int textColor=Color.BLACK;//字体大小默认40
+    private int textSize = 40;//字体大小默认40
+    private int textColor = Color.BLACK;//字体大小默认40
+    private int defaultCount = 26;
 
     //定义接口对象
     private OnFocusChangeStatusListener onFocusChangeStatusListener;
@@ -43,14 +46,16 @@ public class QuicklIndexBar extends View {
     public interface OnFocusChangeStatusListener {
         /**
          * 点击监听
-         * @param index 位置
+         *
+         * @param index       位置
          * @param indexString 内容
          */
         void onItemClick(int index, String indexString);
 
         /**
-         *  滑动监听
-         * @param index 当前滑动到的位置
+         * 滑动监听
+         *
+         * @param index       当前滑动到的位置
          * @param indexString 当前滑动到的位置的内容
          */
         void onScroll(int index, String indexString);
@@ -72,6 +77,7 @@ public class QuicklIndexBar extends View {
 
     /**
      * 设置数据集
+     *
      * @param data 数据集
      */
     public void setData(String[] data) {
@@ -129,23 +135,25 @@ public class QuicklIndexBar extends View {
          */
 
         childMaxWidth = measuredWidth;//每个子view最大的宽度
-        childMaxHeight = (measuredHeight - getPaddingTop() - getPaddingBottom()) / data.length;//每个子view最大高度
+        childMaxHeight =  data.length>=defaultCount ? (measuredHeight - getPaddingTop() - getPaddingBottom()) / data.length : (measuredHeight - getPaddingTop() - getPaddingBottom()) /defaultCount;//每个子view最大高度
 
         //开始绘制view的布局
         for (int i = 0; i < data.length; i++) {
+
             //水平居中
             float value1 = paint.measureText(data[i]);//测量文字的宽度
             float startX = childMaxWidth / 2 - value1 / 2;
             //竖值居中,绘制文字从文字左下角开始,因此"+"
             Paint.FontMetrics fontMetrics = paint.getFontMetrics();
             float value2 = Math.abs((fontMetrics.bottom - fontMetrics.top));
-            float startY = childMaxHeight / 2 + value2 / 2;
+            float startY = data.length>=defaultCount ? childMaxHeight / 2 + value2 / 2 :(measuredHeight-childMaxHeight*data.length)/2+childMaxHeight / 2 + value2 / 2;
 
             //开始绘制
             canvas.drawText(data[i], startX, startY + childMaxHeight * i, paint);
 
             //将每个view的顶部位置存储起来
             childNeedHeights.add((float) (childMaxHeight * i));
+
 
         }
 
@@ -166,13 +174,23 @@ public class QuicklIndexBar extends View {
                 float x = event.getX();
                 float y = event.getY();
 
-                Log.e("TAG", "触发ACTION_DOWN事件了--x=="+x+"--y=="+y);
+                Log.e("TAG", "触发ACTION_DOWN事件了--x==" + x + "--y==" + y);
+                int index;
                 //判断点击的位置在那个字符区域
-                int index = (int) (y / childMaxHeight);
+                if(data.length>=defaultCount ) {
+
+                    index = (int) (y / childMaxHeight);
+
+                }else {
+                    if((y-(measuredHeight-childMaxHeight*data.length)/2)<0) {//防止index在-1和0之间取值为0
+                        return true;
+                    }
+                    index=(int) ((y-(measuredHeight-childMaxHeight*data.length)/2) / childMaxHeight);
+                }
 
                 //防止数组越界，这里我们需做一个处理
-                if (index >= data.length) {
-                    index = data.length - 1;
+                if(index>=data.length||index<0) {
+                    return true;
                 }
                 //设置监听回调
                 if (onFocusChangeStatusListener != null) {
@@ -187,27 +205,37 @@ public class QuicklIndexBar extends View {
                 //获取移动时点击的坐标
                 float x1 = event.getX();
                 float y1 = event.getY();
-                Log.e("TAG", "触发ACTION_MOVE事件了--x=="+x1+"--y=="+y1);
-                //判断移动位置在那个字符区域
-                int index1 = (int) (y1 / childMaxHeight);
+                Log.e("TAG", "触发ACTION_MOVE事件了--x==" + x1 + "--y==" + y1);
+                int index1;
+                //判断点击的位置在那个字符区域
+                if(data.length>=defaultCount ) {
+
+                    index1 = (int) (y1 / childMaxHeight);
+
+                }else {
+                    if((y1-(measuredHeight-childMaxHeight*data.length)/2)<0) {//防止index在-1和0之间取值为0
+                        return true;
+                    }
+                    index1=(int) ((y1-(measuredHeight-childMaxHeight*data.length)/2) / childMaxHeight);
+                }
 
                 //防止数组越界，这里我们需做一个处理
-                if (index1 >= data.length) {
-                    index1 = data.length - 1;
+                if(index1>=data.length||index1<0) {
+                    return true;
                 }
                 //设置监听回调
                 if (onFocusChangeStatusListener != null) {
                     onFocusChangeStatusListener.onScroll(index1, data[index1]);
                 }
 
-                Log.e("TAG", "滑动中的位置"+"index1=" + index1 + "--" + data[index1]);
+                Log.e("TAG", "滑动中的位置" + "index1=" + index1 + "--" + data[index1]);
 
                 return true;
             case MotionEvent.ACTION_UP:
                 //获取移动时点击的坐标
                 float x2 = event.getX();
                 float y2 = event.getY();
-                Log.e("TAG", "触发ACTION_POINTER_UP事件了--x=="+x2+"--y=="+y2);
+                Log.e("TAG", "触发ACTION_POINTER_UP事件了--x==" + x2 + "--y==" + y2);
                 //设置监听回调
                 if (onFocusChangeStatusListener != null) {
                     onFocusChangeStatusListener.onLoseFoucus();
@@ -222,8 +250,6 @@ public class QuicklIndexBar extends View {
 
         return super.onTouchEvent(event);
     }
-
-
 
 
 }
