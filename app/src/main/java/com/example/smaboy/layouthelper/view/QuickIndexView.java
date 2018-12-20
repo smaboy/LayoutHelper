@@ -2,14 +2,24 @@ package com.example.smaboy.layouthelper.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.MainThread;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
 import com.example.smaboy.layouthelper.Entity.UserInfoGroup;
 import com.example.smaboy.layouthelper.R;
+import com.example.smaboy.layouthelper.activity.QuickActivity;
+import com.example.smaboy.layouthelper.adapter.MyRecyclerViewAdapter;
+import com.example.smaboy.layouthelper.util.DataUtils;
 
 /**
  * 类名: QuickIndexView
@@ -22,6 +32,7 @@ public class QuickIndexView extends LinearLayout {
     private RecyclerView recyclerView;
     private TextView tv_notice;
     private QuicklIndexBar quickIndex;
+    private UserInfoGroup userInfoGroup;
 
     public QuickIndexView(Context context) {
         this(context, null);
@@ -30,6 +41,7 @@ public class QuickIndexView extends LinearLayout {
     public QuickIndexView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+    private Handler handler=new Handler(Looper.getMainLooper());
 
     public QuickIndexView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -52,9 +64,33 @@ public class QuickIndexView extends LinearLayout {
 
     private void initData() {
         //制作假数据
-        UserInfoGroup userInfoGroup = new UserInfoGroup();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String json = DataUtils.getJsonFromAsset(getContext(), "userinfo.json");
+                Log.e("TA", json);
+                userInfoGroup = JSONObject.parseObject(json, UserInfoGroup.class);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setContentData();
+
+                    }
+                });
+            }
+        }).start();
+
      
 
+    }
+
+    private void setContentData() {
+        if(userInfoGroup==null) {
+            return;
+        }
+        //设置数据
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new MyRecyclerViewAdapter(getContext(),userInfoGroup));
     }
 
     /**

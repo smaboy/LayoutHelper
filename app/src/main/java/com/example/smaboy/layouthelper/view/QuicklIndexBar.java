@@ -337,7 +337,11 @@ public class QuicklIndexBar extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
+        float mx = event.getX();
+        //该判断用于处理当触点在默认字符排列的左侧时，特别实在爆炸模式下，对触摸事件的消费，该处理能有效控制触摸事件只能在字符所在的 区域消费，而不包含爆炸模式下等超过字符列的区域
+        if(mx<measuredWidth-textNeedMaxWidth) {
+            return false;
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
 

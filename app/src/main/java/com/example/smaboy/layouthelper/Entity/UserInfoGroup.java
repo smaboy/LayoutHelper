@@ -53,6 +53,14 @@ public class UserInfoGroup {
         private String grouptitle;
         private List<UsersBean> users;
 
+        @Override
+        public String toString() {
+            return "UserinfogroupBean{" +
+                    "grouptitle='" + grouptitle + '\'' +
+                    ", users=" + users +
+                    '}';
+        }
+
         public String getGrouptitle() {
             return grouptitle;
         }
@@ -103,6 +111,24 @@ public class UserInfoGroup {
             public void setPhone(long phone) {
                 this.phone = phone;
             }
+
+            @Override
+            public String toString() {
+                return "UsersBean{" +
+                        "name='" + name + '\'' +
+                        ", age=" + age +
+                        ", phone=" + phone +
+                        '}';
+            }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfoGroup{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", userinfogroup=" + userinfogroup +
+                '}';
     }
 }
