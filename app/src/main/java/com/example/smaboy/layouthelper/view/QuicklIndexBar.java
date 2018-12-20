@@ -26,8 +26,11 @@ public class QuicklIndexBar extends View {
 
 
 
-    private int selectedType=0;//快速索引字符选中样式（为默认模式,即不做任何处理）
-    private Context context;
+    public static final int DEFAULT_SELECTED_TYPE=0;//默认样式
+    public static final int ENLARGE_SELECTED_TYPE=1;//放大样式
+    public static final int BURST_SELECTED_TYPE=2;//爆炸样式
+    private int selectedType=BURST_SELECTED_TYPE;//快速索引字符选中样式（为默认模式,即不做任何处理）
+    private Context context;//上下文
 
     private Paint paint;
 
@@ -37,12 +40,14 @@ public class QuicklIndexBar extends View {
     private int measuredWidth;
     private int measuredHeight;
     private List<Float> childNeedHeights = new ArrayList<>();//存储每个字符顶部的坐标值
-    private int childMaxWidth;//字符最大宽度
-    private int childMaxHeight;//字符最大高度
+    private int childMaxWidth;//字符能使用的最大宽度
+    private int childMaxHeight;//字符能使用的最大高度
     private int textSize = 40;//字体大小默认40
     private int selectedPoint = -1;//选中的位置
     private int textColor = Color.BLACK;//字体大小默认40
     private int defaultCount = 26;
+
+    private int textNeedMaxWidth;//字符数组中，需要最大的宽度
 
     //定义接口对象
     private OnFocusChangeStatusListener onFocusChangeStatusListener;
@@ -119,6 +124,22 @@ public class QuicklIndexBar extends View {
 
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthSize=MeasureSpec.getSize(widthMeasureSpec);
+        int widthMode=MeasureSpec.getMode(widthMeasureSpec);
+        int heightSize=MeasureSpec.getSize(heightMeasureSpec);
+        int heightMode=MeasureSpec.getMode(heightMeasureSpec);
+
+
+        //这里我们算出数组中最大的文字宽度
+        for(int i = 0; i < data.length; i++) {
+            float value = paint.measureText(data[i]);//测量文字的宽度
+            textNeedMaxWidth= (int) Math.max(textNeedMaxWidth,value);
+        }
+
+    }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -145,13 +166,60 @@ public class QuicklIndexBar extends View {
         //开始绘制view的布局
         for (int i = 0; i < data.length; i++) {
 
+            switch (selectedType) {
+                case DEFAULT_SELECTED_TYPE ://默认模式
+                    drawDefaultType(canvas, i);
+                    break;
+                case ENLARGE_SELECTED_TYPE ://放大模式
+
+                    break;
+                case BURST_SELECTED_TYPE ://爆炸模式
+                    setBurstType(canvas, i);
+
+
+                    break;
+            }
+
+
+
+        }
+
+
+    }
+
+    private void setBurstType(Canvas canvas, int i) {
+        //爆炸模式和默认模式的区别在于，当用户触发点击或者滑动事件后，当前所处位置的字符应该向外呈圆弧状显示，且所处位置的字符应该为圆弧的最外围
+        if(selectedPoint<0) {//当前没有选中的字符
+            drawDefaultType(canvas,i);
+        }else {
+            //此情况下，我们需要把对应的字符的上下两个字符，共五个字符，位置绘制成圆弧状（当下上两字符位置超过数组上下限做特殊处理）
+            int a=selectedPoint-1;
+            int b=selectedPoint;
+            int c=selectedPoint+1;
+            //圆弧半径为我们最大字符高度的两倍
+            int r=childMaxHeight*2;
+
             //水平居中
+//            float value1 = paint.measureText(data[i]);//测量文字的宽度
+//            float startX = childMaxWidth / 2 - value1 / 2;
+            //水平靠右对齐
             float value1 = paint.measureText(data[i]);//测量文字的宽度
-            float startX = childMaxWidth / 2 - value1 / 2;
+//            float startX = childMaxWidth  - value1;
+            float startX =  (float) (childMaxWidth-textNeedMaxWidth*0.5-value1*0.5-getPaddingEnd());
             //竖值居中,绘制文字从文字左下角开始,因此"+"
             Paint.FontMetrics fontMetrics = paint.getFontMetrics();
             float value2 = Math.abs((fontMetrics.bottom - fontMetrics.top));
-            float startY = data.length>=defaultCount ? childMaxHeight / 2 + value2 / 2 :(measuredHeight-childMaxHeight*data.length)/2+childMaxHeight / 2 + value2 / 2;
+            float startY = data.length>=defaultCount ? getPaddingTop()+childMaxHeight / 2 + value2 / 2 :(measuredHeight-childMaxHeight*data.length)/2+childMaxHeight / 2 + value2 / 2;
+            if(a>=0&&i==a) {//在字符数组的范围内
+                startX-= (float) Math.cos(Math.PI/4)*r;
+
+            }
+            if(i==b) {//在字符数组的范围内
+                startX-= r;
+            }
+            if(c<=data.length-1&&i==c) {//在字符数组的范围内
+                startX-= (float) Math.cos(Math.PI/4)*r;
+            }
 
             //开始绘制
             canvas.drawText(data[i], startX, startY + childMaxHeight * i, paint);
@@ -159,10 +227,26 @@ public class QuicklIndexBar extends View {
             //将每个view的顶部位置存储起来
             childNeedHeights.add((float) (childMaxHeight * i));
 
-
         }
+    }
 
+    private void drawDefaultType(Canvas canvas, int i) {
+//        //水平居中
+//        float value1 = paint.measureText(data[i]);//测量文字的宽度
+//        float startX = childMaxWidth / 2 - value1 / 2;
+        //水平靠右对齐
+        float value1 = paint.measureText(data[i]);//测量文字的宽度
+        float startX = (float) (childMaxWidth-textNeedMaxWidth*0.5-value1*0.5-getPaddingEnd());
+        //竖值居中,绘制文字从文字左下角开始,因此"+"
+        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+        float value2 = Math.abs((fontMetrics.bottom - fontMetrics.top));
+        float startY = data.length>=defaultCount ? getPaddingTop()+childMaxHeight / 2 + value2 / 2 :(measuredHeight-childMaxHeight*data.length)/2+childMaxHeight / 2 + value2 / 2;
 
+        //开始绘制
+        canvas.drawText(data[i], startX, startY + childMaxHeight * i, paint);
+
+        //将每个view的顶部位置存储起来
+        childNeedHeights.add((float) (childMaxHeight * i));
     }
 
 
@@ -207,6 +291,7 @@ public class QuicklIndexBar extends View {
                 }
 
                 Toast.makeText(context, "index=" + index + "--" + data[index], Toast.LENGTH_SHORT).show();
+                invalidate();//刷新
 
                 return true;
 
@@ -243,6 +328,8 @@ public class QuicklIndexBar extends View {
 
                 Log.e("TAG", "滑动中的位置" + "index1=" + index1 + "--" + data[index1]);
 
+                invalidate();//刷新
+
                 return true;
             case MotionEvent.ACTION_UP:
                 //获取移动时点击的坐标
@@ -260,7 +347,7 @@ public class QuicklIndexBar extends View {
                 //记录此时的位置
                 selectedPoint=-1;
 
-                invalidate();
+                invalidate();//刷新
                 return true;
         }
 
