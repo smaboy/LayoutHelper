@@ -121,6 +121,20 @@ public class QuicklIndexBar extends View {
         paint.setTextSize(textSize);//文字大小
         paint.setStyle(Paint.Style.FILL);//填充
 
+        //处理不同样式的背景
+        switch (selectedType) {
+            case DEFAULT_SELECTED_TYPE ://默认模式
+                break;
+            case ENLARGE_SELECTED_TYPE ://放大模式
+
+                break;
+            case BURST_SELECTED_TYPE ://爆炸模式
+                //爆炸模式下我们最好将背景设置为透明色
+                setBackgroundColor(Color.TRANSPARENT);
+
+                break;
+        }
+
 
     }
 
@@ -162,19 +176,7 @@ public class QuicklIndexBar extends View {
         measuredWidth = getMeasuredWidth();//获取容器的宽度
         measuredHeight = getMeasuredHeight();//获取容器的高度
 
-        //处理不同样式的背景
-        switch (selectedType) {
-            case DEFAULT_SELECTED_TYPE ://默认模式
-                break;
-            case ENLARGE_SELECTED_TYPE ://放大模式
 
-                break;
-            case BURST_SELECTED_TYPE ://爆炸模式
-               //爆炸模式下我们最好将背景设置为透明色
-                setBackgroundColor(Color.TRANSPARENT);
-
-                break;
-        }
     }
 
     @Override
@@ -372,7 +374,6 @@ public class QuicklIndexBar extends View {
 
                 return true;
             case MotionEvent.ACTION_UP:
-
 
                 //获取移动时点击的坐标
                 float x2 = event.getX();
