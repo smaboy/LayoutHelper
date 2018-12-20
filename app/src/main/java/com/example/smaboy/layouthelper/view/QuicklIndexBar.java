@@ -16,13 +16,17 @@ import java.util.List;
 /**
  * 类名: QuicklIndexBar
  * 类作用描述: 快速索引
- * 增加需求 ： 考虑到我们在使用过程中，索引可能比较少，这是我们需要对这个进行居中排列，
+ * 增加需求 ： 1.考虑到我们在使用过程中，索引可能比较少，这是我们需要对这个进行居中排列，
  * 这边我们可以设置默认为26，大于等于26的时候，我们设置充满高度，小于的时候进行居中排列
+ *            2.准备做一个在该控件里面的字符被选中的时候，文字呈现爆炸般展开
  * 作者: Smaboy
  * 创建时间: 2018/12/14 16:21
  */
 public class QuicklIndexBar extends View {
 
+
+
+    private int selectedType=0;//快速索引字符选中样式（为默认模式,即不做任何处理）
     private Context context;
 
     private Paint paint;
@@ -36,6 +40,7 @@ public class QuicklIndexBar extends View {
     private int childMaxWidth;//字符最大宽度
     private int childMaxHeight;//字符最大高度
     private int textSize = 40;//字体大小默认40
+    private int selectedPoint = -1;//选中的位置
     private int textColor = Color.BLACK;//字体大小默认40
     private int defaultCount = 26;
 
@@ -104,7 +109,7 @@ public class QuicklIndexBar extends View {
     private void init() {
 
 
-        //初始化画笔
+        //初始化画笔(默认画笔)
         paint = new Paint();//画笔
         paint.setAntiAlias(true);//抗锯齿
         paint.setColor(textColor);//颜色
@@ -192,6 +197,10 @@ public class QuicklIndexBar extends View {
                 if(index>=data.length||index<0) {
                     return true;
                 }
+
+                //记录此时的位置
+                selectedPoint=index;
+
                 //设置监听回调
                 if (onFocusChangeStatusListener != null) {
                     onFocusChangeStatusListener.onItemClick(index, data[index]);
@@ -223,6 +232,10 @@ public class QuicklIndexBar extends View {
                 if(index1>=data.length||index1<0) {
                     return true;
                 }
+
+                //记录此时的位置
+                selectedPoint=index1;
+
                 //设置监听回调
                 if (onFocusChangeStatusListener != null) {
                     onFocusChangeStatusListener.onScroll(index1, data[index1]);
@@ -243,8 +256,11 @@ public class QuicklIndexBar extends View {
 
                 Log.e("TAG", "手指离开了");
 
-                //设置背景
-//                setBackgroundColor(Color.WHITE);
+
+                //记录此时的位置
+                selectedPoint=-1;
+
+                invalidate();
                 return true;
         }
 

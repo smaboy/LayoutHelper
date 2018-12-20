@@ -41,10 +41,17 @@ public class QuickIndexView extends LinearLayout {
     private void init() {
         View inflate = LayoutInflater.from(context).inflate(R.layout.quick_index_view, this, false);
 
+        initData();
+
         initView(inflate);
 
 
         addView(inflate);
+    }
+
+    private void initData() {
+        //制作假数据
+
     }
 
     /**
@@ -71,6 +78,8 @@ public class QuickIndexView extends LinearLayout {
             public void onItemClick(int index, String indexString) {
                 tv_notice.setText(indexString);
                 tv_notice.setVisibility(View.VISIBLE);
+
+//                quickIndex.setBackgroundColor(Color.RED);
             }
 
             @Override
@@ -80,6 +89,8 @@ public class QuickIndexView extends LinearLayout {
                     tv_notice.setVisibility(View.VISIBLE);
                 }
                 tv_notice.setText(indexString);
+
+
             }
 
             @Override
@@ -90,12 +101,14 @@ public class QuickIndexView extends LinearLayout {
                         tv_notice.setVisibility(View.GONE);
                     }
                 }, 1000);
+//                quickIndex.setBackgroundColor(Color.WHITE);
 
             }
         });
 
 
         //设置内容数据
+
 
 
     }
