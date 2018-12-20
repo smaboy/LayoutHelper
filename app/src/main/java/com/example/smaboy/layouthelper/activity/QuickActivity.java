@@ -1,7 +1,8 @@
-package com.example.smaboy.layouthelper;
+package com.example.smaboy.layouthelper.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import com.example.smaboy.layouthelper.R;
 
 /**
  * 类名: SecondActivity
@@ -9,12 +10,12 @@ import android.os.Bundle;
  * 作者: Smaboy
  * 创建时间: 2018/12/14 15:43
  */
-public class SecondActivity extends Activity {
+public class QuickActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.activity_quick);
     }
 }

@@ -69,11 +69,11 @@ public class QuickIndexView extends LinearLayout {
         quickIndex = inflate.findViewById(R.id.quickIndex);
 
         //设置索引数据
-        quickIndex.setData(new String[]{"☆", "A", "B", "C", "D"
-                , "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-                "U", "V", "W", "X", "Y", "Z", "#"});
-//        quickIndex.setData(new String[]{ "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+//        quickIndex.setData(new String[]{"☆", "A", "B", "C", "D"
+//                , "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
 //                "U", "V", "W", "X", "Y", "Z", "#"});
+        quickIndex.setData(new String[]{ "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+                "U", "V", "W", "X", "Y", "Z", "#"});
 
         //设置索引监听
         quickIndex.setOnFocusChangeStatusListener(new QuicklIndexBar.OnFocusChangeStatusListener() {

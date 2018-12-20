@@ -230,6 +230,8 @@ public class QuicklIndexBar extends View {
             //设置选中的文字的大小
             if(i==b) {//在字符数组的范围内
                 paint.setTextSize(textSize+20);
+                requestLayout();//因为字号发生变化了，所以我们的布局也需要发生变化以适应我们的字符展示
+
             }else {
                 paint.setTextSize(textSize);
             }
@@ -247,6 +249,7 @@ public class QuicklIndexBar extends View {
             float startY = data.length>=defaultCount ? getPaddingTop()+childMaxHeight / 2 + value2 / 2 :(measuredHeight-childMaxHeight*data.length)/2+childMaxHeight / 2 + value2 / 2;
             if(a>=0&&i==a) {//在字符数组的范围内
                 startX-= (float) Math.cos(Math.PI/4)*r;
+                startY-=(r*Math.sin(Math.PI/4)-r*0.5);
 
             }
             if(i==b) {//在字符数组的范围内
@@ -254,6 +257,7 @@ public class QuicklIndexBar extends View {
             }
             if(c<=data.length-1&&i==c) {//在字符数组的范围内
                 startX-= (float) Math.cos(Math.PI/4)*r;
+                startY+=(r*Math.sin(Math.PI/4)-r*0.5);
             }
 
             //开始绘制

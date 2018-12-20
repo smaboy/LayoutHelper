@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B4000000"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_margin="25dp"
+        android:background="@drawable/rect_round_white_bg"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_launcher"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="13dp"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="账号已在其他设备登录"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="56dp"
+            />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="您的万里行会员账号于09-10,12:23:34在另一台设备上登录,如果不是您本人操作，您的登录密码可能已被泄露，请及时修改。"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginBottom="35dp"
+            android:layout_below="@id/title"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content"
+            android:background="@drawable/rect_round_gray_white_bg"
+            >
+
+            <TextView
+                android:id="@+id/login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="登录"
+                android:textSize="15sp"
+                android:textColor="#ffffff"
+                android:layout_marginStart="28dp"
+                android:layout_marginEnd="28dp"
+                android:layout_marginBottom="18dp"
+                android:layout_marginTop="17dp"
+                android:padding="10dp"
+                android:gravity="center"
+                android:background="#1A3B64"
+                />
+
+        </FrameLayout>
+
+
+
+    </RelativeLayout>
+
+</FrameLayout>

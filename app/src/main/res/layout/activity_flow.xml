@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.MainActivity"
+        android:orientation="vertical">
+
+
+    <com.example.smaboy.layouthelper.view.MyFlowLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/myflowlayout">
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="你好"
+                android:textColor="#000"
+                android:background="@drawable/shaped"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+        />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shaped"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:text="你好啊"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我是按钮"
+        />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shaped"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:text="你好啊haha"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shaped"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:text="你好啊"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shaped"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:text="你好啊"/>
+
+
+    </com.example.smaboy.layouthelper.view.MyFlowLayout>
+
+
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="左对齐"
+            android:id="@+id/left"/>
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="右对齐"
+            android:id="@+id/right"/>
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="居中对齐"
+            android:id="@+id/center"/>
+
+
+</LinearLayout>
