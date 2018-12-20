@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.example.smaboy.layouthelper.Entity.UserInfoGroup;
 import com.example.smaboy.layouthelper.R;
 
 /**
@@ -51,6 +52,8 @@ public class QuickIndexView extends LinearLayout {
 
     private void initData() {
         //制作假数据
+        UserInfoGroup userInfoGroup = new UserInfoGroup();
+     
 
     }
 

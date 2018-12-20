@@ -132,12 +132,27 @@ public class QuicklIndexBar extends View {
         int heightSize=MeasureSpec.getSize(heightMeasureSpec);
         int heightMode=MeasureSpec.getMode(heightMeasureSpec);
 
+        if(data.length<=0) {
+            return;
+        }
+
+
+        int width;
+        //每个数组的字符能使用的最大高度
+
+        int h =  data.length>=defaultCount ? (heightSize - getPaddingTop() - getPaddingBottom()) / data.length : (heightSize - getPaddingTop() - getPaddingBottom()) /defaultCount;//每个子view最大高度
+
+
 
         //这里我们算出数组中最大的文字宽度
         for(int i = 0; i < data.length; i++) {
             float value = paint.measureText(data[i]);//测量文字的宽度
             textNeedMaxWidth= (int) Math.max(textNeedMaxWidth,value);
         }
+
+        width=h*2+textNeedMaxWidth;
+
+        setMeasuredDimension(widthMode==MeasureSpec.EXACTLY ? widthSize : width,heightSize);
 
     }
 
@@ -146,6 +161,20 @@ public class QuicklIndexBar extends View {
         super.onLayout(changed, left, top, right, bottom);
         measuredWidth = getMeasuredWidth();//获取容器的宽度
         measuredHeight = getMeasuredHeight();//获取容器的高度
+
+        //处理不同样式的背景
+        switch (selectedType) {
+            case DEFAULT_SELECTED_TYPE ://默认模式
+                break;
+            case ENLARGE_SELECTED_TYPE ://放大模式
+
+                break;
+            case BURST_SELECTED_TYPE ://爆炸模式
+               //爆炸模式下我们最好将背景设置为透明色
+                setBackgroundColor(Color.TRANSPARENT);
+
+                break;
+        }
     }
 
     @Override
@@ -155,8 +184,6 @@ public class QuicklIndexBar extends View {
         /**
          * 绘制文字之前，我们先了解一下文字绘制的方式
          * 参考博客 : https://blog.csdn.net/u014702653/article/details/51985821
-         *
-         *
          *
          */
 
@@ -174,7 +201,7 @@ public class QuicklIndexBar extends View {
 
                     break;
                 case BURST_SELECTED_TYPE ://爆炸模式
-                    setBurstType(canvas, i);
+                    drawBurstType(canvas, i);
 
 
                     break;
@@ -187,7 +214,7 @@ public class QuicklIndexBar extends View {
 
     }
 
-    private void setBurstType(Canvas canvas, int i) {
+    private void drawBurstType(Canvas canvas, int i) {
         //爆炸模式和默认模式的区别在于，当用户触发点击或者滑动事件后，当前所处位置的字符应该向外呈圆弧状显示，且所处位置的字符应该为圆弧的最外围
         if(selectedPoint<0) {//当前没有选中的字符
             drawDefaultType(canvas,i);
@@ -198,6 +225,14 @@ public class QuicklIndexBar extends View {
             int c=selectedPoint+1;
             //圆弧半径为我们最大字符高度的两倍
             int r=childMaxHeight*2;
+
+
+            //设置选中的文字的大小
+            if(i==b) {//在字符数组的范围内
+                paint.setTextSize(textSize+20);
+            }else {
+                paint.setTextSize(textSize);
+            }
 
             //水平居中
 //            float value1 = paint.measureText(data[i]);//测量文字的宽度
@@ -228,9 +263,12 @@ public class QuicklIndexBar extends View {
             childNeedHeights.add((float) (childMaxHeight * i));
 
         }
+
     }
 
     private void drawDefaultType(Canvas canvas, int i) {
+        //将画笔大小回归默认大小
+        paint.setTextSize(textSize);
 //        //水平居中
 //        float value1 = paint.measureText(data[i]);//测量文字的宽度
 //        float startX = childMaxWidth / 2 - value1 / 2;
@@ -256,8 +294,6 @@ public class QuicklIndexBar extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
 
-                //设置背景
-//                setBackgroundColor(Color.RED);
 
                 //获取点击的坐标
                 float x = event.getX();
@@ -332,6 +368,8 @@ public class QuicklIndexBar extends View {
 
                 return true;
             case MotionEvent.ACTION_UP:
+
+
                 //获取移动时点击的坐标
                 float x2 = event.getX();
                 float y2 = event.getY();
