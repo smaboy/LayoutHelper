@@ -338,108 +338,129 @@ public class QuicklIndexBar extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float mx = event.getX();
-        //该判断用于处理当触点在默认字符排列的左侧时，特别实在爆炸模式下，对触摸事件的消费，该处理能有效控制触摸事件只能在字符所在的 区域消费，而不包含爆炸模式下等超过字符列的区域
+//        该判断用于处理当触点在默认字符排列的左侧时，特别实在爆炸模式下，对触摸事件的消费，该处理能有效控制触摸事件只能在字符所在的 区域消费，而不包含爆炸模式下等超过字符列的区域
         if(mx<measuredWidth-textNeedMaxWidth) {
-            return false;
+            if(selectedPoint!=-1) {
+                selectedPoint=-1;
+                invalidate();
+            }
+            return false;//不消费
         }
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (setActionDown(event)) return true;
 
-
-                //获取点击的坐标
-                float x = event.getX();
-                float y = event.getY();
-
-                Log.e("TAG", "触发ACTION_DOWN事件了--x==" + x + "--y==" + y);
-                int index;
-                //判断点击的位置在那个字符区域
-                if(data.length>=defaultCount ) {
-
-                    index = (int) (y / childMaxHeight);
-
-                }else {
-                    if((y-(measuredHeight-childMaxHeight*data.length)/2)<0) {//防止index在-1和0之间取值为0
-                        return true;
-                    }
-                    index=(int) ((y-(measuredHeight-childMaxHeight*data.length)/2) / childMaxHeight);
-                }
-
-                //防止数组越界，这里我们需做一个处理
-                if(index>=data.length||index<0) {
-                    return true;
-                }
-
-                //记录此时的位置
-                selectedPoint=index;
-
-                //设置监听回调
-                if (onFocusChangeStatusListener != null) {
-                    onFocusChangeStatusListener.onItemClick(index, data[index]);
-                }
-
-                Toast.makeText(context, "index=" + index + "--" + data[index], Toast.LENGTH_SHORT).show();
-                invalidate();//刷新
 
                 return true;
 
             case MotionEvent.ACTION_MOVE:
-                //获取移动时点击的坐标
-                float x1 = event.getX();
-                float y1 = event.getY();
-                Log.e("TAG", "触发ACTION_MOVE事件了--x==" + x1 + "--y==" + y1);
-                int index1;
-                //判断点击的位置在那个字符区域
-                if(data.length>=defaultCount ) {
+                if (setActionMove(event)) return true;
 
-                    index1 = (int) (y1 / childMaxHeight);
-
-                }else {
-                    if((y1-(measuredHeight-childMaxHeight*data.length)/2)<0) {//防止index在-1和0之间取值为0
-                        return true;
-                    }
-                    index1=(int) ((y1-(measuredHeight-childMaxHeight*data.length)/2) / childMaxHeight);
-                }
-
-                //防止数组越界，这里我们需做一个处理
-                if(index1>=data.length||index1<0) {
-                    return true;
-                }
-
-                //记录此时的位置
-                selectedPoint=index1;
-
-                //设置监听回调
-                if (onFocusChangeStatusListener != null) {
-                    onFocusChangeStatusListener.onScroll(index1, data[index1]);
-                }
-
-                Log.e("TAG", "滑动中的位置" + "index1=" + index1 + "--" + data[index1]);
-
-                invalidate();//刷新
 
                 return true;
             case MotionEvent.ACTION_UP:
-
-                //获取移动时点击的坐标
-                float x2 = event.getX();
-                float y2 = event.getY();
-                Log.e("TAG", "触发ACTION_POINTER_UP事件了--x==" + x2 + "--y==" + y2);
-                //设置监听回调
-                if (onFocusChangeStatusListener != null) {
-                    onFocusChangeStatusListener.onLoseFoucus();
-                }
-
-                Log.e("TAG", "手指离开了");
+                setActionUp(event);
 
 
-                //记录此时的位置
-                selectedPoint=-1;
-
-                invalidate();//刷新
                 return true;
+
         }
 
         return super.onTouchEvent(event);
+    }
+
+    private boolean setActionDown(MotionEvent event) {
+        //获取点击的坐标
+        float x = event.getX();
+        float y = event.getY();
+
+        Log.e("TAG", "触发ACTION_DOWN事件了--x==" + x + "--y==" + y);
+        int index;
+        //判断点击的位置在那个字符区域
+        if(data.length>=defaultCount ) {
+
+            index = (int) (y / childMaxHeight);
+
+        }else {
+            if((y-(measuredHeight-childMaxHeight*data.length)/2)<0) {//防止index在-1和0之间取值为0
+                return true;
+            }
+            index=(int) ((y-(measuredHeight-childMaxHeight*data.length)/2) / childMaxHeight);
+        }
+
+        //防止数组越界，这里我们需做一个处理
+        if(index>=data.length||index<0) {
+            return true;
+        }
+
+        //记录此时的位置
+        selectedPoint=index;
+
+        //设置监听回调
+        if (onFocusChangeStatusListener != null) {
+            onFocusChangeStatusListener.onItemClick(index, data[index]);
+        }
+
+        Toast.makeText(context, "index=" + index + "--" + data[index], Toast.LENGTH_SHORT).show();
+        invalidate();//刷新
+        return false;
+    }
+
+    private boolean setActionMove(MotionEvent event) {
+        //获取移动时点击的坐标
+        float x1 = event.getX();
+        float y1 = event.getY();
+        Log.e("TAG", "触发ACTION_MOVE事件了--x==" + x1 + "--y==" + y1);
+        int index1;
+        //判断点击的位置在那个字符区域
+        if(data.length>=defaultCount ) {
+
+            index1 = (int) (y1 / childMaxHeight);
+
+        }else {
+            if((y1-(measuredHeight-childMaxHeight*data.length)/2)<0) {//防止index在-1和0之间取值为0
+                return true;
+            }
+            index1=(int) ((y1-(measuredHeight-childMaxHeight*data.length)/2) / childMaxHeight);
+        }
+
+        //防止数组越界，这里我们需做一个处理
+        if(index1>=data.length||index1<0) {
+            return true;
+        }
+
+        //记录此时的位置
+        selectedPoint=index1;
+
+        //设置监听回调
+        if (onFocusChangeStatusListener != null) {
+            onFocusChangeStatusListener.onScroll(index1, data[index1]);
+        }
+
+        Log.e("TAG", "滑动中的位置" + "index1=" + index1 + "--" + data[index1]);
+
+        invalidate();//刷新
+        return false;
+    }
+
+    private void setActionUp(MotionEvent event) {
+        //获取移动时点击的坐标
+        float x2 = event.getX();
+        float y2 = event.getY();
+        Log.e("TAG", "触发ACTION_UP事件了--x==" + x2 + "--y==" + y2);
+        //设置监听回调
+        if (onFocusChangeStatusListener != null) {
+            onFocusChangeStatusListener.onLoseFoucus();
+        }
+
+        Log.e("TAG", "手指离开了");
+
+
+        //记录此时的位置
+        selectedPoint=-1;
+
+        invalidate();//刷新
     }
 
 
