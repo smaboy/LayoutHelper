@@ -158,6 +158,17 @@ public class QuicklIndexBar extends View {
 
 
 
+        //考虑放大的字符
+        switch (selectedType) {
+            case DEFAULT_SELECTED_TYPE ://默认模式
+                paint.setTextSize(textSize);
+                break;
+            case ENLARGE_SELECTED_TYPE ://放大模式
+
+            case BURST_SELECTED_TYPE ://爆炸模式
+                paint.setTextSize(textSize+20);
+                break;
+        }
         //这里我们算出数组中最大的文字宽度
         for(int i = 0; i < data.length; i++) {
             float value = paint.measureText(data[i]);//测量文字的宽度
@@ -201,6 +212,7 @@ public class QuicklIndexBar extends View {
                     break;
                 case ENLARGE_SELECTED_TYPE ://放大模式
 
+                    drawEnlargeType(canvas, i);
                     break;
                 case BURST_SELECTED_TYPE ://爆炸模式
                     drawBurstType(canvas, i);
@@ -211,6 +223,37 @@ public class QuicklIndexBar extends View {
 
 
 
+        }
+
+
+    }
+
+    private void drawEnlargeType(Canvas canvas, int i) {
+        if(selectedPoint<0) {//当前没有选中的字符
+            drawDefaultType(canvas,i);
+        }else {
+            //设置选中的文字的大小
+            if(i==selectedPoint) {//在字符数组的范围内
+                paint.setTextSize(textSize+20);
+            }else {
+                paint.setTextSize(textSize);
+            }
+//        //水平居中
+//        float value1 = paint.measureText(data[i]);//测量文字的宽度
+//        float startX = childMaxWidth / 2 - value1 / 2;
+            //水平靠右对齐
+            float value1 = paint.measureText(data[i]);//测量文字的宽度
+            float startX = (float) (childMaxWidth-textNeedMaxWidth*0.5-value1*0.5-getPaddingEnd());
+            //竖值居中,绘制文字从文字左下角开始,因此"+"
+            Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+            float value2 = Math.abs((fontMetrics.bottom - fontMetrics.top));
+            float startY = data.length>=defaultCount ? getPaddingTop()+childMaxHeight / 2 + value2 / 2 :(measuredHeight-childMaxHeight*data.length)/2+childMaxHeight / 2 + value2 / 2;
+
+            //开始绘制
+            canvas.drawText(data[i], startX, startY + childMaxHeight * i, paint);
+
+            //将每个view的顶部位置存储起来
+            childNeedHeights.add((float) (childMaxHeight * i));
         }
 
 
@@ -232,8 +275,6 @@ public class QuicklIndexBar extends View {
             //设置选中的文字的大小
             if(i==b) {//在字符数组的范围内
                 paint.setTextSize(textSize+20);
-                requestLayout();//因为字号发生变化了，所以我们的布局也需要发生变化以适应我们的字符展示
-
             }else {
                 paint.setTextSize(textSize);
             }
