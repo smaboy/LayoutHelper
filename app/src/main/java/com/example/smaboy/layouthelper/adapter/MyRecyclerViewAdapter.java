@@ -33,6 +33,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view=LayoutInflater.from(context).inflate(R.layout.recycler_item,viewGroup,false);
+//        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) view.getLayoutParams();
+//        layoutParams.topMargin=1;
+//        view.setLayoutParams(layoutParams);
         return new MyViewHolder(view);
     }
 

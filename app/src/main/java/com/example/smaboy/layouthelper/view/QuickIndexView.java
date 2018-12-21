@@ -24,7 +24,8 @@ import com.example.smaboy.layouthelper.util.DataUtils;
 
 /**
  * 类名: QuickIndexView
- * 类作用描述: java类作用描述
+ * 类作用描述: 联系人页面类型
+ *            1.提供黏性头部（可控，支持开关）
  * 作者: Smaboy
  * 创建时间: 2018/12/14 16:33
  */
@@ -92,6 +93,7 @@ public class QuickIndexView extends LinearLayout {
         }
         //设置数据
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new StickyDecoration());
         recyclerView.setAdapter(new MyRecyclerViewAdapter(getContext(),userInfoGroup));
     }
 

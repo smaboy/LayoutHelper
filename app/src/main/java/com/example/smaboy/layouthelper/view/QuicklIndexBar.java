@@ -342,6 +342,10 @@ public class QuicklIndexBar extends View {
         if(mx<measuredWidth-textNeedMaxWidth) {
             if(selectedPoint!=-1) {
                 selectedPoint=-1;
+                //设置监听回调（由于脱离设置区域UP事件不能回调，所以在这也得设置监听回调）
+                if (onFocusChangeStatusListener != null) {
+                    onFocusChangeStatusListener.onLoseFoucus();
+                }
                 invalidate();
             }
             return false;//不消费

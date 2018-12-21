@@ -9,6 +9,7 @@
 
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler"
+            android:background="@android:color/darker_gray"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
@@ -18,8 +19,8 @@
             android:layout_height="60dp"
             tools:text="A"
             android:textSize="30sp"
-            android:textColor="@android:color/black"
-            android:background="@android:color/white"
+            android:textColor="@android:color/white"
+            android:background="@drawable/circular_transparent_7_bg"
             android:gravity="center"
             android:layout_gravity="center"
             android:visibility="gone"

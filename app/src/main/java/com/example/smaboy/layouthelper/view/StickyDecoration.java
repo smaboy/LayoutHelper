@@ -26,22 +26,6 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
 //    getItemOffsets() ：为 Decoration 设置偏移。
 
 
-    private int mHeight;
-    private Paint mPaint;
-    private TextPaint mTextPaint;
-    private Rect mTextBounds;
-
-    public StickyDecoration() {
-        mHeight = 100;
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.GRAY);
-        mTextPaint = new TextPaint();
-        mTextPaint.setAntiAlias(true);
-        mTextPaint.setColor(Color.parseColor("#FF000000"));
-        mTextPaint.setTextSize(48f);
-        mTextBounds = new Rect();
-    }
 
     @Override
     public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -53,24 +37,6 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
     public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
 
-        String stickyHeaderName = "我是分隔线";
-        int left = parent.getLeft();
-        //Decoration 的右边位置
-        int right = parent.getRight();
-        //获取 RecyclerView 的 Item 数量
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childView = parent.getChildAt(i);
-            //Decoration 的底边位置
-            int bottom = childView.getTop();
-            //Decoration 的顶边位置
-            int top = bottom - mHeight;
-            c.drawRect(left, top, right, bottom, mPaint);
-
-            //绘制文字
-            mTextPaint.getTextBounds(stickyHeaderName, 0, stickyHeaderName.length(), mTextBounds);
-            c.drawText(stickyHeaderName, left, bottom - mHeight / 2 + mTextBounds.height() / 2, mTextPaint);
-        }
     }
 
     @Override
@@ -78,8 +44,16 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
         super.getItemOffsets(outRect, view, parent, state);
 
         //outRect 相当于 Item 的整体绘制区域,设置 left、top、right、bottom 相当于设置左上右下的内间距
-        //如设置 outRect.top = 5 则相当于设置 paddingTop 为 5px。
-        outRect.top = mHeight;
+        if(parent.getChildAdapterPosition(view)!=0) {
+            outRect.bottom = 10;
+            outRect.left = 10;
+            outRect.right = 10;
+        }else {
+            outRect.top = 10;
+            outRect.bottom = 10;
+            outRect.left = 10;
+            outRect.right = 10;
+        }
 
     }
 }
