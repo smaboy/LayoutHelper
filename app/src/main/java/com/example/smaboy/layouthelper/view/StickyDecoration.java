@@ -16,6 +16,9 @@ import android.view.View;
  * 创建时间: 2018/12/14 15:36
  */
 public class StickyDecoration extends RecyclerView.ItemDecoration {
+    private  Paint paint;//红色画笔
+    private  Paint wPaint;//白色画笔
+    private  Paint bPaint;//灰色画笔
 
 //    ItemDecoration 是一个抽象类，字面意思是 Item 的装饰，我们可以通过内部的绘制方法绘制装饰，它有三个需要实现的抽象方法（过时的方法不管）：
 //
@@ -26,10 +29,47 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
 //    getItemOffsets() ：为 Decoration 设置偏移。
 
 
+    public StickyDecoration() {
+        //在初始化时，先将一些设置构造出来
+        paint=new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color.parseColor("#F6D4B8"));
+
+        wPaint=new Paint();
+        wPaint.setAntiAlias(true);
+        wPaint.setColor(Color.WHITE);
+
+        bPaint=new Paint();
+        bPaint.setAntiAlias(true);
+        bPaint.setColor(Color.GRAY);
+    }
 
     @Override
     public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.onDraw(c, parent, state);
+
+        int childCount = parent.getChildCount();
+        for(int i = 0; i < childCount; i++) {
+
+            View child = parent.getChildAt(i);
+
+            //画上部的红色背景(顶部高度30)
+            c.drawRect(parent.getLeft(),child.getTop()-30,child.getRight(),child.getTop(),paint);
+            //画左侧红色背景矩形
+            c.drawRect(parent.getLeft(),child.getTop(),parent.getLeft()+80,child.getBottom(),paint);
+
+            //画左侧的白色矩形(矩形的宽默认为10px，高度等同于item)
+            c.drawRect(parent.getLeft()+35,child.getTop()-30,parent.getLeft()+45,child.getBottom(),wPaint);
+
+            //画错左侧的圆（半径默认为20）
+            c.drawCircle(parent.getLeft()+40,child.getTop()+child.getHeight()/2,20,wPaint);
+
+            //画圆环
+            bPaint.setStyle(Paint.Style.STROKE);
+            bPaint.setStrokeWidth(2);
+            c.drawCircle(parent.getLeft()+40,child.getTop()+child.getHeight()/2,20,bPaint);
+
+        }
     }
 
 
@@ -45,15 +85,9 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
 
         //outRect 相当于 Item 的整体绘制区域,设置 left、top、right、bottom 相当于设置左上右下的内间距
         if(parent.getChildAdapterPosition(view)!=0) {
-            outRect.bottom = 10;
-            outRect.left = 10;
-            outRect.right = 10;
-        }else {
-            outRect.top = 10;
-            outRect.bottom = 10;
-            outRect.left = 10;
-            outRect.right = 10;
+            outRect.top = 30;
         }
+        outRect.left = 80;
 
     }
 }

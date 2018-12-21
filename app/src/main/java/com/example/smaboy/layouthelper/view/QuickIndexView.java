@@ -13,12 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
 import com.example.smaboy.layouthelper.Entity.UserInfoGroup;
 import com.example.smaboy.layouthelper.R;
-import com.example.smaboy.layouthelper.activity.QuickActivity;
 import com.example.smaboy.layouthelper.adapter.MyRecyclerViewAdapter;
 import com.example.smaboy.layouthelper.util.DataUtils;
 
