@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
 import com.example.smaboy.layouthelper.Entity.UserInfoGroup;
@@ -70,6 +71,7 @@ public class QuickIndexView extends LinearLayout {
                 String json = DataUtils.getJsonFromAsset(getContext(), "userinfo.json");
                 Log.e("TA", json);
                 userInfoGroup = JSONObject.parseObject(json, UserInfoGroup.class);
+
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
