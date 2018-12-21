@@ -29,6 +29,7 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
 //    getItemOffsets() ：为 Decoration 设置偏移。
 
 
+
     public StickyDecoration() {
         //在初始化时，先将一些设置构造出来
         paint=new Paint();
