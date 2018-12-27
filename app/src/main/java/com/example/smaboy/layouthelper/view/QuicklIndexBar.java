@@ -50,7 +50,7 @@ public class QuicklIndexBar extends View {
     private int textSize = 40;//字体大小默认40
     private int selectedPoint = -1;//选中的位置
     private int textColor = Color.BLACK;//字体大小默认40
-    private int defaultCount = 26;
+    private int defaultCount = 26;//该字段用来控制快速索引居中排列的临界值，小于时采用居中排列，大于等于时采用平分充满布局
 
     private int textNeedMaxWidth;//字符数组中，需要最大的宽度
 
@@ -88,6 +88,19 @@ public class QuicklIndexBar extends View {
     //向外提供设置状态监听的方法
     public void setOnFocusChangeStatusListener(OnFocusChangeStatusListener onFocusChangeStatusListener) {
         this.onFocusChangeStatusListener = onFocusChangeStatusListener;
+    }
+
+    /**
+     * 向外界提供的设置索引的样式，目前提供三种
+     *   DEFAULT_SELECTED_TYPE//默认样式
+     *   ENLARGE_SELECTED_TYPE=1;//放大样式
+     *   BURST_SELECTED_TYPE=2;//爆炸样式
+     *
+     * @param selectedType 索引样式
+     *
+     */
+    public void setSelectedType(int selectedType) {
+        this.selectedType = selectedType;
     }
 
     /**
