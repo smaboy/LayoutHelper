@@ -58,6 +58,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.stick :
                 break;
             case R.id.menu :
+                startActivity(new Intent(MainActivity.this,DataActivity.class));
 
                 break;
         }

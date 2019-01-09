@@ -23,7 +23,7 @@
             android:id="@+id/stick"/>
     <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="左右滑菜单"
+            android:text="日历控件"
             android:id="@+id/menu"/>
 
 

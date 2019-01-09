@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextPaint;
 import android.view.View;
 
 /**
@@ -16,9 +15,9 @@ import android.view.View;
  * 创建时间: 2018/12/14 15:36
  */
 public class StickyDecoration extends RecyclerView.ItemDecoration {
-    private  Paint paint;//红色画笔
-    private  Paint wPaint;//白色画笔
-    private  Paint bPaint;//灰色画笔
+    private  static Paint paint;//红色画笔
+    private  static Paint wPaint;//白色画笔
+    private  static Paint bPaint;//灰色画笔
 
 //    ItemDecoration 是一个抽象类，字面意思是 Item 的装饰，我们可以通过内部的绘制方法绘制装饰，它有三个需要实现的抽象方法（过时的方法不管）：
 //
@@ -29,7 +28,7 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
 //    getItemOffsets() ：为 Decoration 设置偏移。
 
 
-    public StickyDecoration() {
+    static  {
         //在初始化时，先将一些设置构造出来
         paint=new Paint();
         paint.setAntiAlias(true);
@@ -88,6 +87,7 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
             outRect.top = 30;
         }
         outRect.left = 80;
+
 
     }
 }

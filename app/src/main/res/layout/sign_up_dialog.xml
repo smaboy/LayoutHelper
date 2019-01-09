@@ -15,13 +15,14 @@
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/cancel"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_launcher"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="13dp"/>
+                android:id="@+id/cancel"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_launcher"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="13dp"
+                tools:ignore="ContentDescription"/>
 
         <TextView
             android:id="@+id/title"

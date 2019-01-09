@@ -20,6 +20,7 @@
 
         <activity android:name=".activity.QuickActivity"/>
         <activity android:name=".activity.FlowActivity"/>
+        <activity android:name=".activity.DataActivity"/>
     </application>
 
 </manifest>

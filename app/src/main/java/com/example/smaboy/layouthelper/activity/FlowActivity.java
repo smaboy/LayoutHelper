@@ -74,9 +74,9 @@ public class FlowActivity extends Activity implements View.OnClickListener {
                 final Dialog dialog=new Dialog(FlowActivity.this, R.style.Dialog_Fullscreen);
 //                final Dialog dialog=new Dialog(FlowActivity.this);
                 dialog.setContentView(R.layout.sign_up_dialog);
-                title = (TextView) dialog.findViewById(R.id.title);
-                content = (TextView)dialog. findViewById(R.id.content);
-                login = (TextView) dialog.findViewById(R.id.login);
+                title = dialog.findViewById(R.id.title);
+                content = dialog. findViewById(R.id.content);
+                login = dialog.findViewById(R.id.login);
 
                 //设置数据
                 title.setText("删除提示");
