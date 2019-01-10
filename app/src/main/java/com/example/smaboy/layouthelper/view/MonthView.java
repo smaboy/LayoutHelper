@@ -334,9 +334,9 @@ public class MonthView extends View {
         for (int i = 0; i < weekCount; i++) {//绘制步骤为，一周一周往下进行绘制
             for (int j = 0; j < 7; j++) {
                 //开始绘制日期
+                int day = monthStyle == Style.SUNDAY_STYLE ? 7 * i + j - dayOfWeekInMonthFirst + 2 : 7 * i + j - dayOfWeekInMonthFirst + 1;//处理日期样式
                 float dayWidth = blackPaint.measureText(Integer.toString(day));
                 x = getLeft() + getPaddingLeft() + canUsewidth / 7 * j + (canUsewidth / 14 - dayWidth / 2);//保证文字水平居中
-                int day = monthStyle == Style.SUNDAY_STYLE ? 7 * i + j - dayOfWeekInMonthFirst + 2 : 7 * i + j - dayOfWeekInMonthFirst + 1;//处理日期样式
                 //处理写入的文字
                 if (day < 1 || day > daysOfMonth) {//日期不在当前月份的范围内，舍去
                     continue;
