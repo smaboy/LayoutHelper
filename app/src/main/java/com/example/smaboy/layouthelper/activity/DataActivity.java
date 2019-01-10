@@ -29,7 +29,7 @@ public class DataActivity extends Activity {
 
 //        month.setTitleStyle(MonthView.Style.TITLE_RIGHT);
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.MONTH,7);
+        instance.add(Calendar.MONTH,-5);
         month.setCalendar(instance);
 
 
