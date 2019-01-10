@@ -1,11 +1,13 @@
 package com.example.smaboy.layouthelper.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -322,7 +324,7 @@ public class MonthView extends View {
         String content;//填写的日期（如：1，2，3...）
         //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
         Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
-        y = getTop() + getPaddingTop() + canUsewidth / 14 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖值居中
+        y = getTop() + getPaddingTop() + canUsewidth / 14 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖直居中
         //判断标题和星期的显示与否，确定y的初始位置
         if (titleStyle != Style.NO_TITLE) {
             y += titleHeight;
@@ -331,10 +333,25 @@ public class MonthView extends View {
             y += weekHeight;
         }
         //开始绘制
+        int day=0;
         for (int i = 0; i < weekCount; i++) {//绘制步骤为，一周一周往下进行绘制
             for (int j = 0; j < 7; j++) {
                 //开始绘制日期
-                int day = monthStyle == Style.SUNDAY_STYLE ? 7 * i + j - dayOfWeekInMonthFirst + 2 : 7 * i + j - dayOfWeekInMonthFirst + 1;//处理日期样式
+                if(i==0) {//处理此时绘制的内容
+                    if( monthStyle == Style.SUNDAY_STYLE){//如果一周以礼拜日为第一天
+                        if(j<dayOfWeekInMonthFirst-1) {
+                            //不绘制
+                            continue;
+                        }
+                        day++;
+                    } else {
+                        day++;
+                    
+                    }
+                }else {
+                    day++;
+                }
+//                int day = monthStyle == Style.SUNDAY_STYLE ? - dayOfWeekInMonthFirst+4 : 7 * i + j - dayOfWeekInMonthFirst + 1;//处理日期样式
                 float dayWidth = blackPaint.measureText(Integer.toString(day));
                 x = getLeft() + getPaddingLeft() + canUsewidth / 7 * j + (canUsewidth / 14 - dayWidth / 2);//保证文字水平居中
                 //处理写入的文字
@@ -441,28 +458,28 @@ public class MonthView extends View {
         }
 
         //1.绘制背景矩形
-        canvas.drawRect(getLeft()+getPaddingLeft(), getTop()+getPaddingTop(), getRight()-getPaddingRight(), getTop()+getPaddingTop()+titleHeight, grayPaint);
+        canvas.drawRect(getLeft() + getPaddingLeft(), getTop() + getPaddingTop(), getRight() - getPaddingRight(), getTop() + getPaddingTop() + titleHeight, grayPaint);
         //2.绘制标题
         String title = year + "年" + (month + 1) + "月" + day + "日";//标题文字
         float titleWidth = whitePaint.measureText(title);//测量文字宽度
         Paint.FontMetrics fontMetrics = whitePaint.getFontMetrics();
         float x, y;
         //竖值居中,绘制文字从文字左下角开始,因此"+"
-        y = getTop()+getPaddingTop()+titleHeight / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;
+        y = getTop() + getPaddingTop() + titleHeight / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;
 
         switch (titleStyle) {
             case TITLE_LEFT://左对齐
-                x = getLeft()+getPaddingLeft() + 20;
+                x = getLeft() + getPaddingLeft() + 20;
                 break;
             case TITLE_CENTER://居中
 
-                x =getLeft()+getPaddingLeft()+(getWidth()-getPaddingLeft()-getPaddingRight())/2-titleWidth/2;
+                x = getLeft() + getPaddingLeft() + (getWidth() - getPaddingLeft() - getPaddingRight()) / 2 - titleWidth / 2;
                 break;
             case TITLE_RIGHT://右对齐
-                x = getRight()-getPaddingRight() - 20 - titleWidth;
+                x = getRight() - getPaddingRight() - 20 - titleWidth;
                 break;
             default:
-                x = getLeft()+getPaddingLeft()+(getWidth()-getPaddingLeft()-getPaddingRight())/2-titleWidth/2;
+                x = getLeft() + getPaddingLeft() + (getWidth() - getPaddingLeft() - getPaddingRight()) / 2 - titleWidth / 2;
                 break;
         }
 
@@ -470,6 +487,60 @@ public class MonthView extends View {
         canvas.drawText(title, x, y, whitePaint);
     }
 
+    /**
+     * 触摸事件处理方法
+     *
+     */
+    float dx=0 , dy=0;
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            //这里我们要实现一个功能，就是左滑进入下一个月，右滑滑进入上一个月,上滑进入上一年，下滑进入下一年
+
+            case MotionEvent.ACTION_DOWN:
+                dx = event.getX();
+                dy = event.getY();
+
+                return true;
+
+            case MotionEvent.ACTION_UP:
+                float mx = event.getX();
+                float my = event.getY();
+                float tempX = Math.abs(mx - dx);//水平滑动的绝对值
+                float tempY = Math.abs(my - dy);//竖直滑动的绝对值
+
+                Log.e("TAG", "tempX"+tempX);
+                Log.e("TAG", "tempY"+tempY);
+
+                if (tempX > tempY && tempX > 30) {//月份变换
+                    if(mx - dx>0 ) {
+                        calendar.add(Calendar.MONTH,-1);
+                    }else {
+                        calendar.add(Calendar.MONTH,1);
+                    }
+                    setCalendar(calendar);
+                    requestLayout();
+                    invalidate();
+                    return true;
+                }
+                if(tempX < tempY && tempY > 30) {//年份变换
+                    if(my - dy>0 ) {
+                        calendar.add(Calendar.YEAR,-1);
+                    }else {
+                        calendar.add(Calendar.YEAR,1);
+                    }
+                    setCalendar(calendar);
+                    requestLayout();
+                    invalidate();
+                    return true;
+                }
+
+                return false;
+        }
+
+        return super.onTouchEvent(event);
+    }
 
     /**
      * 获取指定日期所在月的天数
@@ -492,7 +563,7 @@ public class MonthView extends View {
     private int getDayOfWeek(Calendar calendar) {
         //重新获取calendar的实例是防止修改原calendar的值
         Calendar ca=Calendar.getInstance();
-        ca.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),1);
+        ca.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
         return ca.get(Calendar.DAY_OF_WEEK);
     }
 
@@ -505,8 +576,10 @@ public class MonthView extends View {
      * @return 当前日期所在月份的天数
      */
     private int getDayOfWeekInMonthFirst(Calendar calendar) {
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        return getDayOfWeek(calendar);
+        //重新获取calendar的实例是防止修改原calendar的值
+        Calendar ca=Calendar.getInstance();
+        ca.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),1);
+        return getDayOfWeek(ca);
     }
 
     /**
