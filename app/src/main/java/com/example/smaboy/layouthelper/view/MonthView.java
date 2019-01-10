@@ -269,11 +269,11 @@ public class MonthView extends View {
         switch (monthStyle) {
             case MONDAY_STYLE:
                 if (dayOfWeekInMonthFirst == 1) {
-                    weekCount = (daysOfMonth + 6) / 7 + (daysOfMonth + dayOfWeekInMonthFirst - 1) % 7 == 0 ? 0 : 1;
+                    weekCount = (daysOfMonth + 6) / 7 +((daysOfMonth + 6)% 7 == 0 ? 0 : 1) ;
 
                 } else {
 
-                    weekCount = (daysOfMonth + dayOfWeekInMonthFirst - 2) / 7 + ((daysOfMonth + dayOfWeekInMonthFirst - 1) % 7 == 0 ? 0 : 1);
+                    weekCount = (daysOfMonth + dayOfWeekInMonthFirst - 2) / 7 + ((daysOfMonth + dayOfWeekInMonthFirst - 2) % 7 == 0 ? 0 : 1);
                 }
                 break;
             case SUNDAY_STYLE:
@@ -344,14 +344,21 @@ public class MonthView extends View {
                             continue;
                         }
                         day++;
-                    } else {
+                    } else {//如果一周以礼拜一为第一天
+                        if(j<dayOfWeekInMonthFirst-2) {
+                            if(dayOfWeekInMonthFirst==1&&j==6) {//周日
+                                day++;
+                            }
+                            //不绘制
+                            continue;
+                        }
                         day++;
                     
                     }
                 }else {
                     day++;
                 }
-//                int day = monthStyle == Style.SUNDAY_STYLE ? - dayOfWeekInMonthFirst+4 : 7 * i + j - dayOfWeekInMonthFirst + 1;//处理日期样式
+                //获取日期内容的宽度
                 float dayWidth = blackPaint.measureText(Integer.toString(day));
                 x = getLeft() + getPaddingLeft() + canUsewidth / 7 * j + (canUsewidth / 14 - dayWidth / 2);//保证文字水平居中
                 //处理写入的文字
@@ -596,10 +603,7 @@ public class MonthView extends View {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DATE);
-        Log.e("TAG", "当前日期为:" + calendar.getTime().toString());
-        Log.e("TAG", "当前年份为：" + calendar.get(Calendar.YEAR));
-        Log.e("TAG", "当前月份为：" + calendar.get(Calendar.MONTH));
-        Log.e("TAG", "当前日份为" + calendar.get(Calendar.DATE));
+
         return this;
     }
 
