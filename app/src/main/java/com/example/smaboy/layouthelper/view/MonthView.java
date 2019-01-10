@@ -17,6 +17,8 @@ import java.util.Date;
  * 类名: MonthView
  * 类作用描述: 月份组件
  * 1.提供输入指定月份后，绘制出该月份的天数和头部星期排列（可控制显示与否，可调整星期排序：星期一在一列，星期天在第一列）
+ * 2.提供标题的显示与否，标题的排列方式（左对齐，居中对齐，右对齐）
+ * 3.提供星期的显示与否及样式
  * <p>
  * 作者: Smaboy
  * 创建时间: 2019/1/9 10:16
@@ -211,6 +213,10 @@ public class MonthView extends View {
     private void init() {
         //默认去的日期为当前的日期
         calendar = Calendar.getInstance();
+        //初始化相关参数
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DATE);
 
 
         //初始化画笔工具
@@ -296,15 +302,6 @@ public class MonthView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        //初始化相关参数
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DATE);
-
-        Log.e("MonthView", "当前月份的天数为：" + daysOfMonth);
-        Log.e("MonthView", "当前日期所在月的一号为此周的第几天：" + dayOfWeekInMonthFirst);
-        Log.e("MonthView", "当前日期为" + calendar.get(Calendar.MONTH));
-
         //绘制标题
         drawTitle(canvas);
 
@@ -320,53 +317,42 @@ public class MonthView extends View {
 
     private void drawMonthDay(Canvas canvas) {
         //知道需要绘制的天数和绘制内容1号所在星期几
-        switch (monthStyle) {
-            case SUNDAY_STYLE://周日作为一周的第一天
-                Log.e("TAG", "当前月为" + month + 1 + "月，共有" + weekCount + "周");
-                float x;
-                float y;
-                String content;//填写的日期（如：1，2，3...）
-                //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
-                Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
-                y = getTop() + getPaddingTop() + canUsewidth / 14 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖值居中
-                //判断标题和星期的显示与否，确定y的初始位置
-                if (titleStyle != Style.NO_TITLE) {
-                    y += titleHeight;
-                }
-                if (openWeek) {
-                    y += weekHeight;
-                }
-                //开始绘制
-                for (int i = 0; i < weekCount; i++) {//绘制步骤为，一周一周往下进行绘制
-                    for (int j = 0; j < 7; j++) {
-                        //开始绘制日期
-                        float dayWidth = blackPaint.measureText(Integer.toString(day));
-                        x = getLeft() + getPaddingLeft() + canUsewidth / 7 * j + (canUsewidth / 14 - dayWidth / 2);//保证文字水平居中
-                        int day = 7 * i + j - dayOfWeekInMonthFirst + 2;
-                        //处理写入的文字
-                        if (day < 1 || day > daysOfMonth) {//日期不在当前月份的范围内，舍去
-                            continue;
-                        }
-
-                        //实际填写的字符串
-
-                        content = Integer.toString(day);
-                        canvas.drawText(content, x, y, blackPaint);
-
-                    }
-                    //确定绘制时，y的位置
-                    y += canUsewidth / 7;
-                }
-
-
-                break;
-            case MONDAY_STYLE://周一作为一周的第一天
-
-                break;
-            default:
-
-                break;
+        float x;
+        float y;
+        String content;//填写的日期（如：1，2，3...）
+        //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
+        Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
+        y = getTop() + getPaddingTop() + canUsewidth / 14 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖值居中
+        //判断标题和星期的显示与否，确定y的初始位置
+        if (titleStyle != Style.NO_TITLE) {
+            y += titleHeight;
         }
+        if (openWeek) {
+            y += weekHeight;
+        }
+        //开始绘制
+        for (int i = 0; i < weekCount; i++) {//绘制步骤为，一周一周往下进行绘制
+            for (int j = 0; j < 7; j++) {
+                //开始绘制日期
+                float dayWidth = blackPaint.measureText(Integer.toString(day));
+                x = getLeft() + getPaddingLeft() + canUsewidth / 7 * j + (canUsewidth / 14 - dayWidth / 2);//保证文字水平居中
+                int day = monthStyle == Style.SUNDAY_STYLE ? 7 * i + j - dayOfWeekInMonthFirst + 2 : 7 * i + j - dayOfWeekInMonthFirst + 1;//处理日期样式
+                //处理写入的文字
+                if (day < 1 || day > daysOfMonth) {//日期不在当前月份的范围内，舍去
+                    continue;
+                }
+
+                //实际填写的字符串
+
+                content = Integer.toString(day);
+                canvas.drawText(content, x, y, blackPaint);
+
+            }
+            //确定绘制时，y的位置
+            y += canUsewidth / 7;
+        }
+
+
     }
 
     /**
@@ -411,7 +397,7 @@ public class MonthView extends View {
                 }
                 break;
             case SUNDAY_STYLE://周日作为一周的第一天
-               float temp2 = (getWidth() - getPaddingLeft() - getPaddingRight()) / WEEK_MON.length;//每个星期的宽度
+                float temp2 = (getWidth() - getPaddingLeft() - getPaddingRight()) / WEEK_MON.length;//每个星期的宽度
                 float x2, y2;
 
                 for (int i = 0; i < WEEK_MON.length; i++) {
@@ -455,28 +441,28 @@ public class MonthView extends View {
         }
 
         //1.绘制背景矩形
-        canvas.drawRect(getLeft(), getTop(), getRight(), titleHeight, grayPaint);
+        canvas.drawRect(getLeft()+getPaddingLeft(), getTop()+getPaddingTop(), getRight()-getPaddingRight(), getTop()+getPaddingTop()+titleHeight, grayPaint);
         //2.绘制标题
         String title = year + "年" + (month + 1) + "月" + day + "日";//标题文字
         float titleWidth = whitePaint.measureText(title);//测量文字宽度
         Paint.FontMetrics fontMetrics = whitePaint.getFontMetrics();
         float x, y;
         //竖值居中,绘制文字从文字左下角开始,因此"+"
-        y = titleHeight / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;
+        y = getTop()+getPaddingTop()+titleHeight / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;
 
         switch (titleStyle) {
             case TITLE_LEFT://左对齐
-                x = getLeft() + 20;
+                x = getLeft()+getPaddingLeft() + 20;
                 break;
             case TITLE_CENTER://居中
 
-                x = (getRight() - getLeft() - titleWidth) / 2 + getLeft();
+                x =getLeft()+getPaddingLeft()+(getWidth()-getPaddingLeft()-getPaddingRight())/2-titleWidth/2;
                 break;
             case TITLE_RIGHT://右对齐
-                x = getRight() - 20 - titleWidth;
+                x = getRight()-getPaddingRight() - 20 - titleWidth;
                 break;
             default:
-                x = (getRight() - getLeft() - titleWidth) / 2 + getLeft();
+                x = getLeft()+getPaddingLeft()+(getWidth()-getPaddingLeft()-getPaddingRight())/2-titleWidth/2;
                 break;
         }
 
@@ -504,7 +490,10 @@ public class MonthView extends View {
      * @return 当前日期所在月份的天数
      */
     private int getDayOfWeek(Calendar calendar) {
-        return calendar.get(Calendar.DAY_OF_WEEK);
+        //重新获取calendar的实例是防止修改原calendar的值
+        Calendar ca=Calendar.getInstance();
+        ca.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),1);
+        return ca.get(Calendar.DAY_OF_WEEK);
     }
 
     /**
@@ -530,7 +519,14 @@ public class MonthView extends View {
     //    -------------------------向外界提供一些属性设置的公共方法------------------------------------------
     public MonthView setCalendar(Calendar calendar) {
         this.calendar = calendar;
+        //初始化相关参数
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DATE);
         Log.e("TAG", "当前日期为:" + calendar.getTime().toString());
+        Log.e("TAG", "当前年份为：" + calendar.get(Calendar.YEAR));
+        Log.e("TAG", "当前月份为：" + calendar.get(Calendar.MONTH));
+        Log.e("TAG", "当前日份为" + calendar.get(Calendar.DATE));
         return this;
     }
 
@@ -566,6 +562,11 @@ public class MonthView extends View {
 
     public MonthView setTitleTextSize(int titleTextSize) {
         this.titleTextSize = titleTextSize;
+        return this;
+    }
+
+    public MonthView setOpenWeek(boolean openWeek) {
+        this.openWeek = openWeek;
         return this;
     }
 }
