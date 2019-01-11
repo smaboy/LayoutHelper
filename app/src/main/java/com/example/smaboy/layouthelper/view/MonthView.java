@@ -202,6 +202,21 @@ public class MonthView extends View {
      */
     private int dateViewHeight;
 
+    /**
+     * 接口实例
+     */
+    private OnClickListener listener;
+
+    /**
+     * 向外界提供点击监听的接口
+     *
+     */
+    public interface OnClickListener{
+        void onClick();
+    }
+
+
+
 
     public MonthView(Context context) {
         this(context, null);
@@ -655,9 +670,12 @@ public class MonthView extends View {
                 if(uy-h-getPaddingTop()>0&&uy-getHeight()+getPaddingBottom()<0&&ux-getPaddingLeft()>0&&ux-getWidth()+getPaddingRight()<0) {//点击区域只能在日期区域，不包含标题和星期区域
 
 
-                    int week= (int) ((uy-h-getPaddingTop())/dateViewHeight+1);//获取点击的在哪一周区域
+                    int a= (int) (uy-h-getPaddingTop())/dateViewHeight;//获取点击的在哪一周区域,从0开始
+                    int b= (int) (ux-getPaddingLeft())/dateViewWidth;//获取点击的在哪一周区域,从0开始
 
-                    Toast.makeText(getContext(), "第"+week+"周", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "第"+a+"周，第"+b+"列", Toast.LENGTH_SHORT).show();
+
+
 
 
 
@@ -811,5 +829,14 @@ public class MonthView extends View {
     public MonthView setOpenScrollSwitch(boolean openScrollSwitch) {
         this.openScrollSwitch = openScrollSwitch;
         return this;
+    }
+
+    /**
+     * 向外界提供设置监听接口的方法
+     *
+     * @param listener 监听实例
+     */
+    public void setListener(OnClickListener listener) {
+        this.listener = listener;
     }
 }
