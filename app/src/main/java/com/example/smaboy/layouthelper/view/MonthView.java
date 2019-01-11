@@ -9,12 +9,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -90,7 +87,7 @@ public class MonthView extends View {
     /**
      * 当前日
      */
-    private int day;
+    private int date;
 
     /**
      * 默认选中日期
@@ -131,6 +128,10 @@ public class MonthView extends View {
      * 红色画笔
      */
     private Paint redPaint;
+    /**
+     * 节假日专用画笔
+     */
+    private Paint holidayPaint;
 
     /**
      * 标题样式
@@ -266,7 +267,7 @@ public class MonthView extends View {
         //初始化相关参数
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DATE);
+        date = calendar.get(Calendar.DATE);
 
 
         //初始化画笔工具
@@ -305,6 +306,14 @@ public class MonthView extends View {
         redPaint.setColor(Color.RED);
         redPaint.setTextSize(titleTextSize);
         redPaint.setStyle(Paint.Style.FILL);
+
+
+        holidayPaint = new Paint();
+        holidayPaint.setAntiAlias(true);
+        holidayPaint.setColor(Color.RED);
+        holidayPaint.setTextSize(titleTextSize-10);
+        holidayPaint.setStyle(Paint.Style.FILL);
+
 
     }
 
@@ -435,6 +444,14 @@ public class MonthView extends View {
                     continue;
                 }
 
+                //判断此时的日期是否为节假日，若为节假日需要做特殊处理
+                // TODO: 2019/1/11
+
+
+                //绘制农历
+                // TODO: 2019/1/11
+
+
                 //实际填写的字符串
 
                 content = Integer.toString(currentMonthDays.get(day - 1));
@@ -536,7 +553,7 @@ public class MonthView extends View {
         //1.绘制背景矩形
         canvas.drawRect(getLeft() + getPaddingLeft(), getTop() + getPaddingTop(), getRight() - getPaddingRight(), getTop() + getPaddingTop() + titleHeight, grayPaint);
         //2.绘制标题
-        String title = year + "年" + (month + 1) + "月" + day + "日";//标题文字
+        String title = year + "年" + (month + 1) + "月" + date + "日";//标题文字
         float titleWidth = whitePaint.measureText(title);//测量文字宽度
         Paint.FontMetrics fontMetrics = whitePaint.getFontMetrics();
         float x, y;
@@ -683,7 +700,7 @@ public class MonthView extends View {
         //初始化相关参数
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DATE);
+        date = calendar.get(Calendar.DATE);
 
         return this;
     }
