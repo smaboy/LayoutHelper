@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -612,16 +613,16 @@ public class MonthView extends View {
                 return true;
 
             case MotionEvent.ACTION_UP:
-                float mx = event.getX();
-                float my = event.getY();
-                float tempX = Math.abs(mx - dx);//水平滑动的绝对值
-                float tempY = Math.abs(my - dy);//竖直滑动的绝对值
+                float ux = event.getX();
+                float uy = event.getY();
+                float tempX = Math.abs(ux - dx);//水平滑动的绝对值
+                float tempY = Math.abs(uy - dy);//竖直滑动的绝对值
 
                 Log.e("TAG", "tempX" + tempX);
                 Log.e("TAG", "tempY" + tempY);
 
                 if (tempX > tempY && tempX > dateViewWidth) {//月份变换
-                    if (mx - dx > 0) {
+                    if (ux - dx > 0) {
                         calendar.add(Calendar.MONTH, -1);
                     } else {
                         calendar.add(Calendar.MONTH, 1);
@@ -632,7 +633,7 @@ public class MonthView extends View {
                     return true;
                 }
                 if (tempX < tempY && tempY > dateViewHeight) {//年份变换
-                    if (my - dy > 0) {
+                    if (uy - dy > 0) {
                         calendar.add(Calendar.YEAR, -1);
                     } else {
                         calendar.add(Calendar.YEAR, 1);
@@ -641,6 +642,26 @@ public class MonthView extends View {
                     requestLayout();
                     invalidate();
                     return true;
+                }
+
+                //处理点击事件
+                int h=0;
+                if(titleStyle!=Style.NO_TITLE) {
+                    h+=titleHeight;
+                }
+                if(openWeek) {
+                    h+=weekHeight;
+                }
+                if(uy-h-getPaddingTop()>0&&uy-getHeight()+getPaddingBottom()<0&&ux-getPaddingLeft()>0&&ux-getWidth()+getPaddingRight()<0) {//点击区域只能在日期区域，不包含标题和星期区域
+
+
+                    int week= (int) ((uy-h-getPaddingTop())/dateViewHeight+1);//获取点击的在哪一周区域
+
+                    Toast.makeText(getContext(), "第"+week+"周", Toast.LENGTH_SHORT).show();
+
+
+
+
                 }
 
         }
