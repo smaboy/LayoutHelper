@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 类名: MonthView
@@ -27,8 +29,45 @@ import java.util.Date;
  */
 public class MonthView extends View {
 
+    //-------------常量部分----------------------
     private static final String[] WEEK_SUN = new String[]{"日", "一", "二", "三", "四", "五", "六"};
     private static final String[] WEEK_MON = new String[]{"一", "二", "三", "四", "五", "六", "日"};
+    //农历部分假日  （无用）
+    private final static String[] lunarHolidays = new String[]{
+            "0101 春节",
+            "0115 元宵",
+            "0505 端午",
+            "0707 七夕",
+            "0715 中元",
+            "0815 中秋",
+            "0909 重阳",
+            "1208 腊八",
+            "1224 小年",
+            "0100 除夕"
+    };
+
+    //公历部分节假日
+    private final static String[] solarHolidays = new String[]{
+            "0101 元旦",
+            "0214 情人",
+            "0308 妇女",
+            "0312 植树",
+            "0401 愚人",
+            "0501 劳动",
+            "0504 青年",
+            "0512 护士",
+            "0601 儿童",
+            "0701 建党",
+            "0801 建军",
+            "0910 教师",
+            "1001 国庆",
+            "1225 圣诞"
+    };
+
+    /**
+     * 当前月的日期数组
+     */
+    private List<Integer> currentMonthDays;
 
     /**
      * 日历
@@ -233,6 +272,9 @@ public class MonthView extends View {
         //初始化画笔工具
         initPaint();
 
+        //初始化日期数组
+        currentMonthDays = new ArrayList<>();
+
 
     }
 
@@ -274,6 +316,9 @@ public class MonthView extends View {
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
         daysOfMonth = getDaysOfMonth(calendar);//获取当前月份总的天数
+        for (int i = 1; i <= daysOfMonth; i++) {//保存当前日期数
+            currentMonthDays.add(i);
+        }
         dayOfWeekInMonthFirst = getDayOfWeekInMonthFirst(calendar);//获取指定日期所在月一号为于所在周的第几天
         switch (monthStyle) {
             case MONDAY_STYLE:
@@ -294,7 +339,7 @@ public class MonthView extends View {
 
 
         //判断标题和week的显示处理高度设置
-        int height =0;
+        int height = 0;
         if (titleStyle != Style.NO_TITLE) {
             height += titleHeight;
         }
@@ -304,15 +349,15 @@ public class MonthView extends View {
 
         //确定每个日期的宽高
         dateViewWidth = canUsewidth / 7;
-        if(heightMode == MeasureSpec.EXACTLY ) {//精确值
-            dateViewHeight=(heightSize-height-getPaddingTop()-getPaddingBottom())/weekCount;
-        }else {
-            dateViewHeight=canUsewidth / 7;
+        if (heightMode == MeasureSpec.EXACTLY) {//精确值
+            dateViewHeight = (heightSize - height - getPaddingTop() - getPaddingBottom()) / weekCount;
+        } else {
+            dateViewHeight = canUsewidth / 7;
 
         }
 
         //确定高度
-        height +=dateViewHeight * weekCount + getPaddingTop() + getPaddingBottom();
+        height += dateViewHeight * weekCount + getPaddingTop() + getPaddingBottom();
 
         //通过布局模式来确定宽高
         setMeasuredDimension(widthSize, heightMode == MeasureSpec.EXACTLY ? heightSize : height);
@@ -368,12 +413,13 @@ public class MonthView extends View {
                         }
                         day++;
                     } else {//如果一周以礼拜一为第一天
-                        if (j < dayOfWeekInMonthFirst - 2) {
-                            if (dayOfWeekInMonthFirst == 1 && j == 6) {//周日
-                                day++;
-                            }
+                        if (j < dayOfWeekInMonthFirst - 2 && dayOfWeekInMonthFirst != 1) {
                             //不绘制
                             continue;
+                        } else if (dayOfWeekInMonthFirst == 1&&j<6) {
+                            //不绘制
+                            continue;
+
                         }
                         day++;
 
@@ -391,7 +437,7 @@ public class MonthView extends View {
 
                 //实际填写的字符串
 
-                content = Integer.toString(day);
+                content = Integer.toString(currentMonthDays.get(day - 1));
                 canvas.drawText(content, x, y, blackPaint);
 
             }
@@ -529,6 +575,9 @@ public class MonthView extends View {
         //添加滑动切换日历
         b = handleScrollSwitch(event);
 
+        //设置点击监听
+
+
         return b;
     }
 
@@ -554,7 +603,7 @@ public class MonthView extends View {
                 Log.e("TAG", "tempX" + tempX);
                 Log.e("TAG", "tempY" + tempY);
 
-                if (tempX > tempY && tempX > 50) {//月份变换
+                if (tempX > tempY && tempX > dateViewWidth) {//月份变换
                     if (mx - dx > 0) {
                         calendar.add(Calendar.MONTH, -1);
                     } else {
@@ -565,7 +614,7 @@ public class MonthView extends View {
                     invalidate();
                     return true;
                 }
-                if (tempX < tempY && tempY > 50) {//年份变换
+                if (tempX < tempY && tempY > dateViewHeight) {//年份变换
                     if (my - dy > 0) {
                         calendar.add(Calendar.YEAR, -1);
                     } else {
