@@ -202,10 +202,6 @@ public class MonthView extends View {
          */
         NO_TITLE(3),
         /**
-         * 无标题
-         */
-        NO_WEEK(4),
-        /**
          * 礼拜日作为一周的第一天
          */
         SUNDAY_STYLE(5),
