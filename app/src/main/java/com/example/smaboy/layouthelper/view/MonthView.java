@@ -298,7 +298,7 @@ public class MonthView extends View {
 
 
         //判断标题和week的显示处理高度设置
-        int height =(canUsewidth / 7 * weekCount) + getPaddingTop() + getPaddingBottom();
+        int height =0;
         if (titleStyle != Style.NO_TITLE) {
             height += titleHeight;
         }
@@ -308,7 +308,15 @@ public class MonthView extends View {
 
         //确定每个日期的宽高
         dateViewWidth = canUsewidth / 7;
-        dateViewHeight = heightMode == MeasureSpec.EXACTLY ? heightSize / weekCount : dateViewWidth;
+        if(heightMode == MeasureSpec.EXACTLY ) {//精确值
+            dateViewHeight=(heightSize-height-getPaddingTop()-getPaddingBottom())/weekCount;
+        }else {
+            dateViewHeight=canUsewidth / 7;
+
+        }
+
+        //确定高度
+        height +=dateViewHeight * weekCount + getPaddingTop() + getPaddingBottom();
 
         //通过布局模式来确定宽高
         setMeasuredDimension(widthSize, heightMode == MeasureSpec.EXACTLY ? heightSize : height);
