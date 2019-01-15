@@ -680,6 +680,24 @@ public class MonthView extends View {
                                     listener.onDateClick(year, month+1, d);
                                 }
 
+                            }else {
+                                int d2,f1;
+                                if(dayOfWeekInMonthFirst==1) {//礼拜日特别处理
+                                    f1=7;
+                                    d2=7*(a+1)-6-(7-(b+1));
+
+                                }else {
+                                    f1=dayOfWeekInMonthFirst-1;
+                                    d2=7*(a+1)-(dayOfWeekInMonthFirst-2)-(7-(b+1));
+                                }
+                                //解决点击区域无日期的事件
+                                if(a==0&&b<f1-1) {//第一周无效日期处理
+                                    Toast.makeText(getContext(), "您点击的区域没有日期，请重新选择吧！！", Toast.LENGTH_SHORT).show();
+                                }else if(a==weekCount-1&&d2>daysOfMonth) {
+                                    Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    listener.onDateClick(year, month+1, d2);
+                                }
                             }
                         }
 

@@ -34,7 +34,7 @@ public class DataActivity extends Activity {
         month
         .setTitleStyle(MonthView.Style.TITLE_CENTER)
         .setOpenWeek(true)
-        .setMonthStyle(MonthView.Style.SUNDAY_STYLE)
+        .setMonthStyle(MonthView.Style.MONDAY_STYLE)
         .setOpenScrollSwitch(true)
         .setOnDateClicktListener(new MonthView.OnDateClickListener() {
             @Override
