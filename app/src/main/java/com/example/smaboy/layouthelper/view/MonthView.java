@@ -206,6 +206,16 @@ public class MonthView extends View {
      * 接口实例
      */
     private OnDateClickListener listener;
+    /**
+     *
+     *坐标 选中的列
+     */
+    private int selectX=-1;
+
+    /**
+     * 坐标 选中的行
+     */
+    private int selectY=-1;
 
     /**
      * 向外界提供点击监听的接口
@@ -300,7 +310,7 @@ public class MonthView extends View {
         blackPaint.setAntiAlias(true);
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(titleTextSize);
-        blackPaint.setStyle(Paint.Style.FILL);
+        blackPaint.setStyle(Paint.Style.STROKE);
 
         grayPaint = new Paint();
         grayPaint.setAntiAlias(true);
@@ -411,17 +421,20 @@ public class MonthView extends View {
         //知道需要绘制的天数和绘制内容1号所在星期几
         float x;
         float y;
+        float offY=0;
         String content;//填写的日期（如：1，2，3...）
         //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
         Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
-        y = getTop() + getPaddingTop() + dateViewWidth / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖直居中
+        y = getTop() + getPaddingTop() + dateViewHeight / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖直居中
         //判断标题和星期的显示与否，确定y的初始位置
         if (titleStyle != Style.NO_TITLE) {
-            y += titleHeight;
+            offY += titleHeight;
         }
         if (openWeek) {
-            y += weekHeight;
+            offY += weekHeight;
         }
+        //加上偏移
+        y+=offY;
         //开始绘制
         int day = 0;
         for (int i = 0; i < weekCount; i++) {//绘制步骤为，一周一周往下进行绘制
@@ -457,6 +470,10 @@ public class MonthView extends View {
                     continue;
                 }
 
+                //绘制选中标识（这里我们绘制一个圆环标识选中）,这里我们需要提供一个将日期转化为坐标
+                drawSelectTag(canvas, offY, selectX, selectY);
+
+
                 //判断此时的日期是否为节假日，若为节假日需要做特殊处理
                 // TODO: 2019/1/11
 
@@ -470,11 +487,30 @@ public class MonthView extends View {
                 content = Integer.toString(currentMonthDays.get(day - 1));
                 canvas.drawText(content, x, y, blackPaint);
 
+
             }
             //确定绘制时，y的位置
             y += dateViewHeight;
         }
 
+
+    }
+
+    /**
+     * 绘制选中标识
+     * @param canvas 画布
+     * @param offY Y轴偏移
+     * @param i 横坐标
+     * @param j 纵坐标
+     */
+    private void drawSelectTag(Canvas canvas, float offY, int i, int j) {
+        if(i<0||j<0) {
+            return;
+        }
+        float cx=getLeft()+getPaddingLeft()+dateViewWidth*i+dateViewWidth/2;
+        float cy=getTop()+getPaddingTop()+dateViewHeight*j+dateViewHeight/2+offY;
+        int min=Math.min(dateViewWidth,dateViewHeight);
+        canvas.drawCircle(cx,cy,min/2,blackPaint);
 
     }
 
@@ -634,6 +670,8 @@ public class MonthView extends View {
                             calendar.add(Calendar.MONTH, 1);
                         }
                         setCalendar(calendar);
+                        selectX=-1;
+                        selectY=-1;
                         requestLayout();
                         invalidate();
                         return true;
@@ -645,6 +683,8 @@ public class MonthView extends View {
                             calendar.add(Calendar.YEAR, 1);
                         }
                         setCalendar(calendar);
+                        selectX=-1;
+                        selectY=-1;
                         requestLayout();
                         invalidate();
                         return true;
@@ -678,6 +718,10 @@ public class MonthView extends View {
                                     Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
                                 }else {
                                     listener.onDateClick(year, month+1, d);
+                                    selectX=b;
+                                    selectY=a;
+                                    invalidate();//刷新
+
                                 }
 
                             }else {
@@ -697,6 +741,10 @@ public class MonthView extends View {
                                     Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
                                 }else {
                                     listener.onDateClick(year, month+1, d2);
+                                    selectX=b;
+                                    selectY=a;
+                                    invalidate();//刷新
+
                                 }
                             }
                         }
