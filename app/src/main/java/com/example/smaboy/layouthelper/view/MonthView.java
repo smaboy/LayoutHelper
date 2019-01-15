@@ -205,17 +205,14 @@ public class MonthView extends View {
     /**
      * 接口实例
      */
-    private OnClickListener listener;
+    private OnDateClickListener listener;
 
     /**
      * 向外界提供点击监听的接口
-     *
      */
-    public interface OnClickListener{
-        void onClick();
+    public interface OnDateClickListener {
+        void onDateClick(int year, int month, int date);
     }
-
-
 
 
     public MonthView(Context context) {
@@ -327,7 +324,7 @@ public class MonthView extends View {
         holidayPaint = new Paint();
         holidayPaint.setAntiAlias(true);
         holidayPaint.setColor(Color.RED);
-        holidayPaint.setTextSize(titleTextSize-10);
+        holidayPaint.setTextSize(titleTextSize - 10);
         holidayPaint.setStyle(Paint.Style.FILL);
 
 
@@ -441,7 +438,7 @@ public class MonthView extends View {
                         if (j < dayOfWeekInMonthFirst - 2 && dayOfWeekInMonthFirst != 1) {
                             //不绘制
                             continue;
-                        } else if (dayOfWeekInMonthFirst == 1&&j<6) {
+                        } else if (dayOfWeekInMonthFirst == 1 && j < 6) {
                             //不绘制
                             continue;
 
@@ -606,18 +603,12 @@ public class MonthView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         boolean b;//定义处理
         //添加滑动切换日历
-        b = handleScrollSwitch(event);
-
-        //设置点击监听
-
+        b = handleTouchEvent(event);
 
         return b;
     }
 
-    private Boolean handleScrollSwitch(MotionEvent event) {
-        if (!openScrollSwitch) {//没开启滑动切换日历
-            return super.onTouchEvent(event);
-        }
+    private Boolean handleTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             //这里我们要实现一个功能，就是左滑进入下一个月，右滑滑进入上一个月,上滑进入上一年，下滑进入下一年
 
@@ -635,52 +626,68 @@ public class MonthView extends View {
 
                 Log.e("TAG", "tempX" + tempX);
                 Log.e("TAG", "tempY" + tempY);
+                if (openScrollSwitch) {//没开启滑动切换日历
+                    if (tempX > tempY && tempX > dateViewWidth) {//月份变换
+                        if (ux - dx > 0) {
+                            calendar.add(Calendar.MONTH, -1);
+                        } else {
+                            calendar.add(Calendar.MONTH, 1);
+                        }
+                        setCalendar(calendar);
+                        requestLayout();
+                        invalidate();
+                        return true;
+                    }
+                    if (tempX < tempY && tempY > dateViewHeight) {//年份变换
+                        if (uy - dy > 0) {
+                            calendar.add(Calendar.YEAR, -1);
+                        } else {
+                            calendar.add(Calendar.YEAR, 1);
+                        }
+                        setCalendar(calendar);
+                        requestLayout();
+                        invalidate();
+                        return true;
+                    }
+                }
 
-                if (tempX > tempY && tempX > dateViewWidth) {//月份变换
-                    if (ux - dx > 0) {
-                        calendar.add(Calendar.MONTH, -1);
-                    } else {
-                        calendar.add(Calendar.MONTH, 1);
-                    }
-                    setCalendar(calendar);
-                    requestLayout();
-                    invalidate();
-                    return true;
-                }
-                if (tempX < tempY && tempY > dateViewHeight) {//年份变换
-                    if (uy - dy > 0) {
-                        calendar.add(Calendar.YEAR, -1);
-                    } else {
-                        calendar.add(Calendar.YEAR, 1);
-                    }
-                    setCalendar(calendar);
-                    requestLayout();
-                    invalidate();
-                    return true;
-                }
 
                 //处理点击事件
-                int h=0;
-                if(titleStyle!=Style.NO_TITLE) {
-                    h+=titleHeight;
+                int h = 0;
+                if (titleStyle != Style.NO_TITLE) {
+                    h += titleHeight;
                 }
-                if(openWeek) {
-                    h+=weekHeight;
+                if (openWeek) {
+                    h += weekHeight;
                 }
-                if(uy-h-getPaddingTop()>0&&uy-getHeight()+getPaddingBottom()<0&&ux-getPaddingLeft()>0&&ux-getWidth()+getPaddingRight()<0) {//点击区域只能在日期区域，不包含标题和星期区域
+                if (uy - h - getPaddingTop() > 0 && uy - getHeight() + getPaddingBottom() < 0 && ux - getPaddingLeft() > 0 && ux - getWidth() + getPaddingRight() < 0) {//点击区域只能在日期区域，不包含标题和星期区域
 
+                    if (tempX < dateViewWidth / 2 && tempY < dateViewHeight / 2) {//判别是点击事件的条件
+                        int a = (int) (uy - h - getPaddingTop()) / dateViewHeight;//获取点击的在哪一周区域,从0开始
+                        int b = (int) (ux - getPaddingLeft()) / dateViewWidth;//获取点击的在哪一星期区域,从0开始
+                        Toast.makeText(getContext(), "第" + a + "周，第" + b + "列", Toast.LENGTH_SHORT).show();
+                        //透过a、b我们可以获取点击区域的日期内容
+                        if (null != listener) {
+                            //获取日期
+                            if (monthStyle == Style.SUNDAY_STYLE) {//当前样式为星期天为一周的第一天
+                                int d=7*(a+1)-(dayOfWeekInMonthFirst-1)-(7-(b+1));
+                                //解决点击区域无日期的事件
+                                if(a==0&&b<dayOfWeekInMonthFirst-1) {//第一周无效日期处理
+                                    Toast.makeText(getContext(), "您点击的区域没有日期，请重新选择吧！！", Toast.LENGTH_SHORT).show();
+                                }else if(a==weekCount-1&&d>daysOfMonth) {
+                                    Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    listener.onDateClick(year, month+1, d);
+                                }
 
-                    int a= (int) (uy-h-getPaddingTop())/dateViewHeight;//获取点击的在哪一周区域,从0开始
-                    int b= (int) (ux-getPaddingLeft())/dateViewWidth;//获取点击的在哪一周区域,从0开始
+                            }
+                        }
 
-                    Toast.makeText(getContext(), "第"+a+"周，第"+b+"列", Toast.LENGTH_SHORT).show();
-
-
-
-
-
+                    }
 
                 }
+
+                break;//跳出
 
         }
         return super.onTouchEvent(event);
@@ -836,7 +843,8 @@ public class MonthView extends View {
      *
      * @param listener 监听实例
      */
-    public void setListener(OnClickListener listener) {
+    public MonthView setOnDateClicktListener(OnDateClickListener listener) {
         this.listener = listener;
+        return this;
     }
 }

@@ -3,6 +3,7 @@ package com.example.smaboy.layouthelper.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.view.MonthView;
 
@@ -29,8 +30,18 @@ public class DataActivity extends Activity {
 
 //        month.setTitleStyle(MonthView.Style.TITLE_RIGHT);
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.MONTH,-5);
-        month.setCalendar(instance);
+        instance.add(Calendar.MONTH,6);
+        month
+        .setTitleStyle(MonthView.Style.TITLE_CENTER)
+        .setOpenWeek(true)
+        .setMonthStyle(MonthView.Style.SUNDAY_STYLE)
+        .setOpenScrollSwitch(true)
+        .setOnDateClicktListener(new MonthView.OnDateClickListener() {
+            @Override
+            public void onDateClick(int year, int month, int date) {
+                Toast.makeText(DataActivity.this, year+"-"+month+"-"+date, Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 
