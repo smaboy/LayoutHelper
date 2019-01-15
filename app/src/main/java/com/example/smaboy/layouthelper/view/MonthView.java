@@ -384,7 +384,11 @@ public class MonthView extends View {
         if (heightMode == MeasureSpec.EXACTLY) {//精确值
             dateViewHeight = (heightSize - height - getPaddingTop() - getPaddingBottom()) / weekCount;
         } else {
-            dateViewHeight = canUsewidth / 7;
+            if(heightSize>widthSize) {
+                dateViewHeight = canUsewidth / 7;
+            }else {
+                dateViewHeight=(heightSize-height)/(weekCount+1);
+            }
 
         }
 
@@ -705,7 +709,7 @@ public class MonthView extends View {
                     if (tempX < dateViewWidth / 2 && tempY < dateViewHeight / 2) {//判别是点击事件的条件
                         int a = (int) (uy - h - getPaddingTop()) / dateViewHeight;//获取点击的在哪一周区域,从0开始
                         int b = (int) (ux - getPaddingLeft()) / dateViewWidth;//获取点击的在哪一星期区域,从0开始
-                        Toast.makeText(getContext(), "第" + a + "周，第" + b + "列", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), "第" + a + "周，第" + b + "列", Toast.LENGTH_SHORT).show();
                         //透过a、b我们可以获取点击区域的日期内容
                         if (null != listener) {
                             //获取日期
