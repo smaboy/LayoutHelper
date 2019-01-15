@@ -95,7 +95,7 @@ public class MonthView extends View {
      * <p>
      * 该参数用于处理在该月份中默认选中的日期，方便以后做日期选择范围的控制
      */
-    private int defSelectedDay;
+    private int defSelectedDay=-1;
 
 
     /**
@@ -292,7 +292,6 @@ public class MonthView extends View {
         month = calendar.get(Calendar.MONTH);
         date = calendar.get(Calendar.DATE);
 
-
         //初始化画笔工具
         initPaint();
 
@@ -475,6 +474,10 @@ public class MonthView extends View {
                 }
 
                 //绘制选中标识（这里我们绘制一个圆环标识选中）,这里我们需要提供一个将日期转化为坐标
+                if(defSelectedDay!=-1&&day==defSelectedDay) {//默认选中的日期
+                    selectX=j;
+                    selectY=i;
+                }
                 drawSelectTag(canvas, offY, selectX, selectY);
 
 
@@ -724,6 +727,7 @@ public class MonthView extends View {
                                     listener.onDateClick(year, month+1, d);
                                     selectX=b;
                                     selectY=a;
+                                    defSelectedDay=-1;//置空默认值
                                     invalidate();//刷新
 
                                 }
@@ -747,6 +751,7 @@ public class MonthView extends View {
                                     listener.onDateClick(year, month+1, d2);
                                     selectX=b;
                                     selectY=a;
+                                    defSelectedDay=-1;//置空默认值
                                     invalidate();//刷新
 
                                 }
@@ -821,6 +826,12 @@ public class MonthView extends View {
         return this;
     }
 
+    /**
+     * 设置默认选中的日期
+     *
+     * @param defSelectedDay
+     * @return
+     */
     public MonthView setDefSelectedDay(int defSelectedDay) {
         this.defSelectedDay = defSelectedDay;
         return this;
@@ -917,4 +928,6 @@ public class MonthView extends View {
         this.listener = listener;
         return this;
     }
+
+
 }

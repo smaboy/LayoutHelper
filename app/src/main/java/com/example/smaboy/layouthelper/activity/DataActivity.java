@@ -41,7 +41,8 @@ public class DataActivity extends Activity {
             public void onDateClick(int year, int month, int date) {
                 Toast.makeText(DataActivity.this, year+"-"+month+"-"+date, Toast.LENGTH_SHORT).show();
             }
-        });
+        })
+        .setDefSelectedDay(Calendar.getInstance().get(Calendar.DATE));
 
 
 
