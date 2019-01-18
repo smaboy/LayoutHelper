@@ -61,6 +61,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startActivity(new Intent(MainActivity.this,DataActivity.class));
 
                 break;
+            case R.id.skeleton ://骨架屏
+                startActivity(new Intent(MainActivity.this,DataActivity.class));
+
+                break;
         }
 
     }

@@ -2,14 +2,13 @@ package com.example.smaboy.layouthelper.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+import com.example.smaboy.layouthelper.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -424,7 +423,7 @@ public class MonthView extends View {
         //知道需要绘制的天数和绘制内容1号所在星期几
         float x;
         float y;
-        float offY=0;
+        float offY=0;//偏移量
         String content;//填写的日期（如：1，2，3...）
         //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
         Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
@@ -474,19 +473,15 @@ public class MonthView extends View {
                 }
 
                 //绘制选中标识（这里我们绘制一个圆环标识选中）,这里我们需要提供一个将日期转化为坐标
-                if(defSelectedDay!=-1&&day==defSelectedDay) {//默认选中的日期
+                if(defSelectedDay!=-1&&day==defSelectedDay) {//绘制默认选中的日期的背景
                     selectX=j;
                     selectY=i;
+                    drawSelectTag(canvas, offY, selectX, selectY);
                 }
-                drawSelectTag(canvas, offY, selectX, selectY);
-
-
-                //判断此时的日期是否为节假日，若为节假日需要做特殊处理
-                // TODO: 2019/1/11
-
-
-                //绘制农历
-                // TODO: 2019/1/11
+                //绘制通过点击事件触发的背景
+                if(selectX==j&&selectY==i) {
+                    drawSelectTag(canvas, offY, selectX, selectY);
+                }
 
 
                 //实际填写的字符串
@@ -514,10 +509,23 @@ public class MonthView extends View {
         if(i<0||j<0) {
             return;
         }
-        float cx=getLeft()+getPaddingLeft()+dateViewWidth*i+dateViewWidth/2;
-        float cy=getTop()+getPaddingTop()+dateViewHeight*j+dateViewHeight/2+offY;
+
+        //绘制默认标识
+        float x=getLeft()+getPaddingLeft()+dateViewWidth*i;
+        float y=getTop()+getPaddingTop()+dateViewHeight*j+offY;
+        float cx=x+dateViewWidth/2;
+        float cy=y+dateViewHeight/2;
         int min=Math.min(dateViewWidth,dateViewHeight);
-        canvas.drawCircle(cx,cy,min/2,blackPaint);
+//        canvas.drawCircle(cx,cy,min/2,blackPaint);
+
+        //绘制背景图片
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.jpyd_date_selected_bg);
+        // 指定图片绘制区域(左上角的四分之一)
+        Rect src = new Rect(0,0, bitmap.getWidth(),bitmap.getHeight());
+        // 指定图片在屏幕上显示的区域(原图大小)
+        Rect dst = new Rect((int) x,(int) y,(int) x+dateViewWidth,(int) y+dateViewHeight);
+        canvas.drawBitmap(bitmap,src,dst,null);
+
 
     }
 
