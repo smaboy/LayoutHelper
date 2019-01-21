@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-import com.example.smaboy.layouthelper.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +19,9 @@ import java.util.List;
  * 1.提供输入指定月份后，绘制出该月份的天数和头部星期排列（可控制显示与否，可调整星期排序：星期一在一列，星期天在第一列）
  * 2.提供标题的显示与否，标题的排列方式（左对齐，居中对齐，右对齐）
  * 3.提供星期的显示与否及样式
+ * 4.提供左右滑切换月份，上下滑切换年份，并为该功能提供了开关
+ * 5.提供点击事件的回调监听
+ * 6.提供设置选中日期的背景公共方法，可以设置选中日期的背景，不设置的话采用默认背景
  * <p>
  * 作者: Smaboy
  * 创建时间: 2019/1/9 10:16
@@ -94,7 +96,7 @@ public class MonthView extends View {
      * <p>
      * 该参数用于处理在该月份中默认选中的日期，方便以后做日期选择范围的控制
      */
-    private int defSelectedDay=-1;
+    private int defSelectedDay = -1;
 
 
     /**
@@ -132,6 +134,10 @@ public class MonthView extends View {
      * 节假日专用画笔
      */
     private Paint holidayPaint;
+    /**
+     * 选中画圈专用画笔
+     */
+    private Paint selectedPaint;
 
     /**
      * 标题样式
@@ -206,15 +212,19 @@ public class MonthView extends View {
      */
     private OnDateClickListener listener;
     /**
-     *
-     *坐标 选中的列
+     * 坐标 选中的列
      */
-    private int selectX=-1;
+    private int selectX = -1;
 
     /**
      * 坐标 选中的行
      */
-    private int selectY=-1;
+    private int selectY = -1;
+
+    /**
+     * 选中的背景图
+     */
+    private Bitmap selectedBitmap;
 
     /**
      * 向外界提供点击监听的接口
@@ -336,6 +346,12 @@ public class MonthView extends View {
         holidayPaint.setStyle(Paint.Style.FILL);
 
 
+        selectedPaint = new Paint();
+        selectedPaint.setAntiAlias(true);
+        selectedPaint.setColor(Color.RED);
+        selectedPaint.setStrokeWidth(2.5f);
+        selectedPaint.setStyle(Paint.Style.STROKE);
+
     }
 
     @Override
@@ -382,10 +398,10 @@ public class MonthView extends View {
         if (heightMode == MeasureSpec.EXACTLY) {//精确值
             dateViewHeight = (heightSize - height - getPaddingTop() - getPaddingBottom()) / weekCount;
         } else {
-            if(heightSize>widthSize) {
+            if (heightSize > widthSize) {
                 dateViewHeight = canUsewidth / 7;
-            }else {
-                dateViewHeight=(heightSize-height)/(weekCount+1);
+            } else {
+                dateViewHeight = (heightSize - height) / (weekCount + 1);
             }
 
         }
@@ -423,7 +439,7 @@ public class MonthView extends View {
         //知道需要绘制的天数和绘制内容1号所在星期几
         float x;
         float y;
-        float offY=0;//偏移量
+        float offY = 0;//偏移量
         String content;//填写的日期（如：1，2，3...）
         //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
         Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
@@ -436,7 +452,7 @@ public class MonthView extends View {
             offY += weekHeight;
         }
         //加上偏移
-        y+=offY;
+        y += offY;
         //开始绘制
         int day = 0;
         for (int i = 0; i < weekCount; i++) {//绘制步骤为，一周一周往下进行绘制
@@ -472,14 +488,14 @@ public class MonthView extends View {
                     continue;
                 }
 
-                //绘制选中标识（这里我们绘制一个圆环标识选中）,这里我们需要提供一个将日期转化为坐标
-                if(defSelectedDay!=-1&&day==defSelectedDay) {//绘制默认选中的日期的背景
-                    selectX=j;
-                    selectY=i;
+                //绘制默认选中标识（这里我们绘制一个圆环标识选中）,这里我们需要提供一个将日期转化为坐标
+                if (defSelectedDay != -1 && day == defSelectedDay) {//绘制默认选中的日期的背景
+                    selectX = j;
+                    selectY = i;
                     drawSelectTag(canvas, offY, selectX, selectY);
                 }
                 //绘制通过点击事件触发的背景
-                if(selectX==j&&selectY==i) {
+                if (selectX == j && selectY == i) {
                     drawSelectTag(canvas, offY, selectX, selectY);
                 }
 
@@ -500,31 +516,35 @@ public class MonthView extends View {
 
     /**
      * 绘制选中标识
+     *
      * @param canvas 画布
-     * @param offY Y轴偏移
-     * @param i 横坐标
-     * @param j 纵坐标
+     * @param offY   Y轴偏移
+     * @param i      横坐标
+     * @param j      纵坐标
      */
     private void drawSelectTag(Canvas canvas, float offY, int i, int j) {
-        if(i<0||j<0) {
+        if (i < 0 || j < 0) {
             return;
         }
+        float x = getLeft() + getPaddingLeft() + dateViewWidth * i;
+        float y = getTop() + getPaddingTop() + dateViewHeight * j + offY;
 
-        //绘制默认标识
-        float x=getLeft()+getPaddingLeft()+dateViewWidth*i;
-        float y=getTop()+getPaddingTop()+dateViewHeight*j+offY;
-        float cx=x+dateViewWidth/2;
-        float cy=y+dateViewHeight/2;
-        int min=Math.min(dateViewWidth,dateViewHeight);
-//        canvas.drawCircle(cx,cy,min/2,blackPaint);
+        if (null == selectedBitmap) {
+            //绘制默认标识
 
-        //绘制背景图片
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.jpyd_date_selected_bg);
-        // 指定图片绘制区域(左上角的四分之一)
-        Rect src = new Rect(0,0, bitmap.getWidth(),bitmap.getHeight());
-        // 指定图片在屏幕上显示的区域(原图大小)
-        Rect dst = new Rect((int) x,(int) y,(int) x+dateViewWidth,(int) y+dateViewHeight);
-        canvas.drawBitmap(bitmap,src,dst,null);
+            float cx = x + dateViewWidth / 2;
+            float cy = y + dateViewHeight / 2;
+            int min = Math.min(dateViewWidth, dateViewHeight);
+            canvas.drawCircle(cx, cy, min / 2, selectedPaint);
+        } else {
+            //绘制背景图片
+//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.jpyd_date_selected_bg);
+            // 指定图片绘制区域(左上角的四分之一)
+            Rect src = new Rect(0, 0, selectedBitmap.getWidth(), selectedBitmap.getHeight());
+            // 指定图片在屏幕上显示的区域(原图大小)
+            Rect dst = new Rect((int) x, (int) y, (int) x + dateViewWidth, (int) y + dateViewHeight);
+            canvas.drawBitmap(selectedBitmap, src, dst, null);
+        }
 
 
     }
@@ -685,8 +705,8 @@ public class MonthView extends View {
                             calendar.add(Calendar.MONTH, 1);
                         }
                         setCalendar(calendar);
-                        selectX=-1;
-                        selectY=-1;
+                        selectX = -1;
+                        selectY = -1;
                         requestLayout();
                         invalidate();
                         return true;
@@ -698,8 +718,8 @@ public class MonthView extends View {
                             calendar.add(Calendar.YEAR, 1);
                         }
                         setCalendar(calendar);
-                        selectX=-1;
-                        selectY=-1;
+                        selectX = -1;
+                        selectY = -1;
                         requestLayout();
                         invalidate();
                         return true;
@@ -725,41 +745,41 @@ public class MonthView extends View {
                         if (null != listener) {
                             //获取日期
                             if (monthStyle == Style.SUNDAY_STYLE) {//当前样式为星期天为一周的第一天
-                                int d=7*(a+1)-(dayOfWeekInMonthFirst-1)-(7-(b+1));
+                                int d = 7 * (a + 1) - (dayOfWeekInMonthFirst - 1) - (7 - (b + 1));
                                 //解决点击区域无日期的事件
-                                if(a==0&&b<dayOfWeekInMonthFirst-1) {//第一周无效日期处理
+                                if (a == 0 && b < dayOfWeekInMonthFirst - 1) {//第一周无效日期处理
                                     Toast.makeText(getContext(), "您点击的区域没有日期，请重新选择吧！！", Toast.LENGTH_SHORT).show();
-                                }else if(a==weekCount-1&&d>daysOfMonth) {
+                                } else if (a == weekCount - 1 && d > daysOfMonth) {
                                     Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
-                                }else {
-                                    listener.onDateClick(year, month+1, d);
-                                    selectX=b;
-                                    selectY=a;
-                                    defSelectedDay=-1;//置空默认值
+                                } else {
+                                    listener.onDateClick(year, month + 1, d);
+                                    selectX = b;
+                                    selectY = a;
+                                    defSelectedDay = -1;//置空默认值
                                     invalidate();//刷新
 
                                 }
 
-                            }else {
-                                int d2,f1;
-                                if(dayOfWeekInMonthFirst==1) {//礼拜日特别处理
-                                    f1=7;
-                                    d2=7*(a+1)-6-(7-(b+1));
+                            } else {
+                                int d2, f1;
+                                if (dayOfWeekInMonthFirst == 1) {//礼拜日特别处理
+                                    f1 = 7;
+                                    d2 = 7 * (a + 1) - 6 - (7 - (b + 1));
 
-                                }else {
-                                    f1=dayOfWeekInMonthFirst-1;
-                                    d2=7*(a+1)-(dayOfWeekInMonthFirst-2)-(7-(b+1));
+                                } else {
+                                    f1 = dayOfWeekInMonthFirst - 1;
+                                    d2 = 7 * (a + 1) - (dayOfWeekInMonthFirst - 2) - (7 - (b + 1));
                                 }
                                 //解决点击区域无日期的事件
-                                if(a==0&&b<f1-1) {//第一周无效日期处理
+                                if (a == 0 && b < f1 - 1) {//第一周无效日期处理
                                     Toast.makeText(getContext(), "您点击的区域没有日期，请重新选择吧！！", Toast.LENGTH_SHORT).show();
-                                }else if(a==weekCount-1&&d2>daysOfMonth) {
+                                } else if (a == weekCount - 1 && d2 > daysOfMonth) {
                                     Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
-                                }else {
-                                    listener.onDateClick(year, month+1, d2);
-                                    selectX=b;
-                                    selectY=a;
-                                    defSelectedDay=-1;//置空默认值
+                                } else {
+                                    listener.onDateClick(year, month + 1, d2);
+                                    selectX = b;
+                                    selectY = a;
+                                    defSelectedDay = -1;//置空默认值
                                     invalidate();//刷新
 
                                 }
@@ -934,6 +954,26 @@ public class MonthView extends View {
      */
     public MonthView setOnDateClicktListener(OnDateClickListener listener) {
         this.listener = listener;
+        return this;
+    }
+
+    /**
+     * 向外界提供设置点击选中背景的方法，如果没有设置默认图片背景，则采用默认形式
+     *
+     * @param id 资源id
+     */
+    public MonthView setSelectedBackground(int id) {
+        selectedBitmap = BitmapFactory.decodeResource(getResources(), id);
+        return this;
+    }
+
+    /**
+     * 向外界提供设置点击选中背景的方法，如果没有设置默认图片背景，则采用默认形式
+     *
+     * @param bitmap 位图
+     */
+    public MonthView setSelectedBackground(Bitmap bitmap) {
+        selectedBitmap = bitmap;
         return this;
     }
 

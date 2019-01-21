@@ -34,7 +34,7 @@ public class DataActivity extends Activity {
         month
         .setTitleStyle(MonthView.Style.TITLE_CENTER)
         .setOpenWeek(true)
-        .setMonthStyle(MonthView.Style.SUNDAY_STYLE)
+        .setMonthStyle(MonthView.Style.MONDAY_STYLE)
         .setOpenScrollSwitch(true)
         .setOnDateClicktListener(new MonthView.OnDateClickListener() {
             @Override
@@ -42,7 +42,8 @@ public class DataActivity extends Activity {
                 Toast.makeText(DataActivity.this, year+"-"+month+"-"+date, Toast.LENGTH_SHORT).show();
             }
         })
-        .setDefSelectedDay(Calendar.getInstance().get(Calendar.DATE));
+        .setDefSelectedDay(Calendar.getInstance().get(Calendar.DATE))
+        .setSelectedBackground(R.mipmap.jpyd_date_selected_bg);
 
 
 
