@@ -42,7 +42,7 @@ public class DataActivity extends Activity {
                 Toast.makeText(DataActivity.this, year+"-"+month+"-"+date, Toast.LENGTH_SHORT).show();
             }
         })
-        .setDefSelectedDay(Calendar.getInstance().get(Calendar.DATE))
+        .setDefSelectedDay(Calendar.getInstance())
         .setSelectedBackground(R.mipmap.jpyd_date_selected_bg);
 
 

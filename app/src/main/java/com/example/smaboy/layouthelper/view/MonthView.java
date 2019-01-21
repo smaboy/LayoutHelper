@@ -96,7 +96,7 @@ public class MonthView extends View {
      * <p>
      * 该参数用于处理在该月份中默认选中的日期，方便以后做日期选择范围的控制
      */
-    private int defSelectedDay = -1;
+    private Calendar defCalendar ;
 
 
     /**
@@ -211,15 +211,6 @@ public class MonthView extends View {
      * 接口实例
      */
     private OnDateClickListener listener;
-    /**
-     * 坐标 选中的列
-     */
-    private int selectX = -1;
-
-    /**
-     * 坐标 选中的行
-     */
-    private int selectY = -1;
 
     /**
      * 选中的背景图
@@ -489,14 +480,8 @@ public class MonthView extends View {
                 }
 
                 //绘制默认选中标识（这里我们绘制一个圆环标识选中）,这里我们需要提供一个将日期转化为坐标
-                if (defSelectedDay != -1 && day == defSelectedDay) {//绘制默认选中的日期的背景
-                    selectX = j;
-                    selectY = i;
-                    drawSelectTag(canvas, offY, selectX, selectY);
-                }
-                //绘制通过点击事件触发的背景
-                if (selectX == j && selectY == i) {
-                    drawSelectTag(canvas, offY, selectX, selectY);
+                if (isDefCalendar(year,month,currentMonthDays.get(day - 1))) {//绘制默认选中的日期的背景
+                    drawSelectTag(canvas, offY, j, i);
                 }
 
 
@@ -512,6 +497,23 @@ public class MonthView extends View {
         }
 
 
+    }
+
+    /**
+     * 用于处理此时绘制的日期是否为默认选中日期
+     *
+     * @param year 年
+     * @param month 月
+     * @param integer 日
+     * @return
+     */
+    private boolean isDefCalendar(int year, int month, Integer integer) {
+        if(null!=defCalendar&&defCalendar.get(Calendar.YEAR)==year&&defCalendar.get(Calendar.MONTH)==month
+                &&defCalendar.get(Calendar.DATE)==integer) {
+            return  true;
+
+        }
+        return false;
     }
 
     /**
@@ -705,8 +707,6 @@ public class MonthView extends View {
                             calendar.add(Calendar.MONTH, 1);
                         }
                         setCalendar(calendar);
-                        selectX = -1;
-                        selectY = -1;
                         requestLayout();
                         invalidate();
                         return true;
@@ -718,8 +718,6 @@ public class MonthView extends View {
                             calendar.add(Calendar.YEAR, 1);
                         }
                         setCalendar(calendar);
-                        selectX = -1;
-                        selectY = -1;
                         requestLayout();
                         invalidate();
                         return true;
@@ -753,9 +751,9 @@ public class MonthView extends View {
                                     Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
                                 } else {
                                     listener.onDateClick(year, month + 1, d);
-                                    selectX = b;
-                                    selectY = a;
-                                    defSelectedDay = -1;//置空默认值
+                                    Calendar calendar1 = Calendar.getInstance();
+                                    calendar1.set(year,month,d);
+                                    defCalendar = calendar1;//重写默认值
                                     invalidate();//刷新
 
                                 }
@@ -777,9 +775,9 @@ public class MonthView extends View {
                                     Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
                                 } else {
                                     listener.onDateClick(year, month + 1, d2);
-                                    selectX = b;
-                                    selectY = a;
-                                    defSelectedDay = -1;//置空默认值
+                                    Calendar calendar2 = Calendar.getInstance();
+                                    calendar2.set(year,month,d2);
+                                    defCalendar = calendar2;//置写默认值
                                     invalidate();//刷新
 
                                 }
@@ -857,11 +855,11 @@ public class MonthView extends View {
     /**
      * 设置默认选中的日期
      *
-     * @param defSelectedDay
+     * @param defCalendar
      * @return
      */
-    public MonthView setDefSelectedDay(int defSelectedDay) {
-        this.defSelectedDay = defSelectedDay;
+    public MonthView setDefSelectedDay(Calendar defCalendar) {
+        this.defCalendar = defCalendar;
         return this;
     }
 
