@@ -3,11 +3,13 @@ package com.example.smaboy.layouthelper.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+import com.example.smaboy.layouthelper.util.ChinaDataUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,7 +33,10 @@ public class MonthView extends View {
     //-------------常量部分----------------------
     private static final String[] WEEK_SUN = new String[]{"日", "一", "二", "三", "四", "五", "六"};
     private static final String[] WEEK_MON = new String[]{"一", "二", "三", "四", "五", "六", "日"};
-    //农历部分假日  （无用）
+
+    /**
+     * 农历部分假日
+     */
     private final static String[] lunarHolidays = new String[]{
             "0101 春节",
             "0115 元宵",
@@ -45,7 +50,9 @@ public class MonthView extends View {
             "0100 除夕"
     };
 
-    //公历部分节假日
+    /**
+     * 公历部分节假日
+     */
     private final static String[] solarHolidays = new String[]{
             "0101 元旦",
             "0214 情人",
@@ -96,7 +103,7 @@ public class MonthView extends View {
      * <p>
      * 该参数用于处理在该月份中默认选中的日期，方便以后做日期选择范围的控制
      */
-    private Calendar defCalendar ;
+    private Calendar defCalendar;
 
 
     /**
@@ -165,7 +172,7 @@ public class MonthView extends View {
     /**
      * 标题文字大小
      */
-    private int titleTextSize = 40;
+    private int titleTextSize = 30;
 
 
     /**
@@ -332,8 +339,8 @@ public class MonthView extends View {
 
         holidayPaint = new Paint();
         holidayPaint.setAntiAlias(true);
-        holidayPaint.setColor(Color.RED);
-        holidayPaint.setTextSize(titleTextSize - 10);
+        holidayPaint.setColor(Color.BLUE);
+        holidayPaint.setTextSize(titleTextSize);
         holidayPaint.setStyle(Paint.Style.FILL);
 
 
@@ -432,6 +439,7 @@ public class MonthView extends View {
         float y;
         float offY = 0;//偏移量
         String content;//填写的日期（如：1，2，3...）
+        boolean isHoliday;//判别是否为节假日
         //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
         Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
         y = getTop() + getPaddingTop() + dateViewHeight / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖直居中
@@ -471,8 +479,19 @@ public class MonthView extends View {
                 } else {
                     day++;
                 }
+
+                //判断此时的日期是否为节假日日期
+                if (!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))) {
+                    //节假日字符串
+                    content = getFestivalContent(year, month, currentMonthDays.get(day - 1));
+                    isHoliday = true;
+                } else {
+                    //非节假日实际填写的字符串
+                    content = Integer.toString(currentMonthDays.get(day - 1));
+                    isHoliday = false;
+                }
                 //获取日期内容的宽度
-                float dayWidth = blackPaint.measureText(Integer.toString(day));
+                float dayWidth = blackPaint.measureText(content);
                 x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
                 //处理写入的文字
                 if (day < 1 || day > daysOfMonth) {//日期不在当前月份的范围内，舍去
@@ -480,15 +499,12 @@ public class MonthView extends View {
                 }
 
                 //绘制默认选中标识（这里我们绘制一个圆环标识选中）,这里我们需要提供一个将日期转化为坐标
-                if (isDefCalendar(year,month,currentMonthDays.get(day - 1))) {//绘制默认选中的日期的背景
+                if (isDefCalendar(year, month, currentMonthDays.get(day - 1))) {//绘制默认选中的日期的背景
                     drawSelectTag(canvas, offY, j, i);
                 }
 
-
-                //实际填写的字符串
-
-                content = Integer.toString(currentMonthDays.get(day - 1));
-                canvas.drawText(content, x, y, blackPaint);
+                //绘制内容
+                canvas.drawText(content, x, y, isHoliday ? holidayPaint : blackPaint);
 
 
             }
@@ -500,17 +516,68 @@ public class MonthView extends View {
     }
 
     /**
+     * 判断当前传入的日期是否为节假日，如果是则返回节假日的名称
+     * 判断规则：先查看当前日期与公历节假日数组匹配，如果匹配成功则返回当前节假日的名称
+     * 如果匹配失败，则换算出当前日期的农历与农历节假日数组匹配进行筛选，匹配
+     * 成功则返回农历节假日的名称，否则返回空的字符串
+     * <p>
+     * 注意：传参的话必须是公历日期（如果不是，会出现匹配异常）
+     *
+     * @param year  年
+     * @param month 月
+     * @param day   日
+     */
+    private String getFestivalContent(int year, int month, int day) {
+
+        //节假日名称
+        String holidayName = "";
+        //获取传入的月日长度为4的字符串
+        String m = String.valueOf(month + 1).length() == 2 ? String.valueOf(month + 1) : "0" + (month + 1);
+        String d = String.valueOf(day).length() == 2 ? String.valueOf(day) : "0" + day;
+        String md = m + d;
+
+        try {
+            //公历节假日匹配
+            for (String solar : solarHolidays) {
+                if (solar.contains(md)) {
+                    holidayName = solar.split(" ")[1];
+                    return holidayName;
+                }
+
+            }
+            //获取对应的农历日期
+            long[] lunarData = ChinaDataUtils.calElement(year, month + 1, day);
+            String lm = String.valueOf(lunarData[1]).length() == 2 ? String.valueOf(lunarData[1]) : "0" + lunarData[1];
+            String ld = String.valueOf(lunarData[2]).length() == 2 ? String.valueOf(lunarData[2]) : "0" + lunarData[2];
+            String lmd = lm + ld;
+            //公历节假日匹配
+            for (String lunar : lunarHolidays) {
+                if (lunar.contains(lmd)) {
+                    holidayName = lunar.split(" ")[1];
+                    return holidayName;
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("getFestivalContent", "节假日匹配异常");
+        }
+
+
+        return holidayName;
+    }
+
+    /**
      * 用于处理此时绘制的日期是否为默认选中日期
      *
-     * @param year 年
-     * @param month 月
+     * @param year    年
+     * @param month   月
      * @param integer 日
      * @return
      */
-    private boolean isDefCalendar(int year, int month, Integer integer) {
-        if(null!=defCalendar&&defCalendar.get(Calendar.YEAR)==year&&defCalendar.get(Calendar.MONTH)==month
-                &&defCalendar.get(Calendar.DATE)==integer) {
-            return  true;
+    private boolean isDefCalendar(int year, int month, int integer) {
+        if (null != defCalendar && defCalendar.get(Calendar.YEAR) == year && defCalendar.get(Calendar.MONTH) == month
+                && defCalendar.get(Calendar.DATE) == integer) {
+            return true;
 
         }
         return false;
@@ -752,7 +819,7 @@ public class MonthView extends View {
                                 } else {
                                     listener.onDateClick(year, month + 1, d);
                                     Calendar calendar1 = Calendar.getInstance();
-                                    calendar1.set(year,month,d);
+                                    calendar1.set(year, month, d);
                                     defCalendar = calendar1;//重写默认值
                                     invalidate();//刷新
 
@@ -776,7 +843,7 @@ public class MonthView extends View {
                                 } else {
                                     listener.onDateClick(year, month + 1, d2);
                                     Calendar calendar2 = Calendar.getInstance();
-                                    calendar2.set(year,month,d2);
+                                    calendar2.set(year, month, d2);
                                     defCalendar = calendar2;//置写默认值
                                     invalidate();//刷新
 

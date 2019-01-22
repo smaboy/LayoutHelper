@@ -371,6 +371,7 @@ public class ChinaDataUtils {
         StringBuffer sToday = new StringBuffer();
         try {
             sToday.append(sdf.format(today.getTime()));
+            sToday.append("---->"+l[0]+"-"+l[1]+"-"+l[2]);
             sToday.append(" 农历");
             sToday.append(cyclical((int) l[0]));
             sToday.append('(');
@@ -395,6 +396,6 @@ public class ChinaDataUtils {
      */
     public static void main(String[] args) {
         System.out.println(today());
-        System.out.println(oneDay(2019, 0, 22));
+        System.out.println(oneDay(2019, 0, 2));
     }
 }
