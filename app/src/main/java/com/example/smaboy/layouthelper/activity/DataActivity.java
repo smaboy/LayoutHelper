@@ -30,20 +30,20 @@ public class DataActivity extends Activity {
 
 //        month.setTitleStyle(MonthView.Style.TITLE_RIGHT);
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.MONTH,6);
+        instance.add(Calendar.MONTH, 6);
         month
-        .setTitleStyle(MonthView.Style.TITLE_CENTER)
-        .setOpenWeek(true)
-        .setMonthStyle(MonthView.Style.MONDAY_STYLE)
-        .setOpenScrollSwitch(true)
-        .setOnDateClicktListener(new MonthView.OnDateClickListener() {
-            @Override
-            public void onDateClick(int year, int month, int date) {
-                Toast.makeText(DataActivity.this, year+"-"+month+"-"+date, Toast.LENGTH_SHORT).show();
-            }
-        })
-        .setDefSelectedDay(Calendar.getInstance())
-        .setSelectedBackground(R.mipmap.jpyd_date_selected_bg);
+                .setTitleStyle(MonthView.Style.TITLE_CENTER)
+                .setOpenWeek(true)
+                .setMonthStyle(MonthView.Style.MONDAY_STYLE)
+                .setOpenScrollSwitch(true)
+                .setOnDateClicktListener(new MonthView.OnDateClickListener() {
+                    @Override
+                    public void onDateClick(int year, int month, int date) {
+                        Toast.makeText(DataActivity.this, year + "-" + month + "-" + date, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setDefSelectedDay(Calendar.getInstance())
+                .setSelectedBackground(R.mipmap.jpyd_date_selected_bg);
 
 
 
