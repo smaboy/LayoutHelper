@@ -225,6 +225,13 @@ public class MonthView extends View {
     private Bitmap selectedBitmap;
 
     /**
+     * 显示公历、农历的样式
+     * 这里提供三个样式： NO_LUNAR_HOLIDAY , NO_LUNAR , LUNAR_HOLIDAY
+     *
+     */
+    private Style showLunarStyle=Style.NO_LUNAR_HOLIDAY;
+
+    /**
      * 向外界提供点击监听的接口
      */
     public interface OnDateClickListener {
@@ -278,7 +285,20 @@ public class MonthView extends View {
         /**
          * 礼拜一作为一周的第一天
          */
-        MONDAY_STYLE(6);
+        MONDAY_STYLE(6),
+
+        /**
+         * 不显示农历,节假日
+         */
+        NO_LUNAR_HOLIDAY(7),
+        /**
+         * 不显示农历，如果当日为节假日则显示节假日
+         */
+        NO_LUNAR(8),
+        /**
+         * 显示农历，如果为节假日则显示节假日
+         */
+        LUNAR_HOLIDAY(9);
 
         Style(int nativeInt) {
             this.nativeInt = nativeInt;
@@ -438,8 +458,8 @@ public class MonthView extends View {
         float x;
         float y;
         float offY = 0;//偏移量
-        String content;//填写的日期（如：1，2，3...）
-        boolean isHoliday;//判别是否为节假日
+        String content="";//填写的日期（如：1，2，3...）
+        boolean isHoliday=false;//判别是否为节假日
         //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
         Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
         y = getTop() + getPaddingTop() + dateViewHeight / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖直居中
@@ -481,15 +501,33 @@ public class MonthView extends View {
                 }
 
                 //判断此时的日期是否为节假日日期
-                if (!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))) {
-                    //节假日字符串
-                    content = getFestivalContent(year, month, currentMonthDays.get(day - 1));
-                    isHoliday = true;
-                } else {
-                    //非节假日实际填写的字符串
-                    content = Integer.toString(currentMonthDays.get(day - 1));
-                    isHoliday = false;
+                switch (showLunarStyle) {
+                    case NO_LUNAR_HOLIDAY :
+                        //非节假日实际填写的字符串
+                        content = Integer.toString(currentMonthDays.get(day - 1));
+                        isHoliday = false;
+                        break;
+                    case NO_LUNAR :
+                        if (!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))) {
+                            //节假日字符串
+                            content = getFestivalContent(year, month, currentMonthDays.get(day - 1));
+                            isHoliday = true;
+                        } else {
+                            //非节假日实际填写的字符串
+                            content = Integer.toString(currentMonthDays.get(day - 1));
+                            isHoliday = false;
+                        }
+                        break;
+                    case LUNAR_HOLIDAY :
+
+                        break;
+                    default:
+                        //非节假日实际填写的字符串
+                        content = Integer.toString(currentMonthDays.get(day - 1));
+                        isHoliday = false;
+                        break;
                 }
+
                 //获取日期内容的宽度
                 float dayWidth = blackPaint.measureText(content);
                 x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
@@ -1042,5 +1080,18 @@ public class MonthView extends View {
         return this;
     }
 
-
+    /**
+     *
+     * 设置农历显示的样式
+     * 这里提供三个样式： NO_LUNAR_HOLIDAY(不显示农历，不显示节假日) , NO_LUNAR(不显示农历显示节假日) , LUNAR_HOLIDAY(显示农历和节假日)
+     *
+     * 注意：该样式的设置，当要显示节假日的时候我们必须要设置节假日定义资源，否则将无法生效
+     *
+     * @param showLunarStyle 样式
+     * @return 本view实例
+     */
+    public MonthView setShowLunarStyle(Style showLunarStyle) {
+        this.showLunarStyle = showLunarStyle;
+        return this;
+    }
 }
