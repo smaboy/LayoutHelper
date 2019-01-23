@@ -455,11 +455,8 @@ public class MonthView extends View {
 
     private void drawMonthDay(Canvas canvas) {
         //知道需要绘制的天数和绘制内容1号所在星期几
-        float x;
         float y;
         float offY = 0;//偏移量
-        String content="";//填写的日期（如：1，2，3...）
-        boolean isHoliday=false;//判别是否为节假日
         //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
         Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
         y = getTop() + getPaddingTop() + dateViewHeight / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖直居中
@@ -500,37 +497,6 @@ public class MonthView extends View {
                     day++;
                 }
 
-                //判断此时的日期是否为节假日日期
-                switch (showLunarStyle) {
-                    case NO_LUNAR_HOLIDAY :
-                        //非节假日实际填写的字符串
-                        content = Integer.toString(currentMonthDays.get(day - 1));
-                        isHoliday = false;
-                        break;
-                    case NO_LUNAR :
-                        if (!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))) {
-                            //节假日字符串
-                            content = getFestivalContent(year, month, currentMonthDays.get(day - 1));
-                            isHoliday = true;
-                        } else {
-                            //非节假日实际填写的字符串
-                            content = Integer.toString(currentMonthDays.get(day - 1));
-                            isHoliday = false;
-                        }
-                        break;
-                    case LUNAR_HOLIDAY :
-
-                        break;
-                    default:
-                        //非节假日实际填写的字符串
-                        content = Integer.toString(currentMonthDays.get(day - 1));
-                        isHoliday = false;
-                        break;
-                }
-
-                //获取日期内容的宽度
-                float dayWidth = blackPaint.measureText(content);
-                x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
                 //处理写入的文字
                 if (day < 1 || day > daysOfMonth) {//日期不在当前月份的范围内，舍去
                     continue;
@@ -541,8 +507,8 @@ public class MonthView extends View {
                     drawSelectTag(canvas, offY, j, i);
                 }
 
-                //绘制内容
-                canvas.drawText(content, x, y, isHoliday ? holidayPaint : blackPaint);
+                //绘制日期
+                drawDate(canvas, y, day, j);
 
 
             }
@@ -551,6 +517,116 @@ public class MonthView extends View {
         }
 
 
+    }
+
+    /**
+     * 绘制日期
+     * 真正开始绘制的方法
+     *
+     * @param canvas 画布
+     * @param y y轴坐标
+     * @param day 天
+     * @param j 列
+     */
+    private void drawDate(Canvas canvas, float y, int day, int j) {
+        String content;//公历日期内容
+        float x;//绘制的x坐标
+        String lunarContent;//判断此时的日期是否为节假日日期
+        float dayWidth;//日期文字的宽度
+        float lunarDayWidth;//农历日期文字的宽度
+        switch (showLunarStyle) {
+            case NO_LUNAR_HOLIDAY :
+                //非节假日实际填写的字符串
+                content = Integer.toString(currentMonthDays.get(day - 1));
+                //获取日期内容的宽度
+                dayWidth = blackPaint.measureText(content);
+
+                //获取x坐标
+                x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
+
+                //绘制
+                canvas.drawText(content, x, y, blackPaint);
+                break;
+            case NO_LUNAR :
+                if (!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))) {
+                    //节假日字符串
+                    content = getFestivalContent(year, month, currentMonthDays.get(day - 1));
+                    //获取日期内容的宽度
+                    dayWidth = holidayPaint.measureText(content);
+                    //保证文字水平居中
+                    x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);
+                    //绘制
+                    canvas.drawText(content, x, y, holidayPaint);
+
+                } else {
+                    //非节假日实际填写的字符串
+                    content = Integer.toString(currentMonthDays.get(day - 1));
+                    //获取日期内容的宽度
+                    dayWidth = blackPaint.measureText(content);
+                    //保证文字水平居中
+                    x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);
+                    //绘制
+                    canvas.drawText(content, x, y, blackPaint);
+                }
+
+
+                break;
+            case LUNAR_HOLIDAY :
+                //非节假日实际填写的字符串
+                content = Integer.toString(currentMonthDays.get(day - 1));
+                //获取日期内容的宽度
+                dayWidth = blackPaint.measureText(content);
+
+                x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
+
+                //获取FontMetrics
+                Paint.FontMetrics fm1 = blackPaint.getFontMetrics();
+                Paint.FontMetrics fm2 = grayPaint.getFontMetrics();
+                Paint.FontMetrics fm3 = holidayPaint.getFontMetrics();
+
+                //绘制公历日期
+                canvas.drawText(content, x, y-(fm1.bottom-fm1.top)/2,  blackPaint);
+
+                //绘制农历日期
+                if(!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))){//节假日
+                    lunarContent=getFestivalContent(year, month, currentMonthDays.get(day - 1));
+                    //获取需要绘制的农历字符串宽度
+                    lunarDayWidth=holidayPaint.measureText(lunarContent);
+                    //保证文字水平居中
+                    float x2 = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - lunarDayWidth / 2);
+                    //绘制节假日
+                    canvas.drawText(lunarContent, x2, y+(fm3.bottom-fm3.top)/2,holidayPaint);
+
+
+                } else {
+                    //获取对应的农历
+                    long[] l = ChinaDataUtils.calElement(year, month+1, day);
+                    lunarContent=ChinaDataUtils.getChinaDate((int) l[2]);
+                    //获取需要绘制的农历字符串宽度
+                    lunarDayWidth=grayPaint.measureText(lunarContent);
+
+                    //保证文字水平居中
+                    float x2 = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - (lunarDayWidth) / 2);
+                    //绘制农历
+                    canvas.drawText(lunarContent, x2, y+(fm2.bottom-fm2.top)/2,grayPaint);
+                }
+
+
+
+                break;
+            default:
+                //非节假日实际填写的字符串
+                content = Integer.toString(currentMonthDays.get(day - 1));
+                //获取日期内容的宽度
+                dayWidth = blackPaint.measureText(content);
+
+                //获取x坐标
+                x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
+
+                //绘制
+                canvas.drawText(content, x, y, blackPaint);
+                break;
+        }
     }
 
     /**
