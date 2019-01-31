@@ -27,182 +27,186 @@
 
 
 
-        <LinearLayout
-                android:id="@+id/ll_tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="bottom"
-                android:visibility="gone">
+       <ScrollView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+           <LinearLayout
+                   android:id="@+id/ll_tools"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical"
+                   android:gravity="bottom"
+                   android:visibility="gone">
 
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+               <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
 
-                <Button
-                        android:id="@+id/btn01"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="标题显示"/>
-                <Button
-                        android:id="@+id/btn02"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="标题隐藏"/>
+                   <Button
+                           android:id="@+id/btn01"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="标题显示"/>
+                   <Button
+                           android:id="@+id/btn02"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="标题隐藏"/>
 
-            </LinearLayout>
+               </LinearLayout>
 
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+               <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
 
-                <Button
-                        android:id="@+id/btn03"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="标题左对齐"/>
-                <Button
-                        android:id="@+id/btn04"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="标题居中"/>
-                <Button
-                        android:id="@+id/btn05"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="标题右对齐"/>
+                   <Button
+                           android:id="@+id/btn03"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="标题左对齐"/>
+                   <Button
+                           android:id="@+id/btn04"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="标题居中"/>
+                   <Button
+                           android:id="@+id/btn05"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="标题右对齐"/>
 
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-
-                <Button
-                        android:id="@+id/btn06"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="星期标题显示"/>
-                <Button
-                        android:id="@+id/btn07"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="星期标题隐藏"/>
-
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+               </LinearLayout>
+               <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
 
 
-                <Button
-                        android:id="@+id/btn08"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="星期一为一周首日"/>
-                <Button
-                        android:id="@+id/btn09"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="星期日为一周首日"/>
+                   <Button
+                           android:id="@+id/btn06"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="星期标题显示"/>
+                   <Button
+                           android:id="@+id/btn07"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="星期标题隐藏"/>
 
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-
-                <Button
-                        android:id="@+id/btn10"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="默认选中背景"/>
-                <Button
-                        android:id="@+id/btn11"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="设置选中背景"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+               </LinearLayout>
+               <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
 
 
-                <Button
-                        android:id="@+id/btn12"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="默认显示"/>
-                <Button
-                        android:id="@+id/btn13"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="节假日"/>
-                <Button
-                        android:id="@+id/btn14"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="节假日和农历"/>
+                   <Button
+                           android:id="@+id/btn08"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="星期一为一周首日"/>
+                   <Button
+                           android:id="@+id/btn09"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="星期日为一周首日"/>
 
-            </LinearLayout>
+               </LinearLayout>
 
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+               <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
 
 
-                <Button
-                        android:id="@+id/btn15"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_height="match_parent"
-                        android:text="只设置上限日期（今日）"/>
-                <Button
-                        android:id="@+id/btn16"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_height="match_parent"
-                        android:text="只设置下限日期（今日）"/>
-                <Button
-                        android:id="@+id/btn17"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="设置上下限日期（今日前后10天）"/>
+                   <Button
+                           android:id="@+id/btn10"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="默认选中背景"/>
+                   <Button
+                           android:id="@+id/btn11"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="设置选中背景"/>
 
-            </LinearLayout>
+               </LinearLayout>
+
+               <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
 
 
+                   <Button
+                           android:id="@+id/btn12"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="默认显示"/>
+                   <Button
+                           android:id="@+id/btn13"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="节假日"/>
+                   <Button
+                           android:id="@+id/btn14"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:text="节假日和农历"/>
+
+               </LinearLayout>
+
+               <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
 
 
-        </LinearLayout>
+                   <Button
+                           android:id="@+id/btn15"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:gravity="center"
+                           android:layout_height="match_parent"
+                           android:text="只设置上限日期（今日）"/>
+                   <Button
+                           android:id="@+id/btn16"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:gravity="center"
+                           android:layout_height="match_parent"
+                           android:text="只设置下限日期（今日）"/>
+                   <Button
+                           android:id="@+id/btn17"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="match_parent"
+                           android:gravity="center"
+                           android:text="设置上下限日期（今日前后10天）"/>
+
+               </LinearLayout>
+
+
+
+
+           </LinearLayout>
+       </ScrollView>
 
     </LinearLayout>
 
