@@ -337,7 +337,7 @@ public class MonthView extends View {
         blackPaint = new Paint();
         blackPaint.setAntiAlias(true);
         blackPaint.setColor(Color.BLACK);
-        blackPaint.setTextSize(titleTextSize);
+        blackPaint.setTextSize(titleTextSize+10);
         blackPaint.setStyle(Paint.Style.STROKE);
 
         grayPaint = new Paint();
@@ -355,7 +355,7 @@ public class MonthView extends View {
         redPaint = new Paint();
         redPaint.setAntiAlias(true);
         redPaint.setColor(Color.RED);
-        redPaint.setTextSize(titleTextSize);
+        redPaint.setTextSize(titleTextSize+10);
         redPaint.setStyle(Paint.Style.FILL);
 
 
@@ -371,6 +371,7 @@ public class MonthView extends View {
         selectedPaint.setColor(Color.RED);
         selectedPaint.setStrokeWidth(2.5f);
         selectedPaint.setStyle(Paint.Style.STROKE);
+
 
     }
 
