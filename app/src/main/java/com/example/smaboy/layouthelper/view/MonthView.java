@@ -613,7 +613,7 @@ public class MonthView extends View {
                 Paint.FontMetrics fm3 = holidayPaint.getFontMetrics();
 
                 //绘制公历日期
-                canvas.drawText(content, x, y-(fm1.bottom-fm1.top)/2,  blackPaint);
+                canvas.drawText(content, x, y-(fm1.bottom-fm1.top)/2,  isEnabledSelected(currentMonthDays.get(day - 1)) ? blackPaint : unEnableBlackPaint);
 
                 //绘制农历日期
                 if(!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))){//节假日
