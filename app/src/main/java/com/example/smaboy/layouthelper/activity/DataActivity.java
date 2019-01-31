@@ -22,7 +22,7 @@ public class DataActivity extends Activity implements View.OnClickListener {
     private MonthView month;
     private Button b_show;
     private LinearLayout ll_tools;
-    private Button btn01,btn02,btn03,btn04,btn05,btn06,btn07,btn08,btn09,btn10,btn11,btn12,btn13,btn14;
+    private Button btn01,btn02,btn03,btn04,btn05,btn06,btn07,btn08,btn09,btn10,btn11,btn12,btn13,btn14,btn15,btn16,btn17;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +74,9 @@ public class DataActivity extends Activity implements View.OnClickListener {
         btn12 = findViewById(R.id.btn12);
         btn13 = findViewById(R.id.btn13);
         btn14 = findViewById(R.id.btn14);
+        btn15 = findViewById(R.id.btn15);
+        btn16 = findViewById(R.id.btn16);
+        btn17 = findViewById(R.id.btn17);
 
         b_show.setOnClickListener(this);
         btn01.setOnClickListener(this);
@@ -90,6 +93,9 @@ public class DataActivity extends Activity implements View.OnClickListener {
         btn12.setOnClickListener(this);
         btn13.setOnClickListener(this);
         btn14.setOnClickListener(this);
+        btn15.setOnClickListener(this);
+        btn16.setOnClickListener(this);
+        btn17.setOnClickListener(this);
 
 
     }
@@ -181,6 +187,31 @@ public class DataActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn14 ://节假日和农历
                 month.setShowLunarStyle(MonthView.Style.LUNAR_HOLIDAY);
+                ll_tools.setVisibility(View.GONE);
+                month.invalidate();
+
+                break;
+            case R.id.btn15 ://只设置上限日期
+                month.setUpperLimitDay(Calendar.getInstance());
+                month.setLowerLimitDay(null);
+                ll_tools.setVisibility(View.GONE);
+                month.invalidate();
+
+                break;
+            case R.id.btn16 ://只设置下限日期
+                month.setUpperLimitDay(null);
+                month.setLowerLimitDay(Calendar.getInstance());
+                ll_tools.setVisibility(View.GONE);
+                month.invalidate();
+
+                break;
+            case R.id.btn17 ://设置上下限日期
+                Calendar calendar1 = Calendar.getInstance();
+                Calendar calendar2 = Calendar.getInstance();
+                calendar1.add(Calendar.DATE,-10);
+                calendar2.add(Calendar.DATE,10);
+                month.setUpperLimitDay(calendar1);
+                month.setLowerLimitDay(calendar2);
                 ll_tools.setVisibility(View.GONE);
                 month.invalidate();
 

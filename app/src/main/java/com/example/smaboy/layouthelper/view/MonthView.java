@@ -25,7 +25,7 @@ import java.util.List;
  * 5.提供点击事件的回调监听
  * 6.提供设置选中日期的背景公共方法，可以设置选中日期的背景，不设置的话采用默认背景
  * 7.提供农历农历显示样式：共提供三种样式
- * 8.日历的上限和下限的响应事件控制（只允许用户选择在上限和下限之内的日期）
+ * 8.日历的上限和下限功能完成(可单独设置上限和下限日期)
  * <p>
  * 作者: Smaboy
  * 创建时间: 2019/1/9 10:16
@@ -113,19 +113,24 @@ public class MonthView extends View {
      * <p>
      * 该参数用于控制本月中最小能选择的日期（包含该日期）
      */
-    private int upperLimitDay;
+    private Calendar upperLimitDay;
 
     /**
      * 下限日期
      * <p>
      * 该参数用于控制本月中最大能选择的日期（包含该日期）
      */
-    private int lowerLimitDay;
+    private Calendar lowerLimitDay;
 
     /**
      * 黑色画笔
      */
     private Paint blackPaint;
+
+    /**
+     * 不能选中的黑色画笔（颜色为灰色）
+     */
+    private Paint unEnableBlackPaint;
 
     /**
      * 灰色画笔
@@ -143,6 +148,11 @@ public class MonthView extends View {
      * 节假日专用画笔
      */
     private Paint holidayPaint;
+
+    /**
+     * 不能选择的节假日专用画笔（默认为灰色）
+     */
+    private Paint unEnableHolidayPaint;
     /**
      * 选中画圈专用画笔
      */
@@ -340,6 +350,14 @@ public class MonthView extends View {
         blackPaint.setTextSize(titleTextSize+10);
         blackPaint.setStyle(Paint.Style.STROKE);
 
+        unEnableBlackPaint = new Paint();
+        unEnableBlackPaint.setAntiAlias(true);
+        unEnableBlackPaint.setColor(Color.GRAY);
+        unEnableBlackPaint.setTextSize(titleTextSize+10);
+        unEnableBlackPaint.setStyle(Paint.Style.STROKE);
+
+
+
         grayPaint = new Paint();
         grayPaint.setAntiAlias(true);
         grayPaint.setColor(Color.GRAY);
@@ -364,6 +382,12 @@ public class MonthView extends View {
         holidayPaint.setColor(Color.BLUE);
         holidayPaint.setTextSize(titleTextSize);
         holidayPaint.setStyle(Paint.Style.FILL);
+
+        unEnableHolidayPaint = new Paint();
+        unEnableHolidayPaint.setAntiAlias(true);
+        unEnableHolidayPaint.setColor(Color.GRAY);
+        unEnableHolidayPaint.setTextSize(titleTextSize);
+        unEnableHolidayPaint.setStyle(Paint.Style.FILL);
 
 
         selectedPaint = new Paint();
@@ -539,6 +563,7 @@ public class MonthView extends View {
         float lunarDayWidth;//农历日期文字的宽度
         switch (showLunarStyle) {
             case NO_LUNAR_HOLIDAY :
+
                 //非节假日实际填写的字符串
                 content = Integer.toString(currentMonthDays.get(day - 1));
                 //获取日期内容的宽度
@@ -547,8 +572,8 @@ public class MonthView extends View {
                 //获取x坐标
                 x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
 
-                //绘制
-                canvas.drawText(content, x, y, blackPaint);
+                //绘制(考虑到日期可选性只处理颜色，因此我们将可选性处理放在最后一步)
+                canvas.drawText(content, x, y, isEnabledSelected(currentMonthDays.get(day - 1)) ? blackPaint : unEnableBlackPaint);
                 break;
             case NO_LUNAR :
                 if (!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))) {
@@ -559,7 +584,7 @@ public class MonthView extends View {
                     //保证文字水平居中
                     x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);
                     //绘制
-                    canvas.drawText(content, x, y, holidayPaint);
+                    canvas.drawText(content, x, y, isEnabledSelected(currentMonthDays.get(day - 1)) ? holidayPaint : unEnableHolidayPaint);
 
                 } else {
                     //非节假日实际填写的字符串
@@ -569,7 +594,7 @@ public class MonthView extends View {
                     //保证文字水平居中
                     x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);
                     //绘制
-                    canvas.drawText(content, x, y, blackPaint);
+                    canvas.drawText(content, x, y, isEnabledSelected(currentMonthDays.get(day - 1)) ? blackPaint : unEnableBlackPaint);
                 }
 
 
@@ -598,7 +623,7 @@ public class MonthView extends View {
                     //保证文字水平居中
                     float x2 = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - lunarDayWidth / 2);
                     //绘制节假日
-                    canvas.drawText(lunarContent, x2, y+(fm3.bottom-fm3.top)/2,holidayPaint);
+                    canvas.drawText(lunarContent, x2, y+(fm3.bottom-fm3.top)/2,isEnabledSelected(currentMonthDays.get(day - 1)) ? holidayPaint : unEnableHolidayPaint);
 
 
                 } else {
@@ -627,9 +652,62 @@ public class MonthView extends View {
                 x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
 
                 //绘制
-                canvas.drawText(content, x, y, blackPaint);
+                canvas.drawText(content, x, y, isEnabledSelected(currentMonthDays.get(day - 1)) ? blackPaint : unEnableBlackPaint);
                 break;
         }
+    }
+
+
+    /**
+     * 判断传入的日期是否在可以选择的范围之内
+     *
+     *  考虑到用户设置的上下限日期
+     *
+     *  注意：经测试我们发现，上限我们是包含当日，下限我们是不包含当日的；
+     *        通过查看源码我们也就能理解了，它们进行比较的原理就是通过毫秒数的
+     *
+     * @param day 日期
+     */
+    private boolean isEnabledSelected(int day) {
+        Calendar calendar=Calendar.getInstance();
+        calendar.set(year,month,day);
+
+        if(null==upperLimitDay) {//没有上限
+            if(null==lowerLimitDay){//没有下限
+                return true;
+            } else {//有下限
+                if(calendar.before(lowerLimitDay)) {
+                    return  true;
+                }else {
+                    return false;
+                }
+
+            }
+        }else {//有上限
+            if(null==lowerLimitDay){//没有下限
+                if(calendar.after(upperLimitDay)) {
+                    return  true;
+                }else {
+                    return false;
+                }
+
+            } else {//有下限
+                //这里，防止用户上下限日期设置有误，做一个处理
+                if(upperLimitDay.after(lowerLimitDay)) {//上限日期在下限日期之后，我们进行提示
+                    Toast.makeText(getContext(), "上限日期不能晚于下限日期,设置不能生效", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                if(calendar.after(upperLimitDay)&&calendar.before(lowerLimitDay)) {
+                    return  true;
+                }else {
+                    return false;
+                }
+
+            }
+        }
+
+
     }
 
     /**
@@ -934,11 +1012,14 @@ public class MonthView extends View {
                                 } else if (a == weekCount - 1 && d > daysOfMonth) {
                                     Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    listener.onDateClick(year, month + 1, d);
-                                    Calendar calendar1 = Calendar.getInstance();
-                                    calendar1.set(year, month, d);
-                                    defCalendar = calendar1;//重写默认值
-                                    invalidate();//刷新
+                                    if(isEnabledSelected(d)) {//只有满足用户设置的可选区间,我们才设置回调信息
+                                        listener.onDateClick(year, month + 1, d);
+                                        Calendar calendar1 = Calendar.getInstance();
+                                        calendar1.set(year, month, d);
+                                        defCalendar = calendar1;//重写默认值
+                                        invalidate();//刷新
+                                    }
+
 
                                 }
 
@@ -958,11 +1039,14 @@ public class MonthView extends View {
                                 } else if (a == weekCount - 1 && d2 > daysOfMonth) {
                                     Toast.makeText(getContext(), "您点击的区域超过当前日期数，请重新选择吧！！", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    listener.onDateClick(year, month + 1, d2);
-                                    Calendar calendar2 = Calendar.getInstance();
-                                    calendar2.set(year, month, d2);
-                                    defCalendar = calendar2;//置写默认值
-                                    invalidate();//刷新
+                                    if(isEnabledSelected(d2)) {//只有满足用户设置的可选区间,我们才设置回调信息
+                                        listener.onDateClick(year, month + 1, d2);
+                                        Calendar calendar2 = Calendar.getInstance();
+                                        calendar2.set(year, month, d2);
+                                        defCalendar = calendar2;//置写默认值
+                                        invalidate();//刷新
+                                    }
+
 
                                 }
                             }
@@ -1047,12 +1131,26 @@ public class MonthView extends View {
         return this;
     }
 
-    public MonthView setUpperLimitDay(int upperLimitDay) {
+    /**
+     * 设置可选择的日期的上限
+     *  默认包含当日
+     *
+     * @param upperLimitDay 上限日期
+     * @return
+     */
+    public MonthView setUpperLimitDay(Calendar upperLimitDay) {
         this.upperLimitDay = upperLimitDay;
         return this;
     }
 
-    public MonthView setLowerLimitDay(int lowerLimitDay) {
+    /**
+     * 设置可选择日期的下限
+     *  默认不包含当日
+     *
+     * @param lowerLimitDay 下限日期
+     * @return
+     */
+    public MonthView setLowerLimitDay(Calendar lowerLimitDay) {
         this.lowerLimitDay = lowerLimitDay;
         return this;
     }

@@ -169,6 +169,36 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                <Button
+                        android:id="@+id/btn15"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:text="只设置上限日期（今日）"/>
+                <Button
+                        android:id="@+id/btn16"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:text="只设置下限日期（今日）"/>
+                <Button
+                        android:id="@+id/btn17"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="设置上下限日期（今日前后10天）"/>
+
+            </LinearLayout>
+
 
 
 
