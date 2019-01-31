@@ -291,6 +291,97 @@ public class ChinaDataUtils {
         return nongDate;
     }
 
+    /**
+     * 传入数字月份返回中文月份
+     *
+     *  注意：这边传入的日期是已经经过处理的，所以起始月份为 1
+     *
+     * @return 中文月份
+     */
+    public static String getChinaMonthNumber(int month){
+        switch (month) {
+            case 1 :
+                return "一月";
+
+            case 2 :
+                return "二月";
+            case 3 :
+                return "三月";
+            case 4 :
+                return "四月";
+            case 5 :
+                return "五月";
+            case 6 :
+                return "六月";
+            case 7 :
+                return "七月";
+            case 8 :
+                return "八月";
+            case 9 :
+                return "九月";
+            case 10 :
+                return "十月";
+            case 11 :
+                return "十一月";
+            case 12 :
+                return "十二月";
+            default:
+                return " ";
+        }
+
+    }
+
+    public final static String getChinaDate(int month, int day) {
+        String a = "";
+        if (day == 10)
+            return "初十";
+        if (day == 20)
+            return "二十";
+        if (day == 30)
+            return "三十";
+        if ((day) / 10==0&&day%10==1)
+            return getChinaMonthNumber(month);
+        int two = (int) ((day) / 10);
+        if (two == 0)
+            a = "初";
+        if (two == 1)
+            a = "十";
+        if (two == 2)
+            a = "廿";
+        if (two == 3)
+            a = "三";
+        int one = (int) (day % 10);
+        switch (one) {
+            case 1:
+                a += "一";
+                break;
+            case 2:
+                a += "二";
+                break;
+            case 3:
+                a += "三";
+                break;
+            case 4:
+                a += "四";
+                break;
+            case 5:
+                a += "五";
+                break;
+            case 6:
+                a += "六";
+                break;
+            case 7:
+                a += "七";
+                break;
+            case 8:
+                a += "八";
+                break;
+            case 9:
+                a += "九";
+                break;
+        }
+        return a;
+    }
     public final static String getChinaDate(int day) {
         String a = "";
         if (day == 10)

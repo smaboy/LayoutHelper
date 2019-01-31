@@ -25,6 +25,7 @@ import java.util.List;
  * 5.提供点击事件的回调监听
  * 6.提供设置选中日期的背景公共方法，可以设置选中日期的背景，不设置的话采用默认背景
  * 7.提供农历农历显示样式：共提供三种样式
+ * 8.日历的上限和下限的响应事件控制（只允许用户选择在上限和下限之内的日期）
  * <p>
  * 作者: Smaboy
  * 创建时间: 2019/1/9 10:16
@@ -602,7 +603,7 @@ public class MonthView extends View {
                 } else {
                     //获取对应的农历
                     long[] l = ChinaDataUtils.calElement(year, month+1, day);
-                    lunarContent=ChinaDataUtils.getChinaDate((int) l[2]);
+                    lunarContent=ChinaDataUtils.getChinaDate((int) l[1],(int) l[2]);
                     //获取需要绘制的农历字符串宽度
                     lunarDayWidth=grayPaint.measureText(lunarContent);
 
