@@ -2,6 +2,7 @@ package com.example.smaboy.layouthelper.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Camera;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button quick;
     private Button stick;
     private Button menu;
+    private Button surface_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         quick = findViewById(R.id.quick);
         stick = findViewById(R.id.stick);
         menu = findViewById(R.id.menu);
+        surface_view = findViewById(R.id.surface_view);
 
         flow.setOnClickListener(this);
         quick.setOnClickListener(this);
         stick.setOnClickListener(this);
         menu.setOnClickListener(this);
+        surface_view.setOnClickListener(this);
 
     }
 
@@ -63,6 +67,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.skeleton ://骨架屏
                 startActivity(new Intent(MainActivity.this,DataActivity.class));
+
+                break;
+            case R.id.surface_view ://SurfaceView
+                startActivity(new Intent(MainActivity.this, CameraActivity.class));
 
                 break;
         }
