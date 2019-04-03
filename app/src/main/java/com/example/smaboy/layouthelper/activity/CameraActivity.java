@@ -46,7 +46,6 @@ public class CameraActivity extends Activity {
 
     @OnClick({R.id.b_open, R.id.b_close})
     public void onViewClicked(View view) {
-
         switch (view.getId()) {
             case R.id.b_open:
                 svSurface.init(Camera.open(0));
