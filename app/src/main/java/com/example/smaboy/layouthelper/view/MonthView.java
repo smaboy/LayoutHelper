@@ -407,6 +407,7 @@ public class MonthView extends View {
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
         daysOfMonth = getDaysOfMonth(calendar);//获取当前月份总的天数
+        currentMonthDays.clear();//清空本月数据重新赋值
         for (int i = 1; i <= daysOfMonth; i++) {//保存当前日期数
             currentMonthDays.add(i);
         }
@@ -576,9 +577,10 @@ public class MonthView extends View {
                 canvas.drawText(content, x, y, isEnabledSelected(currentMonthDays.get(day - 1)) ? blackPaint : unEnableBlackPaint);
                 break;
             case NO_LUNAR :
-                if (!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))) {
+                String fName=getFestivalContent(year, month, currentMonthDays.get(day - 1));
+                if (!TextUtils.isEmpty(fName)) {
                     //节假日字符串
-                    content = getFestivalContent(year, month, currentMonthDays.get(day - 1));
+                    content = fName;
                     //获取日期内容的宽度
                     dayWidth = holidayPaint.measureText(content);
                     //保证文字水平居中
@@ -615,9 +617,10 @@ public class MonthView extends View {
                 //绘制公历日期
                 canvas.drawText(content, x, y-(fm1.bottom-fm1.top)/2,  isEnabledSelected(currentMonthDays.get(day - 1)) ? blackPaint : unEnableBlackPaint);
 
+                String fName2=getFestivalContent(year, month, currentMonthDays.get(day - 1));
                 //绘制农历日期
-                if(!TextUtils.isEmpty(getFestivalContent(year, month, currentMonthDays.get(day - 1)))){//节假日
-                    lunarContent=getFestivalContent(year, month, currentMonthDays.get(day - 1));
+                if(!TextUtils.isEmpty(fName2)){//节假日
+                    lunarContent=fName2;
                     //获取需要绘制的农历字符串宽度
                     lunarDayWidth=holidayPaint.measureText(lunarContent);
                     //保证文字水平居中
@@ -730,6 +733,10 @@ public class MonthView extends View {
         String m = String.valueOf(month + 1).length() == 2 ? String.valueOf(month + 1) : "0" + (month + 1);
         String d = String.valueOf(day).length() == 2 ? String.valueOf(day) : "0" + day;
         String md = m + d;
+        Log.e("tag","传入的年月日为="+year+"-"+month+"-"+day);
+        Log.e("tag","获取的月份="+m);
+        Log.e("tag","获取的月份="+d);
+        Log.e("tag","获取的月份和日期组成的字符串="+md);
 
         try {
             //公历节假日匹配
