@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.example.smaboy.layouthelper.R;
+import com.example.smaboy.layouthelper.util.DisplayUtils;
 import com.example.smaboy.layouthelper.view.MyFlowLayout;
 
 /**
@@ -123,7 +124,12 @@ public class FlowActivity extends Activity implements View.OnClickListener {
                 TextView textView = new TextView(this);
                 textView.setText(et_add.getText().toString());
                 textView.setBackgroundResource(R.drawable.shaped);
-                textView.setPadding(10,10,10,10);
+                ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+                marginLayoutParams.setMargins(DisplayUtils.dp2px(this,10),DisplayUtils.dp2px(this,10),DisplayUtils.dp2px(this,10),DisplayUtils.dp2px(this,10));
+                textView.setPadding(DisplayUtils.dp2px(this,5),DisplayUtils.dp2px(this,5),DisplayUtils.dp2px(this,5),DisplayUtils.dp2px(this,5));
+                textView.setLayoutParams(marginLayoutParams);
+
+
 
                 myflowlayout.addView(textView);
                 break;
