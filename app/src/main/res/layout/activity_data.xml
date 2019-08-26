@@ -17,14 +17,28 @@
             android:gravity="bottom">
 
 
-        <Button
-                android:id="@+id/b_show"
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginBottom="10dp"
-                android:text="点我有惊喜"/>
+                android:orientation="horizontal"
+                android:gravity="end">
 
+            <Button
+                    android:id="@+id/b_today"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginBottom="10dp"
+                    android:text="今日"/>
+            <Button
+                    android:id="@+id/b_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginBottom="10dp"
+                    android:text="点我有惊喜"/>
+
+        </LinearLayout>
 
 
        <ScrollView

@@ -22,7 +22,7 @@ public class DataActivity extends Activity implements View.OnClickListener {
     private MonthView month;
     private Button b_show;
     private LinearLayout ll_tools;
-    private Button btn01,btn02,btn03,btn04,btn05,btn06,btn07,btn08,btn09,btn10,btn11,btn12,btn13,btn14,btn15,btn16,btn17;
+    private Button b_today,btn01,btn02,btn03,btn04,btn05,btn06,btn07,btn08,btn09,btn10,btn11,btn12,btn13,btn14,btn15,btn16,btn17;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,7 @@ public class DataActivity extends Activity implements View.OnClickListener {
 
         b_show = findViewById(R.id.b_show);
         ll_tools = findViewById(R.id.ll_tools);
+        b_today = findViewById(R.id.b_today);
         btn01 = findViewById(R.id.btn01);
         btn02 = findViewById(R.id.btn02);
         btn03 = findViewById(R.id.btn03);
@@ -79,6 +80,7 @@ public class DataActivity extends Activity implements View.OnClickListener {
         btn17 = findViewById(R.id.btn17);
 
         b_show.setOnClickListener(this);
+        b_today.setOnClickListener(this);
         btn01.setOnClickListener(this);
         btn02.setOnClickListener(this);
         btn03.setOnClickListener(this);
@@ -111,7 +113,14 @@ public class DataActivity extends Activity implements View.OnClickListener {
                 }
 
                 break;
+            case R.id.b_today :
+                month.setCalendar(Calendar.getInstance());
+                month.setDefSelectedDay(Calendar.getInstance());
+                month.invalidate();
+
+                break;
             case R.id.btn01 ://标题显示
+            case R.id.btn03 ://标题左对齐
                 month.setTitleStyle(MonthView.Style.TITLE_LEFT);
                 ll_tools.setVisibility(View.GONE);
                 month.invalidate();
@@ -119,11 +128,6 @@ public class DataActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn02 ://标题隐藏
                 month.setTitleStyle(MonthView.Style.NO_TITLE);
-                ll_tools.setVisibility(View.GONE);
-                month.invalidate();
-                break;
-            case R.id.btn03 ://标题左对齐
-                month.setTitleStyle(MonthView.Style.TITLE_LEFT);
                 ll_tools.setVisibility(View.GONE);
                 month.invalidate();
                 break;
