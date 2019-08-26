@@ -131,6 +131,7 @@ public class FlowActivity extends Activity implements View.OnClickListener {
 
 
 
+
                 myflowlayout.addView(textView);
                 break;
             case R.id.delete :
