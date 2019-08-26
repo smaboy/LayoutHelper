@@ -487,7 +487,7 @@ public class MonthView extends View {
         float offY = 0;//偏移量
         //一周有7天，这里我们将其平分成七分，高度我们可以设置为何宽度一致
         Paint.FontMetrics fontMetrics = blackPaint.getFontMetrics();
-        y = getTop() + getPaddingTop() + dateViewHeight / 2 - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖直居中
+        y = getTop() + getPaddingTop() + (dateViewHeight >> 1) - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2;//保证竖直居中
         //判断标题和星期的显示与否，确定y的初始位置
         if (titleStyle != Style.NO_TITLE) {
             offY += titleHeight;
@@ -563,19 +563,6 @@ public class MonthView extends View {
         float dayWidth;//日期文字的宽度
         float lunarDayWidth;//农历日期文字的宽度
         switch (showLunarStyle) {
-            case NO_LUNAR_HOLIDAY :
-
-                //非节假日实际填写的字符串
-                content = Integer.toString(currentMonthDays.get(day - 1));
-                //获取日期内容的宽度
-                dayWidth = blackPaint.measureText(content);
-
-                //获取x坐标
-                x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
-
-                //绘制(考虑到日期可选性只处理颜色，因此我们将可选性处理放在最后一步)
-                canvas.drawText(content, x, y, isEnabledSelected(currentMonthDays.get(day - 1)) ? blackPaint : unEnableBlackPaint);
-                break;
             case NO_LUNAR :
                 String fName=getFestivalContent(year, month, currentMonthDays.get(day - 1));
                 if (!TextUtils.isEmpty(fName)) {
@@ -584,7 +571,7 @@ public class MonthView extends View {
                     //获取日期内容的宽度
                     dayWidth = holidayPaint.measureText(content);
                     //保证文字水平居中
-                    x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);
+                    x = getLeft() + getPaddingLeft() + dateViewWidth * j + ((dateViewWidth >> 1) - dayWidth / 2);
                     //绘制
                     canvas.drawText(content, x, y, isEnabledSelected(currentMonthDays.get(day - 1)) ? holidayPaint : unEnableHolidayPaint);
 
@@ -594,7 +581,7 @@ public class MonthView extends View {
                     //获取日期内容的宽度
                     dayWidth = blackPaint.measureText(content);
                     //保证文字水平居中
-                    x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);
+                    x = getLeft() + getPaddingLeft() + dateViewWidth * j + ((dateViewWidth >> 1) - dayWidth / 2);
                     //绘制
                     canvas.drawText(content, x, y, isEnabledSelected(currentMonthDays.get(day - 1)) ? blackPaint : unEnableBlackPaint);
                 }
@@ -607,7 +594,7 @@ public class MonthView extends View {
                 //获取日期内容的宽度
                 dayWidth = blackPaint.measureText(content);
 
-                x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
+                x = getLeft() + getPaddingLeft() + dateViewWidth * j + ((dateViewWidth >> 1) - dayWidth / 2);//保证文字水平居中
 
                 //获取FontMetrics
                 Paint.FontMetrics fm1 = blackPaint.getFontMetrics();
@@ -624,7 +611,7 @@ public class MonthView extends View {
                     //获取需要绘制的农历字符串宽度
                     lunarDayWidth=holidayPaint.measureText(lunarContent);
                     //保证文字水平居中
-                    float x2 = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - lunarDayWidth / 2);
+                    float x2 = getLeft() + getPaddingLeft() + dateViewWidth * j + ((dateViewWidth >> 1) - lunarDayWidth / 2);
                     //绘制节假日
                     canvas.drawText(lunarContent, x2, y+(fm3.bottom-fm3.top)/2,isEnabledSelected(currentMonthDays.get(day - 1)) ? holidayPaint : unEnableHolidayPaint);
 
@@ -637,7 +624,7 @@ public class MonthView extends View {
                     lunarDayWidth=grayPaint.measureText(lunarContent);
 
                     //保证文字水平居中
-                    float x2 = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - (lunarDayWidth) / 2);
+                    float x2 = getLeft() + getPaddingLeft() + dateViewWidth * j + ((dateViewWidth >> 1) - (lunarDayWidth) / 2);
                     //绘制农历
                     canvas.drawText(lunarContent, x2, y+(fm2.bottom-fm2.top)/2,grayPaint);
                 }
@@ -645,6 +632,7 @@ public class MonthView extends View {
 
 
                 break;
+            case NO_LUNAR_HOLIDAY :
             default:
                 //非节假日实际填写的字符串
                 content = Integer.toString(currentMonthDays.get(day - 1));
@@ -652,7 +640,7 @@ public class MonthView extends View {
                 dayWidth = blackPaint.measureText(content);
 
                 //获取x坐标
-                x = getLeft() + getPaddingLeft() + dateViewWidth * j + (dateViewWidth / 2 - dayWidth / 2);//保证文字水平居中
+                x = getLeft() + getPaddingLeft() + dateViewWidth * j + ((dateViewWidth >> 1) - dayWidth / 2);//保证文字水平居中
 
                 //绘制
                 canvas.drawText(content, x, y, isEnabledSelected(currentMonthDays.get(day - 1)) ? blackPaint : unEnableBlackPaint);
