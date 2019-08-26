@@ -24,7 +24,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button quick;
     private Button stick;
     private Button menu;
-    private Button surface_view;
+    private Button custom_photo;
+    private Button h5_page;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +38,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
         quick = findViewById(R.id.quick);
         stick = findViewById(R.id.stick);
         menu = findViewById(R.id.menu);
-        surface_view = findViewById(R.id.surface_view);
+        custom_photo = findViewById(R.id.custom_photo);
+        h5_page = findViewById(R.id.h5_page);
 
         flow.setOnClickListener(this);
         quick.setOnClickListener(this);
         stick.setOnClickListener(this);
         menu.setOnClickListener(this);
-        surface_view.setOnClickListener(this);
+        custom_photo.setOnClickListener(this);
+        h5_page.setOnClickListener(this);
 
     }
 
@@ -66,11 +69,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.skeleton ://骨架屏
-                startActivity(new Intent(MainActivity.this,DataActivity.class));
 
                 break;
-            case R.id.surface_view ://SurfaceView
-                startActivity(new Intent(MainActivity.this, CameraActivity.class));
+            case R.id.custom_photo ://自定义拍照
+                startActivity(new Intent(MainActivity.this,CameraActivity.class));
+                break;
+            case R.id.h5_page ://h5页面
 
                 break;
         }
