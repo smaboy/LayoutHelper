@@ -15,6 +15,8 @@ import com.example.smaboy.layouthelper.base.BaseActivity;
 import com.example.smaboy.layouthelper.util.DisplayUtils;
 import com.example.smaboy.layouthelper.view.MyFlowLayout;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * 类名: FlowActivity
  * 类作用描述: java类作用描述
@@ -34,6 +36,57 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
     private TextView title;
     private TextView content;
     private TextView login;
+
+    @Override
+    public int getLayoutViewId() {
+        return R.layout.activity_flow;
+    }
+
+    @Override
+    public void init(@Nullable Bundle savedInstanceState) {
+        left = findViewById(R.id.left);
+        right = findViewById(R.id.right);
+        center = findViewById(R.id.center);
+        add = findViewById(R.id.add);
+        delete = findViewById(R.id.delete);
+        delete_all = findViewById(R.id.delete_all);
+        et_add = findViewById(R.id.et_add);
+        myflowlayout = findViewById(R.id.myflowlayout);
+
+        left.setOnClickListener(this);
+        right.setOnClickListener(this);
+        center.setOnClickListener(this);
+        add.setOnClickListener(this);
+        delete.setOnClickListener(this);
+        delete_all.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void setData() {
+        myflowlayout.setOnChildViewClickListener(new MyFlowLayout.OnChildViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+
+                try {
+                    TextView textView= (TextView) v;
+                    textView.setText("我被改变了");
+                } catch (Exception e) {
+                    Toast.makeText(FlowActivity.this, "不是TextView类型不能做相关操作", Toast.LENGTH_SHORT).show();
+                }
+
+                Toast.makeText(FlowActivity.this, "您点击了我"+position, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public boolean onLongClick(View v, final int position) {
+
+                showDeleteDialog(position);
+
+                return false;
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {
@@ -87,57 +140,6 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-    @Override
-    public int getLayoutViewId() {
-        return R.layout.activity_flow;
-    }
-
-    @Override
-    public void initViewId() {
-        left = findViewById(R.id.left);
-        right = findViewById(R.id.right);
-        center = findViewById(R.id.center);
-        add = findViewById(R.id.add);
-        delete = findViewById(R.id.delete);
-        delete_all = findViewById(R.id.delete_all);
-        et_add = findViewById(R.id.et_add);
-        myflowlayout = findViewById(R.id.myflowlayout);
-
-        left.setOnClickListener(this);
-        right.setOnClickListener(this);
-        center.setOnClickListener(this);
-        add.setOnClickListener(this);
-        delete.setOnClickListener(this);
-        delete_all.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void setData() {
-        myflowlayout.setOnChildViewClickListener(new MyFlowLayout.OnChildViewClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-
-                try {
-                    TextView textView= (TextView) v;
-                    textView.setText("我被改变了");
-                } catch (Exception e) {
-                    Toast.makeText(FlowActivity.this, "不是TextView类型不能做相关操作", Toast.LENGTH_SHORT).show();
-                }
-
-                Toast.makeText(FlowActivity.this, "您点击了我"+position, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public boolean onLongClick(View v, final int position) {
-
-                showDeleteDialog(position);
-
-                return false;
-            }
-        });
-    }
-
     /**
      * 显示长按删除弹窗
      * @param position 位置
@@ -165,4 +167,6 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
 
         dialog.show();
     }
+
+
 }

@@ -1,14 +1,16 @@
 package com.example.smaboy.layouthelper.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
 import com.example.smaboy.layouthelper.view.MonthView;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
 
@@ -24,6 +26,70 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
     private Button b_show;
     private LinearLayout ll_tools;
     private Button b_today,btn01,btn02,btn03,btn04,btn05,btn06,btn07,btn08,btn09,btn10,btn11,btn12,btn13,btn14,btn15,btn16,btn17;
+
+
+    @Override
+    public int getLayoutViewId() {
+        return R.layout.activity_data;
+    }
+
+
+
+    @Override
+    public void init(@Nullable Bundle savedInstanceState) {
+        month = findViewById(R.id.month);
+
+        b_show = findViewById(R.id.b_show);
+        ll_tools = findViewById(R.id.ll_tools);
+        b_today = findViewById(R.id.b_today);
+        btn01 = findViewById(R.id.btn01);
+        btn02 = findViewById(R.id.btn02);
+        btn03 = findViewById(R.id.btn03);
+        btn04 = findViewById(R.id.btn04);
+        btn05 = findViewById(R.id.btn05);
+        btn06 = findViewById(R.id.btn06);
+        btn07 = findViewById(R.id.btn07);
+        btn08 = findViewById(R.id.btn08);
+        btn09 = findViewById(R.id.btn09);
+        btn10 = findViewById(R.id.btn10);
+        btn11 = findViewById(R.id.btn11);
+        btn12 = findViewById(R.id.btn12);
+        btn13 = findViewById(R.id.btn13);
+        btn14 = findViewById(R.id.btn14);
+        btn15 = findViewById(R.id.btn15);
+        btn16 = findViewById(R.id.btn16);
+        btn17 = findViewById(R.id.btn17);
+
+        //设置监听
+        month.setOnDateClicktListener((year, month, date) -> Toast.makeText(DataActivity.this, year + "-" + month + "-" + date, Toast.LENGTH_SHORT).show());
+
+
+
+        b_show.setOnClickListener(this);
+        b_today.setOnClickListener(this);
+        btn01.setOnClickListener(this);
+        btn02.setOnClickListener(this);
+        btn03.setOnClickListener(this);
+        btn04.setOnClickListener(this);
+        btn05.setOnClickListener(this);
+        btn06.setOnClickListener(this);
+        btn07.setOnClickListener(this);
+        btn08.setOnClickListener(this);
+        btn09.setOnClickListener(this);
+        btn10.setOnClickListener(this);
+        btn11.setOnClickListener(this);
+        btn12.setOnClickListener(this);
+        btn13.setOnClickListener(this);
+        btn14.setOnClickListener(this);
+        btn15.setOnClickListener(this);
+        btn16.setOnClickListener(this);
+        btn17.setOnClickListener(this);
+    }
+
+    @Override
+    public void setData() {
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -144,68 +210,6 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
         }
-
-    }
-
-    @Override
-    public int getLayoutViewId() {
-        return R.layout.activity_data;
-    }
-
-    @Override
-    public void initViewId() {
-        month = findViewById(R.id.month);
-
-        b_show = findViewById(R.id.b_show);
-        ll_tools = findViewById(R.id.ll_tools);
-        b_today = findViewById(R.id.b_today);
-        btn01 = findViewById(R.id.btn01);
-        btn02 = findViewById(R.id.btn02);
-        btn03 = findViewById(R.id.btn03);
-        btn04 = findViewById(R.id.btn04);
-        btn05 = findViewById(R.id.btn05);
-        btn06 = findViewById(R.id.btn06);
-        btn07 = findViewById(R.id.btn07);
-        btn08 = findViewById(R.id.btn08);
-        btn09 = findViewById(R.id.btn09);
-        btn10 = findViewById(R.id.btn10);
-        btn11 = findViewById(R.id.btn11);
-        btn12 = findViewById(R.id.btn12);
-        btn13 = findViewById(R.id.btn13);
-        btn14 = findViewById(R.id.btn14);
-        btn15 = findViewById(R.id.btn15);
-        btn16 = findViewById(R.id.btn16);
-        btn17 = findViewById(R.id.btn17);
-
-        //设置监听
-        month.setOnDateClicktListener((year, month, date) -> Toast.makeText(DataActivity.this, year + "-" + month + "-" + date, Toast.LENGTH_SHORT).show());
-
-
-
-        b_show.setOnClickListener(this);
-        b_today.setOnClickListener(this);
-        btn01.setOnClickListener(this);
-        btn02.setOnClickListener(this);
-        btn03.setOnClickListener(this);
-        btn04.setOnClickListener(this);
-        btn05.setOnClickListener(this);
-        btn06.setOnClickListener(this);
-        btn07.setOnClickListener(this);
-        btn08.setOnClickListener(this);
-        btn09.setOnClickListener(this);
-        btn10.setOnClickListener(this);
-        btn11.setOnClickListener(this);
-        btn12.setOnClickListener(this);
-        btn13.setOnClickListener(this);
-        btn14.setOnClickListener(this);
-        btn15.setOnClickListener(this);
-        btn16.setOnClickListener(this);
-        btn17.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void setData() {
 
     }
 }

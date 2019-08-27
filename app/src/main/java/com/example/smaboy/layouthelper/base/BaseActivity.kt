@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
+import butterknife.ButterKnife
+import butterknife.Unbinder
 import com.example.smaboy.layouthelper.R
 import com.yanzhenjie.sofia.Bar
 import com.yanzhenjie.sofia.Sofia
@@ -24,7 +26,8 @@ import com.yanzhenjie.sofia.Sofia
  *
  */
 abstract class BaseActivity : FragmentActivity() {
-    lateinit var bar :Bar
+    lateinit var bar: Bar
+    lateinit var bind: Unbinder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +35,11 @@ abstract class BaseActivity : FragmentActivity() {
         //设置内容
         setContentView(getLayoutViewId())
 
+        //控件绑定
+        bind = ButterKnife.bind(this)
+
         //初始化内容
-        initViewId()
+        init(savedInstanceState)
 
 
         //设置沉浸式状态栏
@@ -50,12 +56,21 @@ abstract class BaseActivity : FragmentActivity() {
     }
 
     //添加布局
-    abstract fun getLayoutViewId() : Int
+    abstract fun getLayoutViewId(): Int
+
     //初始化view
-    abstract fun initViewId()
+    abstract fun init(savedInstanceState: Bundle?)
 
     //设置数据
     abstract fun setData()
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        //解绑
+        bind.unbind()
+    }
 
 
 }
