@@ -1,7 +1,6 @@
 package com.example.smaboy.layouthelper.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -27,11 +26,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Button menu;
     private Button custom_photo;
     private Button h5_page;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void onClick(View v) {
@@ -91,14 +85,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void setData() {
-
-        //处理沉浸式状态栏
-        bar
-                .statusBarDarkFont()//状态栏深色字体
-                .statusBarBackgroundAlpha(0)//状态栏透明度为0
-                .navigationBarBackgroundAlpha(0);//导航栏透明度为0
-//                .invasionStatusBar()//内容入侵状态栏
-//                .invasionNavigationBar();//内容入侵导航栏
 
 
     }
