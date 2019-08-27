@@ -163,7 +163,7 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
 
         //设置数据
         title.setText("删除提示");
-        content.setText("您确定要删除该项吗？删除后不可恢复，那您可以通过添加按钮添加子view进来，不过添加进来的子view的样式是被固定的，如果您知晓请按确认键进行删除该view");
+        content.setText("您确定要删除该项吗？\n删除后不可恢复，但您可以通过添加按钮添加子view进来，不过添加进来的子view的样式是被固定的。\n如果您已知晓,请按确认键进行删除该view。");
         login.setText("确定");
         //设置监听
         login.setOnClickListener(v -> {
