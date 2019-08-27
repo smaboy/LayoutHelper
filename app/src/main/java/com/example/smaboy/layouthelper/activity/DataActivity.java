@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.example.smaboy.layouthelper.R;
+import com.example.smaboy.layouthelper.base.BaseActivity;
 import com.example.smaboy.layouthelper.view.MonthView;
 
 import java.util.Calendar;
@@ -17,90 +18,12 @@ import java.util.Calendar;
  * 作者: Smaboy
  * 创建时间: 2019/1/9 10:12
  */
-public class DataActivity extends Activity implements View.OnClickListener {
+public class DataActivity extends BaseActivity implements View.OnClickListener {
 
     private MonthView month;
     private Button b_show;
     private LinearLayout ll_tools;
     private Button b_today,btn01,btn02,btn03,btn04,btn05,btn06,btn07,btn08,btn09,btn10,btn11,btn12,btn13,btn14,btn15,btn16,btn17;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_data);
-
-
-        month = findViewById(R.id.month);
-
-//        Calendar instance = Calendar.getInstance();
-//        instance.add(Calendar.MONTH, 6);
-//        month
-//                .setTitleStyle(MonthView.Style.TITLE_CENTER)
-//                .setOpenWeek(true)
-//                .setMonthStyle(MonthView.Style.MONDAY_STYLE)
-//                .setOpenScrollSwitch(true)
-//                .setOnDateClicktListener(new MonthView.OnDateClickListener() {
-//                    @Override
-//                    public void onDateClick(int year, int month, int date) {
-//                        Toast.makeText(DataActivity.this, year + "-" + month + "-" + date, Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .setDefSelectedDay(Calendar.getInstance())
-//                .setSelectedBackground(R.mipmap.jpyd_date_selected_bg)
-//                .setShowLunarStyle(MonthView.Style.LUNAR_HOLIDAY);
-
-        month.setOnDateClicktListener(new MonthView.OnDateClickListener() {
-            @Override
-            public void onDateClick(int year, int month, int date) {
-                Toast.makeText(DataActivity.this, year + "-" + month + "-" + date, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        b_show = findViewById(R.id.b_show);
-        ll_tools = findViewById(R.id.ll_tools);
-        b_today = findViewById(R.id.b_today);
-        btn01 = findViewById(R.id.btn01);
-        btn02 = findViewById(R.id.btn02);
-        btn03 = findViewById(R.id.btn03);
-        btn04 = findViewById(R.id.btn04);
-        btn05 = findViewById(R.id.btn05);
-        btn06 = findViewById(R.id.btn06);
-        btn07 = findViewById(R.id.btn07);
-        btn08 = findViewById(R.id.btn08);
-        btn09 = findViewById(R.id.btn09);
-        btn10 = findViewById(R.id.btn10);
-        btn11 = findViewById(R.id.btn11);
-        btn12 = findViewById(R.id.btn12);
-        btn13 = findViewById(R.id.btn13);
-        btn14 = findViewById(R.id.btn14);
-        btn15 = findViewById(R.id.btn15);
-        btn16 = findViewById(R.id.btn16);
-        btn17 = findViewById(R.id.btn17);
-
-        b_show.setOnClickListener(this);
-        b_today.setOnClickListener(this);
-        btn01.setOnClickListener(this);
-        btn02.setOnClickListener(this);
-        btn03.setOnClickListener(this);
-        btn04.setOnClickListener(this);
-        btn05.setOnClickListener(this);
-        btn06.setOnClickListener(this);
-        btn07.setOnClickListener(this);
-        btn08.setOnClickListener(this);
-        btn09.setOnClickListener(this);
-        btn10.setOnClickListener(this);
-        btn11.setOnClickListener(this);
-        btn12.setOnClickListener(this);
-        btn13.setOnClickListener(this);
-        btn14.setOnClickListener(this);
-        btn15.setOnClickListener(this);
-        btn16.setOnClickListener(this);
-        btn17.setOnClickListener(this);
-
-
-    }
 
     @Override
     public void onClick(View v) {
@@ -221,6 +144,68 @@ public class DataActivity extends Activity implements View.OnClickListener {
 
                 break;
         }
+
+    }
+
+    @Override
+    public int getLayoutViewId() {
+        return R.layout.activity_data;
+    }
+
+    @Override
+    public void initViewId() {
+        month = findViewById(R.id.month);
+
+        b_show = findViewById(R.id.b_show);
+        ll_tools = findViewById(R.id.ll_tools);
+        b_today = findViewById(R.id.b_today);
+        btn01 = findViewById(R.id.btn01);
+        btn02 = findViewById(R.id.btn02);
+        btn03 = findViewById(R.id.btn03);
+        btn04 = findViewById(R.id.btn04);
+        btn05 = findViewById(R.id.btn05);
+        btn06 = findViewById(R.id.btn06);
+        btn07 = findViewById(R.id.btn07);
+        btn08 = findViewById(R.id.btn08);
+        btn09 = findViewById(R.id.btn09);
+        btn10 = findViewById(R.id.btn10);
+        btn11 = findViewById(R.id.btn11);
+        btn12 = findViewById(R.id.btn12);
+        btn13 = findViewById(R.id.btn13);
+        btn14 = findViewById(R.id.btn14);
+        btn15 = findViewById(R.id.btn15);
+        btn16 = findViewById(R.id.btn16);
+        btn17 = findViewById(R.id.btn17);
+
+        //设置监听
+        month.setOnDateClicktListener((year, month, date) -> Toast.makeText(DataActivity.this, year + "-" + month + "-" + date, Toast.LENGTH_SHORT).show());
+
+
+
+        b_show.setOnClickListener(this);
+        b_today.setOnClickListener(this);
+        btn01.setOnClickListener(this);
+        btn02.setOnClickListener(this);
+        btn03.setOnClickListener(this);
+        btn04.setOnClickListener(this);
+        btn05.setOnClickListener(this);
+        btn06.setOnClickListener(this);
+        btn07.setOnClickListener(this);
+        btn08.setOnClickListener(this);
+        btn09.setOnClickListener(this);
+        btn10.setOnClickListener(this);
+        btn11.setOnClickListener(this);
+        btn12.setOnClickListener(this);
+        btn13.setOnClickListener(this);
+        btn14.setOnClickListener(this);
+        btn15.setOnClickListener(this);
+        btn16.setOnClickListener(this);
+        btn17.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void setData() {
 
     }
 }
