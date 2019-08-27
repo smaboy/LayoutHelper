@@ -466,7 +466,7 @@ public class ChinaDataUtils {
     public static String oneDay(int year,int month,int day) {
         Calendar today = Calendar.getInstance(Locale.SIMPLIFIED_CHINESE);
         today.set(year,month,day);
-        long[] l = calElement(year, month+1, day);
+        long[] l = calElement(year, month, day);
         StringBuffer sToday = new StringBuffer();
         try {
             sToday.append(sdf.format(today.getTime()));
@@ -521,6 +521,6 @@ public class ChinaDataUtils {
      */
     public static void main(String[] args) {
         System.out.println(today());
-        System.out.println(oneDay(2019, 0, 2));
+        System.out.println(oneDay(2019, 1, 2));
     }
 }
