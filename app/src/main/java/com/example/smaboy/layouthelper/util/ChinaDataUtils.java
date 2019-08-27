@@ -442,7 +442,7 @@ public class ChinaDataUtils {
         try {
             sToday.append(sdf.format(today.getTime()));
 //            sToday.append(" 农历");
-            sToday.append("\t");
+            sToday.append("  ");
             sToday.append(cyclical(year));
             sToday.append('(');
             sToday.append(AnimalsYear(year));
@@ -466,13 +466,13 @@ public class ChinaDataUtils {
     public static String oneDay(int year,int month,int day) {
         Calendar today = Calendar.getInstance(Locale.SIMPLIFIED_CHINESE);
         today.set(year,month,day);
-        long[] l = calElement(year, month, day);
+        long[] l = calElement(year, month+1, day);
         StringBuffer sToday = new StringBuffer();
         try {
             sToday.append(sdf.format(today.getTime()));
 //            sToday.append("---->"+l[0]+"-"+l[1]+"-"+l[2]);
 //            sToday.append(" 农历");
-            sToday.append("\t");
+            sToday.append("  ");
             sToday.append(cyclical((int) l[0]));
             sToday.append('(');
             sToday.append(AnimalsYear((int) l[0]));
@@ -521,6 +521,6 @@ public class ChinaDataUtils {
      */
     public static void main(String[] args) {
         System.out.println(today());
-        System.out.println(oneDay(2019, 1, 2));
+        System.out.println(oneDay(2019, 0, 2));
     }
 }

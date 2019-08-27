@@ -69,7 +69,7 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
         month.setOnDateClicktListener((year, month, date) -> {
 
             //修改老历年份
-            tv_selected_info.setText( ChinaDataUtils.oneDay(year,month,date));
+            tv_selected_info.setText( ChinaDataUtils.oneDay(year,month-1,date));
 
 
             //吐丝
@@ -120,6 +120,7 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
             case R.id.b_today :
+                tv_selected_info.setText(ChinaDataUtils.today());
                 month.setCalendar(Calendar.getInstance());
                 month.setDefSelectedDay(Calendar.getInstance());
                 month.invalidate();
