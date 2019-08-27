@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -8,90 +8,117 @@
         android:orientation="vertical">
 
 
-    <com.example.smaboy.layouthelper.view.MyFlowLayout
+<!--    内容部分-->
+    <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/myflowlayout">
+            android:layout_height="wrap_content">
+        <LinearLayout
+                android:id="@+id/ll_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+            <!--    图片-->
+            <ImageView
+                    android:id="@+id/iv_woman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="matrix"
+                    android:src="@drawable/woman"/>
+
+            <com.example.smaboy.layouthelper.view.MyFlowLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/myflowlayout">
 
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="你好"
-                android:textColor="#000"
-                android:background="@drawable/shaped"
-                android:layout_margin="10dp"
-                android:padding="5dp"
-        />
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shaped"
-                android:layout_margin="10dp"
-                android:padding="5dp"
-                android:text="你好啊"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="你好"
+                        android:textColor="#000"
+                        android:background="@drawable/shaped"
+                        android:layout_margin="10dp"
+                        android:padding="5dp"
+                        />
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shaped"
+                        android:layout_margin="10dp"
+                        android:padding="5dp"
+                        android:text="你好啊"/>
 
-<!--        <Button android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="我是按钮"-->
-<!--        />-->
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shaped"
-                android:layout_margin="10dp"
-                android:padding="5dp"
-                android:text="你好啊haha"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shaped"
-                android:layout_margin="10dp"
-                android:padding="5dp"
-                android:text="你好啊"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shaped"
-                android:layout_margin="10dp"
-                android:padding="5dp"
-                android:text="你好啊"/>
-
-
-    </com.example.smaboy.layouthelper.view.MyFlowLayout>
+                <!--        <Button android:layout_width="wrap_content"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:text="我是按钮"-->
+                <!--        />-->
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shaped"
+                        android:layout_margin="10dp"
+                        android:padding="5dp"
+                        android:text="你好啊haha"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shaped"
+                        android:layout_margin="10dp"
+                        android:padding="5dp"
+                        android:text="你好啊"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shaped"
+                        android:layout_margin="10dp"
+                        android:padding="5dp"
+                        android:text="你好啊"/>
 
 
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="左对齐"
-            android:id="@+id/left"/>
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="右对齐"
-            android:id="@+id/right"/>
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="居中对齐"
-            android:id="@+id/center"/>
-
-    <EditText
-            android:id="@+id/et_add"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="请输入您要添加的内容，并按添加键完成添加"
-     />
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="添加"
-            android:id="@+id/add"/>
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="删除最后一个"
-            android:id="@+id/delete"/>
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="删除所有"
-            android:id="@+id/delete_all"/>
+            </com.example.smaboy.layouthelper.view.MyFlowLayout>
 
 
-</LinearLayout>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="左对齐"
+                    android:id="@+id/left"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="右对齐"
+                    android:id="@+id/right"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="居中对齐"
+                    android:id="@+id/center"/>
+
+            <EditText
+                    android:id="@+id/et_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="请输入您要添加的内容，并按添加键完成添加"
+                    />
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加"
+                    android:id="@+id/add"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="删除最后一个"
+                    android:id="@+id/delete"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="删除所有"
+                    android:id="@+id/delete_all"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+
+
+</FrameLayout>

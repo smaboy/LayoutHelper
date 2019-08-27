@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 public class FlowActivity extends BaseActivity implements View.OnClickListener {
 
     private MyFlowLayout myflowlayout;
+    private ImageView iv_woman;
     private Button left;
     private Button right;
     private Button center;
@@ -44,6 +45,7 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void init(@Nullable Bundle savedInstanceState) {
+        iv_woman = findViewById(R.id.iv_woman);
         left = findViewById(R.id.left);
         right = findViewById(R.id.right);
         center = findViewById(R.id.center);
@@ -64,6 +66,12 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void setData() {
+        //处理状态栏
+        bar.invasionStatusBar()
+        .invasionNavigationBar()
+        .fitsNavigationBarView(delete_all);
+
+        //设置监听
         myflowlayout.setOnChildViewClickListener(new MyFlowLayout.OnChildViewClickListener() {
             @Override
             public void onClick(View v, int position) {
