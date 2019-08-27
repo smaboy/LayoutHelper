@@ -37,27 +37,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.flow :
+            case R.id.flow:
 
-                startActivity(new Intent(MainActivity.this,FlowActivity.class));
+                startActivity(new Intent(MainActivity.this, FlowActivity.class));
                 break;
 
-            case R.id.quick :
-                startActivity(new Intent(MainActivity.this,QuickActivity.class));
+            case R.id.quick:
+                startActivity(new Intent(MainActivity.this, QuickActivity.class));
                 break;
-            case R.id.stick :
+            case R.id.stick:
                 break;
-            case R.id.menu :
-                startActivity(new Intent(MainActivity.this,DataActivity.class));
-
-                break;
-            case R.id.skeleton ://骨架屏
+            case R.id.menu:
+                startActivity(new Intent(MainActivity.this, DataActivity.class));
 
                 break;
-            case R.id.custom_photo ://自定义拍照
-                startActivity(new Intent(MainActivity.this,CameraActivity.class));
+            case R.id.skeleton://骨架屏
+
                 break;
-            case R.id.h5_page ://h5页面
+            case R.id.custom_photo://自定义拍照
+                startActivity(new Intent(MainActivity.this, CameraActivity.class));
+                break;
+            case R.id.h5_page://h5页面
 
                 break;
         }
@@ -92,7 +92,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void setData() {
 
-//        bar.fitsStatusBarView(ll_title);
-        bar.fitsNavigationBarView(ll_title);
+        //处理沉浸式状态栏
+        bar
+                .statusBarDarkFont()//状态栏深色字体
+                .statusBarBackgroundAlpha(0)//状态栏透明度为0
+                .navigationBarBackgroundAlpha(0);//导航栏透明度为0
+//                .invasionStatusBar()//内容入侵状态栏
+//                .invasionNavigationBar();//内容入侵导航栏
+
+
     }
 }
