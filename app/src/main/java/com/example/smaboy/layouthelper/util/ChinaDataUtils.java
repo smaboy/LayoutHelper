@@ -441,7 +441,8 @@ public class ChinaDataUtils {
         StringBuffer sToday = new StringBuffer();
         try {
             sToday.append(sdf.format(today.getTime()));
-            sToday.append(" 农历");
+//            sToday.append(" 农历");
+            sToday.append("\t");
             sToday.append(cyclical(year));
             sToday.append('(');
             sToday.append(AnimalsYear(year));
@@ -455,6 +456,13 @@ public class ChinaDataUtils {
         }
     }
 
+    /**
+     * 获取某一天阳历对应的农历
+     * @param year 年
+     * @param month 月
+     * @param day 日
+     * @return
+     */
     public static String oneDay(int year,int month,int day) {
         Calendar today = Calendar.getInstance(Locale.SIMPLIFIED_CHINESE);
         today.set(year,month,day);
@@ -462,8 +470,34 @@ public class ChinaDataUtils {
         StringBuffer sToday = new StringBuffer();
         try {
             sToday.append(sdf.format(today.getTime()));
-            sToday.append("---->"+l[0]+"-"+l[1]+"-"+l[2]);
-            sToday.append(" 农历");
+//            sToday.append("---->"+l[0]+"-"+l[1]+"-"+l[2]);
+//            sToday.append(" 农历");
+            sToday.append("\t");
+            sToday.append(cyclical((int) l[0]));
+            sToday.append('(');
+            sToday.append(AnimalsYear((int) l[0]));
+            sToday.append(")年");
+            sToday.append(nStr1[(int) l[1]]);
+            sToday.append("月");
+            sToday.append(getChinaDate((int) (l[2])));
+            return sToday.toString();
+        } finally {
+            sToday = null;
+        }
+    }
+    /**
+     * 获取某一天阳历对应的农历
+     * @param calendar 日期
+     * @return
+     */
+    public static String oneDay(Calendar calendar) {
+        long[] l = calElement(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DATE));
+        StringBuffer sToday = new StringBuffer();
+        try {
+            sToday.append(sdf.format(calendar.getTime()));
+//            sToday.append("---->"+l[0]+"-"+l[1]+"-"+l[2]);
+//            sToday.append(" 农历");
+            sToday.append("\t");
             sToday.append(cyclical((int) l[0]));
             sToday.append('(');
             sToday.append(AnimalsYear((int) l[0]));

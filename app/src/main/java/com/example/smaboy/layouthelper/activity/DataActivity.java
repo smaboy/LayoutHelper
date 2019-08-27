@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
+import com.example.smaboy.layouthelper.util.ChinaDataUtils;
+import com.example.smaboy.layouthelper.util.DataUtils;
 import com.example.smaboy.layouthelper.view.MonthView;
 
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +26,7 @@ import java.util.Calendar;
 public class DataActivity extends BaseActivity implements View.OnClickListener {
 
     private MonthView month;
+    private TextView tv_selected_info;
     private Button b_show;
     private LinearLayout ll_tools;
     private Button b_today,btn01,btn02,btn03,btn04,btn05,btn06,btn07,btn08,btn09,btn10,btn11,btn12,btn13,btn14,btn15,btn16,btn17;
@@ -38,6 +42,7 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void init(@Nullable Bundle savedInstanceState) {
         month = findViewById(R.id.month);
+        tv_selected_info = findViewById(R.id.tv_selected_info);
 
         b_show = findViewById(R.id.b_show);
         ll_tools = findViewById(R.id.ll_tools);
@@ -61,7 +66,16 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
         btn17 = findViewById(R.id.btn17);
 
         //设置监听
-        month.setOnDateClicktListener((year, month, date) -> Toast.makeText(DataActivity.this, year + "-" + month + "-" + date, Toast.LENGTH_SHORT).show());
+        month.setOnDateClicktListener((year, month, date) -> {
+
+            //修改老历年份
+            tv_selected_info.setText( ChinaDataUtils.oneDay(year,month,date));
+
+
+            //吐丝
+            Toast.makeText(DataActivity.this, year + "-" + month + "-" + date, Toast.LENGTH_SHORT).show();
+
+        });
 
 
 
@@ -89,6 +103,9 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void setData() {
 
+        //初始化日期数据
+        tv_selected_info.setText(ChinaDataUtils.today());
+        month.setDefSelectedDay(Calendar.getInstance());
     }
 
     @Override
