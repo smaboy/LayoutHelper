@@ -348,13 +348,13 @@ public class MonthView extends View {
         blackPaint.setAntiAlias(true);
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(titleTextSize+10);
-        blackPaint.setStyle(Paint.Style.STROKE);
+        blackPaint.setStyle(Paint.Style.FILL);
 
         unEnableBlackPaint = new Paint();
         unEnableBlackPaint.setAntiAlias(true);
         unEnableBlackPaint.setColor(Color.GRAY);
         unEnableBlackPaint.setTextSize(titleTextSize+10);
-        unEnableBlackPaint.setStyle(Paint.Style.STROKE);
+        unEnableBlackPaint.setStyle(Paint.Style.FILL);
 
 
 
