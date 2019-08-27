@@ -68,6 +68,10 @@
                     android:layout_height="wrap_content"
                     android:text="H5页面跳转"
                     android:id="@+id/h5_page"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Material页面"
+                    android:id="@+id/material_page"/>
 
 
 
