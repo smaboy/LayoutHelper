@@ -1,15 +1,17 @@
 package com.example.smaboy.layouthelper.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
 import com.example.smaboy.layouthelper.util.DisplayUtils;
@@ -67,7 +69,7 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void setData() {
         //处理状态栏
-        bar.invasionStatusBar()
+        bar
         .invasionNavigationBar()
         .fitsNavigationBarView(delete_all);
 
