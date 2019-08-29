@@ -1,7 +1,6 @@
 package com.example.smaboy.layouthelper.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
-import com.example.smaboy.layouthelper.util.DisplayUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -89,7 +87,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(new Intent(MainActivity.this, QuickActivity.class));
                 break;
             case R.id.stick:
-                Toast.makeText(MainActivity.this, "我是粘性头部", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, StickyActivity.class));
                 break;
             case R.id.menu:
                 startActivity(new Intent(MainActivity.this, DataActivity.class));

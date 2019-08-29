@@ -56,4 +56,7 @@ dependencies {
 
     //列表顶部悬浮效果
     implementation 'com.gavin.com.library:stickyDecoration:1.5.1'
+
+    //引入BaseAdapter
+    implementation 'com.zhy:base-rvadapter:3.0.3'
 }
