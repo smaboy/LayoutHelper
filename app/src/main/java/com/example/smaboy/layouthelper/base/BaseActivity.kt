@@ -44,8 +44,8 @@ abstract class BaseActivity : FragmentActivity() {
         //设置沉浸式状态栏
         bar = Sofia.with(this)
             .statusBarDarkFont()//状态栏深色字体
-            .statusBarBackgroundAlpha(0)//状态栏透明度为0
-            .navigationBarBackgroundAlpha(0)//导航栏透明度为0
+//            .statusBarBackgroundAlpha(0)//状态栏透明度为0
+//            .navigationBarBackgroundAlpha(0)//导航栏透明度为0
 //            .invasionStatusBar()//内容入侵状态栏
 //            .invasionNavigationBar()//内容入侵导航栏
 

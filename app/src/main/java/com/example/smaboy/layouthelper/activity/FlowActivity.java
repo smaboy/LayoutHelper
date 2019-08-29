@@ -71,11 +71,11 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void setData() {
-        //处理状态栏
+        //处理沉浸式状态栏，基类中状态栏导航栏默认是透明的
         bar
-        .invasionNavigationBar()
-        .invasionStatusBar();
-        sv_scroll.setPadding(10,0,10,DisplayUtils.getNavigationBarHeight(this));
+                .statusBarBackgroundAlpha(0)//状态栏透明度为0
+                .invasionStatusBar()
+                .navigationBarBackground(getResources().getColor(android.R.color.holo_orange_dark));
 
         //设置监听
         myflowlayout.setOnChildViewClickListener(new MyFlowLayout.OnChildViewClickListener() {
