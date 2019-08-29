@@ -73,7 +73,6 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
     public void setData() {
         //处理沉浸式状态栏，基类中状态栏导航栏默认是透明的
         bar
-                .statusBarBackgroundAlpha(0)//状态栏透明度为0
                 .invasionStatusBar()
                 .navigationBarBackground(getResources().getColor(android.R.color.holo_orange_dark));
 
