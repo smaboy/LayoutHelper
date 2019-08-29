@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
+import com.example.smaboy.layouthelper.util.DisplayUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -65,6 +66,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void setData() {
+
+        //处理沉浸式状态栏，基类中状态栏导航栏默认是透明的
+        bar
+                .invasionStatusBar()
+                .invasionNavigationBar();
+
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) ll_title.getLayoutParams();
+        layoutParams.setMargins(0, DisplayUtils.getStatusBarHeight(this),0,0);
+        ll_title.setLayoutParams(layoutParams);
 
 
     }

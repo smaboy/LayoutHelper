@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activity.MainActivity"
+        android:background="@android:color/holo_orange_dark"
         android:orientation="vertical">
 
 
 <!--    内容部分-->
     <ScrollView
+            android:id="@+id/sv_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <LinearLayout
                 android:id="@+id/ll_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
                 android:orientation="vertical">
 
             <!--    图片-->
@@ -26,7 +25,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="matrix"
-                    app:srcCompat="@drawable/woman"/>
+                    android:src="@drawable/woman"/>
 
             <com.example.smaboy.layouthelper.view.MyFlowLayout
                     android:layout_width="match_parent"

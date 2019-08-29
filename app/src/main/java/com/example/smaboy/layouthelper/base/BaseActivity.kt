@@ -1,9 +1,11 @@
 package com.example.smaboy.layouthelper.base
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import com.example.smaboy.layouthelper.util.DisplayUtils
 import com.yanzhenjie.sofia.Bar
 import com.yanzhenjie.sofia.Sofia
 
@@ -50,6 +52,7 @@ abstract class BaseActivity : FragmentActivity() {
 
         //设置数据
         setData()
+
     }
 
     //添加布局

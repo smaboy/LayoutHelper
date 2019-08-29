@@ -1,6 +1,13 @@
 package com.example.smaboy.layouthelper.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Rect;
+import android.util.DisplayMetrics;
+import android.util.Log;
+
+import java.lang.reflect.Method;
 
 /**
  * 类名: DisplayUtils
@@ -51,5 +58,53 @@ public class DisplayUtils {
     public static int sp2px(Context context, float spValue) {
         final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
+    }
+
+
+    /**
+     * 获取状态栏的高度
+     * @param context 上下文
+     * @return 状态栏的高度
+     */
+    public static int getStatusBarHeight(Context context) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen","android");
+        int height = resources.getDimensionPixelSize(resourceId);
+        return height;
+    }
+
+    /**
+     *
+     * 获取导航栏的高度
+     * @param context 上下文
+     * @return 导航栏的高度
+     */
+    public static int getNavigationBarHeight(Context context) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height","dimen", "android");
+        int height = resources.getDimensionPixelSize(resourceId);
+        return height;
+    }
+
+
+    /**
+     * 获取屏幕高度
+     * @param context 上下文
+     * @return 屏幕高度
+     */
+    public static int getScreenHeight(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return dm.heightPixels;
+    }
+
+
+    /**
+     * 获取屏幕宽度
+     * @param context 上下文
+     * @return 屏幕宽度
+     */
+    public static int getScreenWidth(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return dm.widthPixels;
     }
 }

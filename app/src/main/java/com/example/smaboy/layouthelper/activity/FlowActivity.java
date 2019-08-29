@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 public class FlowActivity extends BaseActivity implements View.OnClickListener {
 
     private MyFlowLayout myflowlayout;
+    private ScrollView sv_scroll;
     private ImageView iv_woman;
     private Button left;
     private Button right;
@@ -47,6 +49,7 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void init(@Nullable Bundle savedInstanceState) {
+        sv_scroll = findViewById(R.id.sv_scroll);
         iv_woman = findViewById(R.id.iv_woman);
         left = findViewById(R.id.left);
         right = findViewById(R.id.right);
@@ -71,7 +74,8 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
         //处理状态栏
         bar
         .invasionNavigationBar()
-        .fitsNavigationBarView(delete_all);
+        .invasionStatusBar();
+        sv_scroll.setPadding(10,0,10,DisplayUtils.getNavigationBarHeight(this));
 
         //设置监听
         myflowlayout.setOnChildViewClickListener(new MyFlowLayout.OnChildViewClickListener() {
