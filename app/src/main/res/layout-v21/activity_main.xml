@@ -73,6 +73,10 @@
                     android:layout_height="wrap_content"
                     android:text="Material页面"
                     android:id="@+id/material_page"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="蓝牙页面"
+                    android:id="@+id/bluetooth_page"/>
 
 
 

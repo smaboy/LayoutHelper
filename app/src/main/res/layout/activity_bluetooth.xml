@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <!--    标题区域-->
+    <LinearLayout
+            android:id="@+id/ll_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp">
+
+        <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="蓝牙测试"
+                android:textColor="@android:color/black"
+                tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+
+    <!--        蓝牙连接状态展示模块-->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:gravity="center_vertical">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="蓝牙连接状态: "
+                android:textColor="@android:color/black"
+                tools:ignore="HardcodedText" />
+
+        <TextView
+                android:id="@+id/tv_bluetooth_open_or_close_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="请点击开启蓝牙，或关闭蓝牙来刷新蓝牙连接状态"
+                tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+
+    <!--    内容区域-->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+        <!--        蓝牙开启后可用列表-->
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:ignore="NestedWeights">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="可用设备"
+                    android:textColor="@android:color/black"
+                    tools:ignore="HardcodedText" />
+
+            <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                <TextView
+                        android:id="@+id/tv_usable_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="请打开蓝牙，并点击可用设备列表，来刷新！！"
+                        android:padding="5dp"
+                        tools:ignore="HardcodedText" />
+            </ScrollView>
+
+
+        </LinearLayout>
+
+        <!--        蓝牙开启后已匹配列表-->
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="已匹配设备"
+                    android:textColor="@android:color/black"
+                    tools:ignore="HardcodedText" />
+
+            <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                <TextView
+                        android:id="@+id/tv_paired_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="请打开蓝牙，并点击已配对设备列表，来刷新！！"
+                        android:padding="5dp"
+                        tools:ignore="HardcodedText" />
+            </ScrollView>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <!--    功能区域-->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+
+        <Button
+                android:id="@+id/b_open"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="开启蓝牙"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                tools:ignore="HardcodedText" />
+
+        <Button
+                android:id="@+id/b_close"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="关闭蓝牙"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                tools:ignore="HardcodedText" />
+
+        <Button
+                android:id="@+id/b_usable_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="可用设备"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                tools:ignore="HardcodedText,SmallSp" />
+
+        <Button
+                android:id="@+id/b_paired_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="配对设备"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                tools:ignore="HardcodedText,SmallSp" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

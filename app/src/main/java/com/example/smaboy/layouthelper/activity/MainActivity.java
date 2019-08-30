@@ -32,6 +32,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Button h5_page;
     private Button material_page;
     private Button skeleton;
+    private Button bluetooth_page;
 
 
 
@@ -52,6 +53,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         h5_page = findViewById(R.id.h5_page);
         material_page = findViewById(R.id.material_page);
         skeleton = findViewById(R.id.skeleton);
+        bluetooth_page = findViewById(R.id.bluetooth_page);
 
         flow.setOnClickListener(this);
         quick.setOnClickListener(this);
@@ -61,6 +63,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         h5_page.setOnClickListener(this);
         material_page.setOnClickListener(this);
         skeleton.setOnClickListener(this);
+        bluetooth_page.setOnClickListener(this);
     }
 
     @Override
@@ -106,6 +109,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.material_page://material页面
                 Toast.makeText(MainActivity.this, "我是material页面", Toast.LENGTH_SHORT).show();
+
+            case R.id.bluetooth_page://material页面
+                startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
 
                 break;
         }
