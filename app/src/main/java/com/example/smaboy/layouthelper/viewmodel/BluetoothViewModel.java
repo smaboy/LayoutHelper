@@ -1,7 +1,11 @@
 package com.example.smaboy.layouthelper.viewmodel;
 
+import android.bluetooth.BluetoothAdapter;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.smaboy.layouthelper.receiver.BluetoothReceiver;
 
 /**
  * <ur>
@@ -33,7 +37,28 @@ public class BluetoothViewModel extends ViewModel {
      * @return 返回蓝牙状态
      */
     public MutableLiveData<String> openBluetooth() {
-        isOpen.postValue("已开启");
+        BluetoothAdapter bTAdatper = BluetoothAdapter.getDefaultAdapter();
+        
+        if(null==bTAdatper) {
+            isOpen.postValue("当前设备不支持蓝牙功能");
+        }else {
+            if(!bTAdatper.isEnabled()){//蓝牙处于关闭状态
+           /* Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(i);*/
+                bTAdatper.enable();
+                isOpen.postValue("正在开启中");
+                if(bTAdatper.isEnabled()){
+                    isOpen.postValue("开启成功");
+                } else {
+                    isOpen.postValue("开启失败");
+                }
+
+            }else {//蓝牙处于开启状态
+                isOpen.postValue("蓝牙处于开启状态");
+            }
+
+
+        }
 
         return isOpen;
 
@@ -44,7 +69,25 @@ public class BluetoothViewModel extends ViewModel {
      * @return 返回蓝牙状态
      */
     public MutableLiveData<String> closeBluetooth() {
-        isClose.postValue("已关闭");
+        BluetoothAdapter bTAdatper = BluetoothAdapter.getDefaultAdapter();
+
+        if(null==bTAdatper) {
+            isClose.postValue("当前设备不支持蓝牙功能");
+        }else {
+            if(!bTAdatper.isEnabled()){//蓝牙处于关闭状态
+                isClose.postValue("蓝牙处于关闭状态");
+            }else {//蓝牙处于开启状态
+                bTAdatper.disable();
+                isClose.postValue("正在关闭中");
+                if(bTAdatper.isEnabled()){
+                    isOpen.postValue("关闭失败");
+                } else {
+                    isOpen.postValue("关闭成功");
+                }
+            }
+
+
+        }
 
         return isClose;
 

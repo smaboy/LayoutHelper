@@ -1,5 +1,8 @@
 package com.example.smaboy.layouthelper.activity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
+import com.example.smaboy.layouthelper.receiver.BluetoothReceiver;
 import com.example.smaboy.layouthelper.viewmodel.BluetoothViewModel;
 
 import org.jetbrains.annotations.Nullable;
@@ -60,6 +64,9 @@ public class BluetoothActivity extends BaseActivity {
         //获取model
         model= ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(BluetoothViewModel.class);
 
+        //设置监听
+        registerBoradcastReceiver();
+
     }
 
     @Override
@@ -87,5 +94,20 @@ public class BluetoothActivity extends BaseActivity {
 
                 break;
         }
+    }
+
+    private void registerBoradcastReceiver() {
+        //注册监听
+        IntentFilter stateChangeFilter = new IntentFilter(
+                BluetoothAdapter.ACTION_STATE_CHANGED);
+        IntentFilter connectedFilter = new IntentFilter(
+                BluetoothDevice.ACTION_ACL_CONNECTED);
+        IntentFilter disConnectedFilter = new IntentFilter(
+                BluetoothDevice.ACTION_ACL_DISCONNECTED);
+
+        BluetoothReceiver bluetoothReceiver = new BluetoothReceiver();
+        registerReceiver(bluetoothReceiver, stateChangeFilter);
+        registerReceiver(bluetoothReceiver, connectedFilter);
+        registerReceiver(bluetoothReceiver, disConnectedFilter);
     }
 }
