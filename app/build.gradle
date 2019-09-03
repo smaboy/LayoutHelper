@@ -62,4 +62,7 @@ dependencies {
 
     //引入事件总线
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    //beacon库
+    implementation 'org.altbeacon:android-beacon-library:2.9'
 }
