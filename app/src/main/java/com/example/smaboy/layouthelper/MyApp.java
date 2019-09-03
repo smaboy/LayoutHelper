@@ -19,6 +19,8 @@ import org.altbeacon.beacon.startup.RegionBootstrap;
  * </ur>
  */
 public class MyApp extends Application implements BootstrapNotifier {
+    private static final long DEFAULT_FOREGROUND_BETWEEN_SCAN_PERIOD = 1000;
+    private static final long DEFAULT_FOREGROUND_SCAN_PERIOD = 1000;
     private RegionBootstrap regionBootstrap;
     private BackgroundPowerSaver backgroundPowerSaver;
 
@@ -26,14 +28,24 @@ public class MyApp extends Application implements BootstrapNotifier {
     public void onCreate() {
         super.onCreate();
 
-        init();
+//        initBeacon();
     }
 
-    private void init() {
+
+    private void initBeacon() {
+        // 获取beaconManager实例对象
         BeaconManager beaconManager = BeaconManager.getInstanceForApplication(this);
+        //设置搜索的时间间隔和周期
+        beaconManager.setForegroundBetweenScanPeriod(DEFAULT_FOREGROUND_BETWEEN_SCAN_PERIOD);
+        beaconManager.setForegroundScanPeriod(DEFAULT_FOREGROUND_SCAN_PERIOD);
+        //清除beacon数据包格式
         beaconManager.getBeaconParsers().clear();
+        //设置beacon数据包格式
         beaconManager.getBeaconParsers().add(new BeaconParser()
                 .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+        //将activity与库中的BeaconService绑定到一起,服务准备完成后就会自动回调下面的onBeaconServiceConnect方法
+//        beaconManager.bind(this);
+
         Region region = new Region("all-region-beacon",null,null,null);
         regionBootstrap = new RegionBootstrap(this,region);
         backgroundPowerSaver = new BackgroundPowerSaver(this);
