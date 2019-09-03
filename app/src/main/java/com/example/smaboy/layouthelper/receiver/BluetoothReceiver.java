@@ -6,10 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.smaboy.layouthelper.Entity.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * <ur>
  * <li> 类名: BluetoothReceiver</li>
- * <li> 类作用描述: java类作用描述 </li>
+ * <li> 类作用描述: 全局监听蓝牙的改变状态 </li>
  * <li> 页面名称: 页面描述 </li>
  * <li> 作者: <a href="mailto:liyongliang3@ceair.com">Li Yongliang</a></li>
  * <li> 创建时间: 2019/8/30 17:07</li>
@@ -25,16 +29,21 @@ public class BluetoothReceiver extends BroadcastReceiver {
             int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
             switch (blueState) {
                 case BluetoothAdapter.STATE_TURNING_ON:
-                    Log.e("TAG", "TURNING_ON");
+                    EventBus.getDefault().post(new MessageEvent("蓝牙正在开启"));
+//                    Log.e("TAG", "TURNING_ON");
                     break;
                 case BluetoothAdapter.STATE_ON:
-                    Log.e("TAG", "STATE_ON");
+
+                    EventBus.getDefault().post(new MessageEvent("蓝牙开启成功"));
+//                    Log.e("TAG", "STATE_ON");
                     break;
                 case BluetoothAdapter.STATE_TURNING_OFF:
-                    Log.e("TAG", "STATE_TURNING_OFF");
+                    EventBus.getDefault().post(new MessageEvent("蓝牙正在关闭"));
+//                    Log.e("TAG", "STATE_TURNING_OFF");
                     break;
                 case BluetoothAdapter.STATE_OFF:
-                    Log.e("TAG", "STATE_OFF");
+                    EventBus.getDefault().post(new MessageEvent("蓝牙关闭成功"));
+//                    Log.e("TAG", "STATE_OFF");
                     break;
             }
         }

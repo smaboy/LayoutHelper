@@ -59,4 +59,7 @@ dependencies {
 
     //引入BaseAdapter
     implementation 'com.zhy:base-rvadapter:3.0.3'
+
+    //引入事件总线
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }

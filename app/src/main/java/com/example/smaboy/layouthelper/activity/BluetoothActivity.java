@@ -2,8 +2,10 @@ package com.example.smaboy.layouthelper.activity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -12,11 +14,15 @@ import android.widget.TextView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.smaboy.layouthelper.Entity.MessageEvent;
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
 import com.example.smaboy.layouthelper.receiver.BluetoothReceiver;
 import com.example.smaboy.layouthelper.viewmodel.BluetoothViewModel;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.Nullable;
 
 import butterknife.BindView;
@@ -53,6 +59,22 @@ public class BluetoothActivity extends BaseActivity {
 
     private BluetoothViewModel model;
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //初始化事件总线
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        //解注册事件总线
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     public int getLayoutViewId() {
         return R.layout.activity_bluetooth;
@@ -78,11 +100,11 @@ public class BluetoothActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.b_open://开启蓝牙
-                model.openBluetooth().observe(this, s -> tvBluetoothOpenOrCloseStatus.setText(s));
+                model.openBluetooth(this).observe(this, s -> tvBluetoothOpenOrCloseStatus.setText(s));
 
                 break;
             case R.id.b_close://关闭蓝牙
-                model.closeBluetooth().observe(this, s -> tvBluetoothOpenOrCloseStatus.setText(s));
+                model.closeBluetooth(this).observe(this, s -> tvBluetoothOpenOrCloseStatus.setText(s));
 
                 break;
             case R.id.b_usable_list://获取可用列表
@@ -94,6 +116,19 @@ public class BluetoothActivity extends BaseActivity {
 
                 break;
         }
+    }
+
+    /**
+     * 接收事件总线发来的消息
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+
+        if(null!=event) {
+           tvBluetoothOpenOrCloseStatus.setText(event.getArg1());
+        }
+
     }
 
     private void registerBoradcastReceiver() {
@@ -109,5 +144,28 @@ public class BluetoothActivity extends BaseActivity {
         registerReceiver(bluetoothReceiver, stateChangeFilter);
         registerReceiver(bluetoothReceiver, connectedFilter);
         registerReceiver(bluetoothReceiver, disConnectedFilter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==BluetoothViewModel.OPEN_BLUETOOTH_REQUEST_CODE) {//开启蓝牙的回调
+            switch (resultCode) {
+                case RESULT_CANCELED :
+                    tvBluetoothOpenOrCloseStatus.setText("请求开启蓝牙失败");
+//                    Log.e("TAG", "开启蓝牙-RESULT_CANCELED");
+                    break;
+                case RESULT_FIRST_USER :
+//                    Log.e("TAG", "开启蓝牙-RESULT_FIRST_USER");
+                    break;
+                case RESULT_OK :
+                    tvBluetoothOpenOrCloseStatus.setText("请求开启蓝牙成功");
+//                    Log.e("TAG", "开启蓝牙-RESULT_OK");
+
+                    break;
+            }
+        }
+
     }
 }

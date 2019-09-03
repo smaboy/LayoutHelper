@@ -8,6 +8,7 @@ import butterknife.Unbinder
 import com.example.smaboy.layouthelper.util.DisplayUtils
 import com.yanzhenjie.sofia.Bar
 import com.yanzhenjie.sofia.Sofia
+import org.greenrobot.eventbus.EventBus
 
 /**
  *
@@ -54,6 +55,7 @@ abstract class BaseActivity : FragmentActivity() {
         setData()
 
     }
+
 
     //添加布局
     abstract fun getLayoutViewId(): Int
