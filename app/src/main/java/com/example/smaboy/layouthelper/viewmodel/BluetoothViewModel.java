@@ -1,14 +1,19 @@
 package com.example.smaboy.layouthelper.viewmodel;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import java.util.Set;
 
 
 /**
@@ -28,6 +33,7 @@ public class BluetoothViewModel extends ViewModel {
     public MutableLiveData<String> isPaired;//匹配列表
     public static final int OPEN_BLUETOOTH_REQUEST_CODE = 0x001;
     public static final int CLOSE_BLUETOOTH_REQUEST_CODE = 0x002;
+    private StringBuilder tvDevices = new StringBuilder();
 
     public BluetoothViewModel() {
         //初始化操作
@@ -51,10 +57,15 @@ public class BluetoothViewModel extends ViewModel {
         } else {
             if (!bTAdapter.isEnabled()) {//蓝牙处于关闭状态
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                activity.startActivityForResult(intent,OPEN_BLUETOOTH_REQUEST_CODE);
+                activity.startActivityForResult(intent, OPEN_BLUETOOTH_REQUEST_CODE);
 //                bTAdapter.enable(); 此方法开启 没有提示
             } else {//蓝牙处于开启状态
-                isOpen.postValue("蓝牙处于开启状态");
+                //获取本地蓝牙名称
+                String name = bTAdapter.getName();
+                //获取本地蓝牙地址
+                @SuppressLint("HardwareIds") String address = bTAdapter.getAddress();
+
+                isOpen.postValue("蓝牙处于开启状态" + "\n蓝牙名称==" + name + "\n蓝牙地址==" + address);
             }
 
 
@@ -98,7 +109,15 @@ public class BluetoothViewModel extends ViewModel {
      * @return 返回蓝牙状态
      */
     public MutableLiveData<String> getUsableList() {
-        isUsable.postValue("无");
+        BluetoothAdapter bTAdapter = BluetoothAdapter.getDefaultAdapter();
+        // 判断是否在搜索,如果在搜索，就取消搜索
+        if (bTAdapter.isDiscovering()) {
+            bTAdapter.cancelDiscovery();
+        }
+        // 开始搜索
+        bTAdapter.startDiscovery();
+
+        isUsable.postValue("正在搜索...");
 
         return isUsable;
 
@@ -110,7 +129,25 @@ public class BluetoothViewModel extends ViewModel {
      * @return 返回蓝牙状态
      */
     public MutableLiveData<String> getPairedList() {
-        isPaired.postValue("无");
+        BluetoothAdapter bTAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // 获取已经配对的设备
+        Set<BluetoothDevice> pairedDevices = bTAdapter.getBondedDevices();
+        // 判断是否有配对过的设备
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                // 遍历到列表中
+                tvDevices
+                        .append(device.getName())
+                        .append("      ")
+                        .append(device.getAddress())
+                        .append("\n");
+                Log.e("TAG", "已配对设备  " + tvDevices.toString());
+            }
+        }
+
+
+        isPaired.postValue(tvDevices.toString());
         return isPaired;
 
     }

@@ -1,14 +1,18 @@
 package com.example.smaboy.layouthelper.receiver;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.smaboy.layouthelper.Entity.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.Arrays;
 
 /**
  * <ur>
@@ -20,6 +24,8 @@ import org.greenrobot.eventbus.EventBus;
  * </ur>
  */
 public class BluetoothReceiver extends BroadcastReceiver {
+
+    private StringBuilder stringBuilder=new StringBuilder();
     @Override
     public void onReceive(Context context, Intent intent) {
         if (null == intent || null == intent.getAction()) {
@@ -46,6 +52,36 @@ public class BluetoothReceiver extends BroadcastReceiver {
 //                    Log.e("TAG", "STATE_OFF");
                     break;
             }
+        } else if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {//发现设备的广播
+            // 从intent中获取设备
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            // 判断是否配对过
+            if (device.getBondState() != BluetoothDevice.BOND_BONDED) {//没有匹配过
+                //过滤掉没有名称的设备
+                if(!TextUtils.isEmpty(device.getName())) {
+                    // 添加到列表
+                    stringBuilder
+                            .append(device.getName())
+                            .append("\n")
+                            .append(device.getAddress())
+                            .append("\n\n");
+
+                }
+
+                // 添加到列表
+                String tvDevices = device.getName() +
+                        "   " +
+                        device.getAddress() +
+                        "\n";
+                Log.e("TAG", "设备为：\n"+ tvDevices);
+            }
+            // 搜索完成
+        } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intent.getAction())) {
+            MessageEvent messageEvent = new MessageEvent(stringBuilder.toString());
+            messageEvent.setCode(100);
+            EventBus.getDefault().post(messageEvent);
+            Log.e("TAG", "搜索完成");
         }
+
     }
 }

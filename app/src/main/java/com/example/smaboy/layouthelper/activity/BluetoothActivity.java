@@ -126,7 +126,12 @@ public class BluetoothActivity extends BaseActivity {
     public void onMessageEvent(MessageEvent event) {
 
         if(null!=event) {
-           tvBluetoothOpenOrCloseStatus.setText(event.getArg1());
+            if(100==event.getCode()){
+                tvUsableList.setText(event.getArg1());
+            } else {
+
+                tvBluetoothOpenOrCloseStatus.setText(event.getArg1());
+            }
         }
 
     }
@@ -140,10 +145,17 @@ public class BluetoothActivity extends BaseActivity {
         IntentFilter disConnectedFilter = new IntentFilter(
                 BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
+        // 找到设备的广播
+        IntentFilter foundFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        // 搜索完成的广播
+        IntentFilter discoveryFinishedFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+
         BluetoothReceiver bluetoothReceiver = new BluetoothReceiver();
         registerReceiver(bluetoothReceiver, stateChangeFilter);
         registerReceiver(bluetoothReceiver, connectedFilter);
         registerReceiver(bluetoothReceiver, disConnectedFilter);
+        registerReceiver(bluetoothReceiver, foundFilter);
+        registerReceiver(bluetoothReceiver, discoveryFinishedFilter);
     }
 
     @Override

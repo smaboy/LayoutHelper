@@ -12,6 +12,7 @@ package com.example.smaboy.layouthelper.Entity;
 public  class MessageEvent {
 
 
+    private int code;
     private String arg1;
     private String arg2;
     private String arg3;
@@ -67,5 +68,13 @@ public  class MessageEvent {
 
     public void setObject(Object object) {
         this.object = object;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }
