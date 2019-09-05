@@ -90,10 +90,10 @@ public class BluetoothViewModel extends ViewModel {
                 isClose.postValue("蓝牙处于关闭状态");
             } else {//蓝牙处于开启状态
                 isClose.postValue("蓝牙处于开启状态");
-                bTAdatper.disable();
+//                bTAdatper.disable();
                 // 跳转到蓝牙设置页面，关闭蓝牙，没有发现弹出对话框关闭蓝牙的
-//                Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
-//                activity.startActivityForResult(intent,CLOSE_BLUETOOTH_REQUEST_CODE);
+                Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                activity.startActivityForResult(intent,CLOSE_BLUETOOTH_REQUEST_CODE);
             }
 
 
