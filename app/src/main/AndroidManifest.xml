@@ -35,10 +35,6 @@
         <activity android:name=".base.BaseActivity" />
         <activity android:name=".activity.StickyActivity" />
         <activity android:name=".activity.BluetoothActivity" />
-        <activity android:name=".activity.BeaconActivity" />
-        <service android:name=".service.BeaconService"/>
-        <receiver android:name=".receiver.BluetoothReceiver"/>
-        <receiver android:name=".activity.BeaconActivity$BeaconBroadcastReceiver"/>
     </application>
 
 </manifest>

@@ -16,12 +16,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.lifecycle.Observer;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.smaboy.layouthelper.Entity.BeaconLocationData;
 import com.example.smaboy.layouthelper.Entity.MessageEvent;
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
@@ -32,11 +30,8 @@ import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
-import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
-import org.altbeacon.beacon.startup.RegionBootstrap;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -88,7 +83,6 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
     private BluetoothViewModel model;
     private BeaconManager beaconManager;
-    private BeaconLocationData beaconLocationData;
     private Region region;
     private StringBuilder usableString =new StringBuilder();
 
@@ -136,6 +130,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @OnClick({R.id.b_open, R.id.b_close, R.id.b_usable_list, R.id.b_paired_list})
     public void onClick(View view) {
         switch (view.getId()) {
