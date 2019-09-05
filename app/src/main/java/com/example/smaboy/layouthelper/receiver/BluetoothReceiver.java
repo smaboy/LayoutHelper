@@ -12,8 +12,6 @@ import com.example.smaboy.layouthelper.Entity.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.Arrays;
-
 /**
  * <ur>
  * <li> 类名: BluetoothReceiver</li>
@@ -35,20 +33,20 @@ public class BluetoothReceiver extends BroadcastReceiver {
             int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
             switch (blueState) {
                 case BluetoothAdapter.STATE_TURNING_ON:
-                    EventBus.getDefault().post(new MessageEvent("蓝牙正在开启"));
+                    EventBus.getDefault().post(new MessageEvent(102,0,"蓝牙正在开启"));
                     Log.e("TAG", "TURNING_ON");
                     break;
                 case BluetoothAdapter.STATE_ON:
 
-                    EventBus.getDefault().post(new MessageEvent("蓝牙开启成功"));
+                    EventBus.getDefault().post(new MessageEvent(102,0,"蓝牙开启成功"));
                     Log.e("TAG", "STATE_ON");
                     break;
                 case BluetoothAdapter.STATE_TURNING_OFF:
-                    EventBus.getDefault().post(new MessageEvent("蓝牙正在关闭"));
+                    EventBus.getDefault().post(new MessageEvent(102,0,"蓝牙正在关闭"));
                     Log.e("TAG", "STATE_TURNING_OFF");
                     break;
                 case BluetoothAdapter.STATE_OFF:
-                    EventBus.getDefault().post(new MessageEvent("蓝牙关闭成功"));
+                    EventBus.getDefault().post(new MessageEvent(102,0,"蓝牙关闭成功"));
                     Log.e("TAG", "STATE_OFF");
                     break;
             }
@@ -69,15 +67,15 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 }
 
                 // 添加到列表
-                MessageEvent messageEvent = new MessageEvent(device.getName()+"\n"+device.getAddress()+"\n\n");
-                messageEvent.setCode(100);
+                MessageEvent messageEvent = new MessageEvent(100);
+                messageEvent.setStr(device.getName()+"\n"+device.getAddress()+"\n\n");
                 EventBus.getDefault().post(messageEvent);
 //                Log.e("TAG", "设备为：\n"+ tvDevices);
             }
             // 搜索完成
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intent.getAction())) {
-            MessageEvent messageEvent = new MessageEvent("扫描完成");
-            messageEvent.setCode(101);
+            MessageEvent messageEvent = new MessageEvent(101);
+            messageEvent.setStr("扫描完成");
             EventBus.getDefault().post(messageEvent);
             Log.e("TAG", "搜索完成");
         }

@@ -23,7 +23,7 @@
 
     </LinearLayout>
 
-    <!--        蓝牙连接状态展示模块-->
+    <!--蓝牙连接状态展示模块-->
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,80 +47,108 @@
 
     </LinearLayout>
 
+
     <!--    内容区域-->
-    <LinearLayout
-            android:layout_width="match_parent"
+    <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:layout_weight="1">
 
-
-        <!--        蓝牙开启后可用列表-->
+        <!--蓝牙模块-->
         <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:id="@+id/ll_bluetooth_info"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                tools:ignore="NestedWeights">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="可用设备"
-                    android:textColor="@android:color/black"
-                    tools:ignore="HardcodedText" />
 
-            <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+            <!--        蓝牙开启后可用列表-->
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    tools:ignore="NestedWeights">
 
                 <TextView
-                        android:id="@+id/tv_usable_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="请打开蓝牙，并点击可用设备列表，来刷新！！"
-                        android:padding="5dp"
+                        android:text="可用设备"
+                        android:textColor="@android:color/black"
                         tools:ignore="HardcodedText" />
-            </ScrollView>
+
+                <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                    <TextView
+                            android:id="@+id/tv_usable_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="请打开蓝牙，并点击可用设备列表，来刷新！！"
+                            android:padding="5dp"
+                            tools:ignore="HardcodedText" />
+                </ScrollView>
+
+
+            </LinearLayout>
+
+            <!--        蓝牙开启后已匹配列表-->
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="已匹配设备"
+                        android:textColor="@android:color/black"
+                        tools:ignore="HardcodedText" />
+
+                <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                    <TextView
+                            android:id="@+id/tv_paired_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="请打开蓝牙，并点击已配对设备列表，来刷新！！"
+                            android:padding="5dp"
+                            tools:ignore="HardcodedText" />
+                </ScrollView>
+
+
+            </LinearLayout>
 
 
         </LinearLayout>
 
-        <!--        蓝牙开启后已匹配列表-->
+        <!--beacon模块-->
         <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:id="@+id/ll_beacon_info"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
-
+                android:background="@android:color/white">
             <TextView
+                    android:id="@+id/tv_beacon_info"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="已匹配设备"
-                    android:textColor="@android:color/black"
-                    tools:ignore="HardcodedText" />
-
-            <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                <TextView
-                        android:id="@+id/tv_paired_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="请打开蓝牙，并点击已配对设备列表，来刷新！！"
-                        android:padding="5dp"
-                        tools:ignore="HardcodedText" />
-            </ScrollView>
-
+                    android:layout_height="match_parent"
+                    android:text="beacon测试展示页"
+                    tools:ignore="HardcodedText"
+                    android:padding="10dp"
+                    />
 
         </LinearLayout>
 
+    </FrameLayout>
 
-    </LinearLayout>
+
 
 
     <!--    功能区域-->
@@ -169,6 +197,38 @@
                 android:textSize="12sp"
                 android:textColor="@android:color/black"
                 tools:ignore="HardcodedText,SmallSp" />
+
+
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        <Button
+                android:id="@+id/b_start_rang"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="开始测试beacon"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                tools:ignore="HardcodedText" />
+
+        <Button
+                android:id="@+id/b_stop_rang"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="停止测试beacon"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                tools:ignore="HardcodedText" />
+
 
 
     </LinearLayout>

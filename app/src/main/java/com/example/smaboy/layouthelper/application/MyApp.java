@@ -1,4 +1,4 @@
-package com.example.smaboy.layouthelper;
+package com.example.smaboy.layouthelper.application;
 
 import android.app.Application;
 
