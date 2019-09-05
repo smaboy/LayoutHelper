@@ -3,7 +3,7 @@ package com.example.smaboy.layouthelper.util;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Utils {
+public class BeaconUtils {
 	public static Map<String, String> attributes = new HashMap<String, String>();
 
 	static {
@@ -223,14 +223,14 @@ public class Utils {
 	    attributes.put("0000ffa5-0000-1000-8000-00805f9b34fb", "ACCEL_Z");
 	}
 
-	private static Utils INSTANCE;
+	private static BeaconUtils INSTANCE;
 
-	private Utils() {
+	private BeaconUtils() {
 	}
 
-	public static Utils getInstance() {
+	public static BeaconUtils getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new Utils();
+			INSTANCE = new BeaconUtils();
 		}
 		return INSTANCE;
 	}

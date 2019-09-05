@@ -1,5 +1,10 @@
 package com.example.smaboy.layouthelper.Entity;
 
+import android.os.Handler;
+import android.os.Message;
+
+import androidx.annotation.NonNull;
+
 /**
  * <ur>
  * <li> 类名: MessageEvent</li>

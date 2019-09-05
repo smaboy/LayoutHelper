@@ -97,8 +97,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
             case R.id.skeleton://骨架屏
-                startActivity(new Intent(MainActivity.this, BeaconActivity.class));
-//                Toast.makeText(MainActivity.this, "我是骨架屏", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "我是骨架屏", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.custom_photo://自定义拍照
                 startActivity(new Intent(MainActivity.this, CameraActivity.class));
