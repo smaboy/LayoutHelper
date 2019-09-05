@@ -64,8 +64,8 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
     private static final long DEFAULT_FOREGROUND_BETWEEN_SCAN_PERIOD = 1000L;//扫描间隔时间 30s
     private static final long DEFAULT_FOREGROUND_SCAN_PERIOD = 1000L;//扫描周期 10min
     private static final String TAG = "Smaboy2";
-    private static final String FILTER_UUID = "C91BBDBE-DF54-4501-A3AA-D7BDF1FD2E1D";//开发uuid
-//    private static final String FILTER_UUID = "FDA50693A4E24FB1AFCFC6EB07647825";//生产uuid
+    public static final String FILTER_UUID = "C91BBDBE-DF54-4501-A3AA-D7BDF1FD2E1D";//开发uuid
+//    public static final String FILTER_UUID = "FDA50693A4E24FB1AFCFC6EB07647825";//生产uuid
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 0x100;
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -89,6 +89,8 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
     private BluetoothViewModel model;
     private BeaconManager beaconManager;
     private BeaconLocationData beaconLocationData;
+    private Region region;
+    private StringBuilder usableString =new StringBuilder();
 
 
     @Override
@@ -104,6 +106,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
         //解注册事件总线
         EventBus.getDefault().unregister(this);
+
     }
 
     @Override
@@ -121,11 +124,10 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
         registerBoradcastReceiver();
 
 
-//        requestLocationPermissions();
-//
-//        initBeacon();
-//
-//        beaconLocationData = new BeaconLocationData();
+        requestLocationPermissions();
+
+        initBeacon();
+
 
     }
 
@@ -164,9 +166,14 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
     public void onMessageEvent(MessageEvent event) {
 
         if(null!=event) {
-            if(100==event.getCode()){
-                tvUsableList.setText(event.getArg1());
-            } else {
+            if(100==event.getCode()){//扫描到设备的回调
+                usableString.append(event.getArg1());
+                tvUsableList.setText(usableString);
+            }else if(101==event.getCode()) {//扫描完成
+                usableString.append(event.getArg1());
+                tvUsableList.setText(usableString);
+            }
+            else {
 
                 tvBluetoothOpenOrCloseStatus.setText(event.getArg1());
             }
@@ -216,22 +223,6 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
                         break;
                 }
         }
-        if(requestCode==BluetoothViewModel.CLOSE_BLUETOOTH_REQUEST_CODE) {//关闭蓝牙的回调
-                switch (resultCode) {
-                    case RESULT_CANCELED :
-                        tvBluetoothOpenOrCloseStatus.setText("请求开启蓝牙失败");
-//                    Log.e("TAG", "开启蓝牙-RESULT_CANCELED");
-                        break;
-                    case RESULT_FIRST_USER :
-//                    Log.e("TAG", "开启蓝牙-RESULT_FIRST_USER");
-                        break;
-                    case RESULT_OK :
-                        tvBluetoothOpenOrCloseStatus.setText("请求开启蓝牙成功");
-//                    Log.e("TAG", "开启蓝牙-RESULT_OK");
-
-                        break;
-                }
-        }
 
     }
 
@@ -258,7 +249,6 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
                 Log.i(TAG, "didRangeBeaconsInRegion: 调用了这个方法:"+collection.size());
-//                updateTextViewMsg("进入didRangeBeaconsInRegion方法");
                 if (collection.size() > 0) {
                     //符合要求的beacon集合
                     List<Beacon> beacons = new ArrayList<>();
@@ -292,7 +282,6 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
 
 //                        从数据类中获取位置信息
-                        String location = beaconLocationData.getLocationMsg(major, minor);
                         Log.i(TAG, "didRangeBeaconsInRegion: "+ beacons.toString() );
                         Log.i(TAG, "nearBeacon: "+ uuid+"==="+major+"==="+minor+"==="+rssi+"==="+txPower );
 
@@ -305,21 +294,13 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
         try {
 //            别忘了启动搜索,不然不会调用didRangeBeaconsInRegion方法
-            beaconManager.startRangingBeaconsInRegion(new Region(FILTER_UUID, null, null, null));
+            region = new Region(FILTER_UUID, null, null, null);
+            beaconManager.startRangingBeaconsInRegion(region);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-    private void updateTextViewMsg(final String location) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(BluetoothActivity.this, location, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
 
     /**
      * 6.0以上需要动态权限请求，才能使用beacon

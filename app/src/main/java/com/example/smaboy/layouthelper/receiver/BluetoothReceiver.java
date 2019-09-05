@@ -36,20 +36,20 @@ public class BluetoothReceiver extends BroadcastReceiver {
             switch (blueState) {
                 case BluetoothAdapter.STATE_TURNING_ON:
                     EventBus.getDefault().post(new MessageEvent("蓝牙正在开启"));
-//                    Log.e("TAG", "TURNING_ON");
+                    Log.e("TAG", "TURNING_ON");
                     break;
                 case BluetoothAdapter.STATE_ON:
 
                     EventBus.getDefault().post(new MessageEvent("蓝牙开启成功"));
-//                    Log.e("TAG", "STATE_ON");
+                    Log.e("TAG", "STATE_ON");
                     break;
                 case BluetoothAdapter.STATE_TURNING_OFF:
                     EventBus.getDefault().post(new MessageEvent("蓝牙正在关闭"));
-//                    Log.e("TAG", "STATE_TURNING_OFF");
+                    Log.e("TAG", "STATE_TURNING_OFF");
                     break;
                 case BluetoothAdapter.STATE_OFF:
                     EventBus.getDefault().post(new MessageEvent("蓝牙关闭成功"));
-//                    Log.e("TAG", "STATE_OFF");
+                    Log.e("TAG", "STATE_OFF");
                     break;
             }
         } else if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {//发现设备的广播
@@ -69,16 +69,15 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 }
 
                 // 添加到列表
-                String tvDevices = device.getName() +
-                        "   " +
-                        device.getAddress() +
-                        "\n";
-                Log.e("TAG", "设备为：\n"+ tvDevices);
+                MessageEvent messageEvent = new MessageEvent(device.getName()+"\n"+device.getAddress()+"\n\n");
+                messageEvent.setCode(100);
+                EventBus.getDefault().post(messageEvent);
+//                Log.e("TAG", "设备为：\n"+ tvDevices);
             }
             // 搜索完成
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intent.getAction())) {
-            MessageEvent messageEvent = new MessageEvent(stringBuilder.toString());
-            messageEvent.setCode(100);
+            MessageEvent messageEvent = new MessageEvent("扫描完成");
+            messageEvent.setCode(101);
             EventBus.getDefault().post(messageEvent);
             Log.e("TAG", "搜索完成");
         }

@@ -7,13 +7,18 @@ import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.smaboy.layouthelper.activity.BluetoothActivity;
+
 import java.util.Set;
+import java.util.UUID;
 
 
 /**
@@ -90,10 +95,10 @@ public class BluetoothViewModel extends ViewModel {
                 isClose.postValue("蓝牙处于关闭状态");
             } else {//蓝牙处于开启状态
                 isClose.postValue("蓝牙处于开启状态");
-//                bTAdatper.disable();
-                // 跳转到蓝牙设置页面，关闭蓝牙，没有发现弹出对话框关闭蓝牙的
-                Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
-                activity.startActivityForResult(intent,CLOSE_BLUETOOTH_REQUEST_CODE);
+                bTAdatper.disable();
+//                // 跳转到蓝牙设置页面，关闭蓝牙，没有发现弹出对话框关闭蓝牙的
+//                Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+//                activity.startActivityForResult(intent,CLOSE_BLUETOOTH_REQUEST_CODE);
             }
 
 
@@ -108,8 +113,14 @@ public class BluetoothViewModel extends ViewModel {
      *
      * @return 返回蓝牙状态
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public MutableLiveData<String> getUsableList() {
         BluetoothAdapter bTAdapter = BluetoothAdapter.getDefaultAdapter();
+        //开启蓝牙
+        if(!bTAdapter.isEnabled()) {
+            bTAdapter.enable();
+        }
+
         // 判断是否在搜索,如果在搜索，就取消搜索
         if (bTAdapter.isDiscovering()) {
             bTAdapter.cancelDiscovery();
@@ -118,6 +129,13 @@ public class BluetoothViewModel extends ViewModel {
         bTAdapter.startDiscovery();
 
         isUsable.postValue("正在搜索...");
+
+        bTAdapter.startLeScan(new BluetoothAdapter.LeScanCallback() {
+            @Override
+            public void onLeScan(BluetoothDevice bluetoothDevice, int i, byte[] bytes) {
+//                UUID uuid = new UUID();
+            }
+        });
 
         return isUsable;
 
