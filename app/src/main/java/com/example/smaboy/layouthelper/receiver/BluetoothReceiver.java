@@ -55,21 +55,13 @@ public class BluetoothReceiver extends BroadcastReceiver {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             // 判断是否配对过
             if (device.getBondState() != BluetoothDevice.BOND_BONDED) {//没有匹配过
-                //过滤掉没有名称的设备
-                if(!TextUtils.isEmpty(device.getName())) {
-                    // 添加到列表
-                    stringBuilder
-                            .append(device.getName())
-                            .append("\n")
-                            .append(device.getAddress())
-                            .append("\n\n");
-
+                // 添加到列表
+                if(!TextUtils.isEmpty(device.getName())) {//过滤掉没有名称的蓝牙设备
+                    MessageEvent messageEvent = new MessageEvent(100);
+                    messageEvent.setStr(device.getName()+"\n"+device.getAddress()+"\n\n");
+                    EventBus.getDefault().post(messageEvent);
                 }
 
-                // 添加到列表
-                MessageEvent messageEvent = new MessageEvent(100);
-                messageEvent.setStr(device.getName()+"\n"+device.getAddress()+"\n\n");
-                EventBus.getDefault().post(messageEvent);
 //                Log.e("TAG", "设备为：\n"+ tvDevices);
             }
             // 搜索完成
