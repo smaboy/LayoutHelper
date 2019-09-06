@@ -1,6 +1,9 @@
 package com.example.smaboy.layouthelper.activity;
 
 import android.Manifest;
+import android.animation.AnimatorSet;
+import android.animation.FloatArrayEvaluator;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -170,7 +173,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
                 break;
             case R.id.b_stop_rang://关闭beacon
                 try {
-                    if(null!=beaconManager) beaconManager.stopRangingBeaconsInRegion(region);
+                    if (null != beaconManager) beaconManager.stopRangingBeaconsInRegion(region);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -252,7 +255,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
     private void initBeacon() {
         BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(null!=defaultAdapter&&!defaultAdapter.isEnabled()) {
+        if (null != defaultAdapter && !defaultAdapter.isEnabled()) {
             Toast.makeText(BluetoothActivity.this, "请先开启蓝牙", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -268,7 +271,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
         }
 
         //置空beaconString
-        beaconString.delete(0,beaconString.length());
+        beaconString.delete(0, beaconString.length());
         tvBeaconInfo.setText("开始扫描周边beacon设备...");
 
 
@@ -284,7 +287,6 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
                 .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         //将activity与库中的BeaconService绑定到一起,服务准备完成后就会自动回调下面的onBeaconServiceConnect方法
         beaconManager.bind(this);
-
 
 
     }
@@ -343,7 +345,6 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
                             tvBeaconInfo.setText(beaconString);
 
                         }
-
 
 
                     }
@@ -448,12 +449,42 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
      * @param status
      */
     private void isBeanconStatus(Boolean status) {
+        AnimatorSet llBluetoothInfoSet = new AnimatorSet();
+        AnimatorSet llBeaconInfoSet = new AnimatorSet();
+//        ObjectAnimator llBluetoothInfoY = ObjectAnimator.ofFloat(llBluetoothInfo, "translationY");
+//        ObjectAnimator llBeaconInfoY = ObjectAnimator.ofFloat(llBeaconInfo, "translationY");
+//        llBluetoothInfoY.setDuration(2000);
+//        llBeaconInfoY.setDuration(2000);
+
         if (status) {
-            llBluetoothInfo.setVisibility(View.GONE);
-            llBeaconInfo.setVisibility(View.VISIBLE);
+            llBluetoothInfoSet.playTogether(
+                    ObjectAnimator.ofFloat(llBluetoothInfo, "alpha", 1, 0.5f, 0.25f, 0),
+                    ObjectAnimator.ofFloat(llBluetoothInfo, "translationY", 0, llBluetoothInfo.getHeight() / 2, llBluetoothInfo.getHeight()*3 / 4, llBluetoothInfo.getHeight())
+            );
+            llBluetoothInfoSet.setDuration(1000*2).start();
+
+            llBeaconInfoSet.playTogether(
+                    ObjectAnimator.ofFloat(llBeaconInfo, "alpha", 0, 0.25f, 0.5f, 1),
+                    ObjectAnimator.ofFloat(llBeaconInfo, "translationY", llBeaconInfo.getHeight(), llBeaconInfo.getHeight() / 2, llBeaconInfo.getHeight() / 4, 0)
+            );
+            llBeaconInfoSet.setDuration(1000*2).start();
+
+//            llBluetoothInfo.setVisibility(View.GONE);
+//            llBeaconInfo.setVisibility(View.VISIBLE);
         } else {
-            llBluetoothInfo.setVisibility(View.VISIBLE);
-            llBeaconInfo.setVisibility(View.GONE);
+            llBluetoothInfoSet.playTogether(
+                    ObjectAnimator.ofFloat(llBluetoothInfo, "alpha", 0, 0.25f, 0.5f, 1f),
+                    ObjectAnimator.ofFloat(llBluetoothInfo, "translationY", llBluetoothInfo.getHeight(), llBluetoothInfo.getHeight() / 2, llBluetoothInfo.getHeight() / 4, 0)
+            );
+            llBluetoothInfoSet.setDuration(1000*2).start();
+
+            llBeaconInfoSet.playTogether(
+                    ObjectAnimator.ofFloat(llBeaconInfo, "alpha", 1, 0.5f, 0.25f, 0),
+                    ObjectAnimator.ofFloat(llBeaconInfo, "translationY", 0, llBeaconInfo.getHeight() / 2, llBeaconInfo.getHeight()*3 / 4, llBeaconInfo.getHeight())
+            );
+            llBeaconInfoSet.setDuration(1000*2).start();
+//            llBluetoothInfo.setVisibility(View.VISIBLE);
+//            llBeaconInfo.setVisibility(View.GONE);
         }
 
     }
