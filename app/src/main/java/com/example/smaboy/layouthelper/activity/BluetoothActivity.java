@@ -345,6 +345,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
                                     .append("major: ").append(beacon.getId2()).append("\n")
                                     .append("minor: ").append(beacon.getId3()).append("\n")
                                     .append("rssi: ").append(beacon.getRssi()).append("\n")
+                                    .append("address: ").append(beacon.getBluetoothAddress()).append("\n")
                                     .append("txPower: ").append(beacon.getTxPower()).append("\n\n\n");
                             tvBeaconInfo.setText(beaconString);
 
