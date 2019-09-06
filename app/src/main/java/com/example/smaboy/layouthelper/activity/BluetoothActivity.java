@@ -102,6 +102,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
     private Region region;
     private StringBuilder usableString = new StringBuilder();
     private StringBuilder beaconString = new StringBuilder();
+    private boolean defBeaconStatus;
 
 
     @Override
@@ -133,6 +134,9 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
         //设置监听
         registerBoradcastReceiver();
+
+        //初始化状态
+        defBeaconStatus=true;
 
 
     }
@@ -449,14 +453,17 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
      * @param status
      */
     private void isBeanconStatus(Boolean status) {
+        //防止状态相同的切换，提升体验
+        if(defBeaconStatus==status) {
+         return;
+        }else {
+            defBeaconStatus=status;
+        }
+
         AnimatorSet llBluetoothInfoSet = new AnimatorSet();
         AnimatorSet llBeaconInfoSet = new AnimatorSet();
-//        ObjectAnimator llBluetoothInfoY = ObjectAnimator.ofFloat(llBluetoothInfo, "translationY");
-//        ObjectAnimator llBeaconInfoY = ObjectAnimator.ofFloat(llBeaconInfo, "translationY");
-//        llBluetoothInfoY.setDuration(2000);
-//        llBeaconInfoY.setDuration(2000);
 
-        if (status) {
+        if (defBeaconStatus) {
             llBluetoothInfoSet.playTogether(
                     ObjectAnimator.ofFloat(llBluetoothInfo, "alpha", 1, 0.5f, 0.25f, 0),
                     ObjectAnimator.ofFloat(llBluetoothInfo, "translationY", 0, llBluetoothInfo.getHeight() / 2, llBluetoothInfo.getHeight()*3 / 4, llBluetoothInfo.getHeight())
@@ -469,8 +476,6 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
             );
             llBeaconInfoSet.setDuration(1000*2).start();
 
-//            llBluetoothInfo.setVisibility(View.GONE);
-//            llBeaconInfo.setVisibility(View.VISIBLE);
         } else {
             llBluetoothInfoSet.playTogether(
                     ObjectAnimator.ofFloat(llBluetoothInfo, "alpha", 0, 0.25f, 0.5f, 1f),
@@ -483,8 +488,6 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
                     ObjectAnimator.ofFloat(llBeaconInfo, "translationY", 0, llBeaconInfo.getHeight() / 2, llBeaconInfo.getHeight()*3 / 4, llBeaconInfo.getHeight())
             );
             llBeaconInfoSet.setDuration(1000*2).start();
-//            llBluetoothInfo.setVisibility(View.VISIBLE);
-//            llBeaconInfo.setVisibility(View.GONE);
         }
 
     }

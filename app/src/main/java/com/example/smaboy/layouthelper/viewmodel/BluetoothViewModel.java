@@ -153,6 +153,7 @@ public class BluetoothViewModel extends ViewModel {
         Set<BluetoothDevice> pairedDevices = bTAdapter.getBondedDevices();
         // 判断是否有配对过的设备
         if (pairedDevices.size() > 0) {
+            tvDevices.delete(0,tvDevices.length());
             for (BluetoothDevice device : pairedDevices) {
                 // 遍历到列表中
                 tvDevices
