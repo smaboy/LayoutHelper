@@ -135,14 +135,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/white">
-            <TextView
-                    android:id="@+id/tv_beacon_info"
+            <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="beacon测试展示页"
-                    tools:ignore="HardcodedText"
-                    android:padding="10dp"
-                    />
+                    android:layout_height="match_parent">
+                <TextView
+                        android:id="@+id/tv_beacon_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="beacon测试展示页"
+                        tools:ignore="HardcodedText"
+                        android:padding="10dp"
+                        />
+
+            </ScrollView>
+
 
         </LinearLayout>
 

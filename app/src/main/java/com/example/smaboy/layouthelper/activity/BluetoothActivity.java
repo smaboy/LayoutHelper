@@ -8,14 +8,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProvider;
@@ -95,6 +98,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
     private BeaconManager beaconManager;
     private Region region;
     private StringBuilder usableString = new StringBuilder();
+    private StringBuilder beaconString = new StringBuilder();
 
 
     @Override
@@ -126,11 +130,6 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
         //设置监听
         registerBoradcastReceiver();
-
-
-        requestLocationPermissions();
-
-        initBeacon();
 
 
     }
@@ -165,10 +164,16 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
                 break;
             case R.id.b_start_rang://开启beancon
+                requestLocationPermissions();
                 isBeanconStatus(true);
 
                 break;
             case R.id.b_stop_rang://关闭beacon
+                try {
+                    if(null!=beaconManager) beaconManager.stopRangingBeaconsInRegion(region);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 isBeanconStatus(true);
 
                 break;
@@ -246,6 +251,27 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
     }
 
     private void initBeacon() {
+        BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(null!=defaultAdapter&&!defaultAdapter.isEnabled()) {
+            Toast.makeText(BluetoothActivity.this, "请先开启蓝牙", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //是否首次创建
+        if (null != beaconManager) {
+            try {
+                beaconManager.startRangingBeaconsInRegion(region);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        //置空beaconString
+        beaconString.delete(0,beaconString.length());
+        tvBeaconInfo.setText("开始扫描周边beacon设备...");
+
+
         // 获取beaconManager实例对象
         beaconManager = BeaconManager.getInstanceForApplication(this);
         //设置搜索的时间间隔和周期
@@ -258,6 +284,8 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
                 .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         //将activity与库中的BeaconService绑定到一起,服务准备完成后就会自动回调下面的onBeaconServiceConnect方法
         beaconManager.bind(this);
+
+
 
     }
 
@@ -303,6 +331,19 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 //                        从数据类中获取位置信息
                         Log.i(TAG, "didRangeBeaconsInRegion: " + beacons.toString());
                         Log.i(TAG, "nearBeacon: " + uuid + "===" + major + "===" + minor + "===" + rssi + "===" + txPower);
+
+                        //处理数据的展示
+                        for (Beacon beacon : beacons) {
+                            beaconString
+                                    .append("uuid :  ").append(beacon.getId1()).append("\n")
+                                    .append("major: ").append(beacon.getId2()).append("\n")
+                                    .append("minor: ").append(beacon.getId3()).append("\n")
+                                    .append("rssi: ").append(beacon.getRssi()).append("\n")
+                                    .append("txPower: ").append(beacon.getTxPower()).append("\n\n\n");
+                            tvBeaconInfo.setText(beaconString);
+
+                        }
+
 
 
                     }
@@ -352,8 +393,12 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
                 builder.show();
 
+            } else {
+                initBeacon();
             }
 
+        } else {
+            initBeacon();
         }
     }
 
@@ -363,12 +408,19 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
         switch (requestCode) {
             case PERMISSION_REQUEST_COARSE_LOCATION: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    Log.d(TAG, "coarse location permission granted");
+                    initBeacon();
                 } else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Functionality limited");
                     builder.setMessage("Since location access has not been granted, this app will not be able to discover beacons when in the background.");
-                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            goIntentSetting();
+
+                        }
+                    });
+                    builder.setNegativeButton(android.R.string.cancel, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
                         @Override
@@ -392,10 +444,11 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
 
     /**
      * 是否是beacon状态
+     *
      * @param status
      */
     private void isBeanconStatus(Boolean status) {
-        if(status){
+        if (status) {
             llBluetoothInfo.setVisibility(View.GONE);
             llBeaconInfo.setVisibility(View.VISIBLE);
         } else {
@@ -403,6 +456,17 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
             llBeaconInfo.setVisibility(View.GONE);
         }
 
+    }
+
+    private void goIntentSetting() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
