@@ -103,6 +103,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
     private StringBuilder usableString = new StringBuilder();
     private StringBuilder beaconString = new StringBuilder();
     private boolean defBeaconStatus;
+    private BluetoothReceiver bluetoothReceiver;
 
 
     @Override
@@ -132,7 +133,7 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
         //获取model
         model = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(BluetoothViewModel.class);
 
-        //设置监听
+        //注册广播监听
         registerBoradcastReceiver();
 
         //初始化状态
@@ -213,25 +214,18 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
     }
 
     private void registerBoradcastReceiver() {
-        //注册监听
-        IntentFilter stateChangeFilter = new IntentFilter(
-                BluetoothAdapter.ACTION_STATE_CHANGED);
-        IntentFilter connectedFilter = new IntentFilter(
-                BluetoothDevice.ACTION_ACL_CONNECTED);
-        IntentFilter disConnectedFilter = new IntentFilter(
-                BluetoothDevice.ACTION_ACL_DISCONNECTED);
-
-        // 找到设备的广播
+        //蓝牙状态改变的广播
+        IntentFilter stateChangeFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        // 找到蓝牙设备的广播
         IntentFilter foundFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         // 搜索完成的广播
         IntentFilter discoveryFinishedFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
-        BluetoothReceiver bluetoothReceiver = new BluetoothReceiver();
+        bluetoothReceiver = new BluetoothReceiver();
         registerReceiver(bluetoothReceiver, stateChangeFilter);
-        registerReceiver(bluetoothReceiver, connectedFilter);
-        registerReceiver(bluetoothReceiver, disConnectedFilter);
         registerReceiver(bluetoothReceiver, foundFilter);
         registerReceiver(bluetoothReceiver, discoveryFinishedFilter);
+
     }
 
     @Override
@@ -339,15 +333,18 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
                         Log.i(TAG, "nearBeacon: " + uuid + "===" + major + "===" + minor + "===" + rssi + "===" + txPower);
 
                         //处理数据的展示
-                        for (Beacon beacon : beacons) {
-                            beaconString
-                                    .append("uuid :  ").append(beacon.getId1()).append("\n")
-                                    .append("major: ").append(beacon.getId2()).append("\n")
-                                    .append("minor: ").append(beacon.getId3()).append("\n")
-                                    .append("rssi: ").append(beacon.getRssi()).append("\n")
-                                    .append("address: ").append(beacon.getBluetoothAddress()).append("\n")
-                                    .append("txPower: ").append(beacon.getTxPower()).append("\n\n\n");
-                            tvBeaconInfo.setText(beaconString);
+                        if(!isFinishing()) {//当前activity没被销毁
+                            for (Beacon beacon : beacons) {
+                                beaconString
+                                        .append("uuid :  ").append(beacon.getId1()).append("\n")
+                                        .append("major: ").append(beacon.getId2()).append("\n")
+                                        .append("minor: ").append(beacon.getId3()).append("\n")
+                                        .append("rssi: ").append(beacon.getRssi()).append("\n")
+                                        .append("address: ").append(beacon.getBluetoothAddress()).append("\n")
+                                        .append("txPower: ").append(beacon.getTxPower()).append("\n\n\n");
+                                tvBeaconInfo.setText(beaconString);
+
+                            }
 
                         }
 
@@ -444,7 +441,14 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        beaconManager.unbind(this);
+
+        //解注册广播接受者
+        unregisterReceiver(bluetoothReceiver);
+
+        //解绑beacon
+        if(null!=beaconManager) {
+            beaconManager.unbind(this);
+        }
     }
 
 
