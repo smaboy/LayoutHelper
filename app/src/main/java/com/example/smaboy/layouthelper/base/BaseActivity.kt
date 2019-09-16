@@ -1,10 +1,12 @@
 package com.example.smaboy.layouthelper.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import com.example.smaboy.layouthelper.R
 import com.example.smaboy.layouthelper.util.DisplayUtils
 import com.yanzhenjie.sofia.Bar
 import com.yanzhenjie.sofia.Sofia
@@ -74,5 +76,17 @@ abstract class BaseActivity : FragmentActivity() {
         mUnbinder.unbind()
     }
 
+
+    override fun startActivity(intent: Intent?) {
+        super.startActivity(intent)
+
+        overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit)
+    }
+
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit)
+    }
 
 }

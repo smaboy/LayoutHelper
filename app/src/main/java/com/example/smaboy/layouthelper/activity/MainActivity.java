@@ -2,6 +2,7 @@ package com.example.smaboy.layouthelper.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
@@ -16,6 +17,9 @@ import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
 
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 类名: MainActivity
@@ -38,7 +42,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Button skeleton;
     private Button bluetooth_page;
     private LinearLayout ll_button_group;
-
+    private boolean mBackKeyPressed;
 
 
     @Override
@@ -143,6 +147,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        ll_button_group.setLayoutAnimation(layoutAnimationController1);
 //        ll_button_group.startLayoutAnimation();
 
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (!mBackKeyPressed) {
+                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                mBackKeyPressed = true;
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        mBackKeyPressed = false;
+                    }
+                }, 2000);
+                return true;
+            } else {
+                finish();
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
 
     }
 }
