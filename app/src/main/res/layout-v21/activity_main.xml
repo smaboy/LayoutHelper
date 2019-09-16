@@ -34,9 +34,11 @@
 
         <LinearLayout
                 android:layout_width="match_parent"
+                android:minHeight="800dp"
                 android:layout_height="wrap_content"
                 android:padding="30dp"
                 android:orientation="vertical"
+                android:layoutAnimation="@anim/layout_animation_fade_in"
                 tools:ignore="RtlSymmetry">
 
             <Button android:layout_width="80dp"
