@@ -3,6 +3,10 @@ package com.example.smaboy.layouthelper.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,6 +37,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Button material_page;
     private Button skeleton;
     private Button bluetooth_page;
+    private LinearLayout ll_button_group;
 
 
 
@@ -54,6 +59,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         material_page = findViewById(R.id.material_page);
         skeleton = findViewById(R.id.skeleton);
         bluetooth_page = findViewById(R.id.bluetooth_page);
+        ll_button_group = findViewById(R.id.ll_button_group);
 
         flow.setOnClickListener(this);
         quick.setOnClickListener(this);
@@ -73,6 +79,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         bar
                 .statusBarBackground(getResources().getDrawable(android.R.color.holo_orange_dark))
                 .navigationBarBackground(getResources().getColor(android.R.color.holo_orange_dark));
+
+        //添加布局动画
+        startAnimation();
+
 
     }
 
@@ -114,6 +124,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
         }
+
+    }
+
+    public void startAnimation(){
+
+        /*方法一*/
+        LayoutAnimationController layoutAnimationController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fade_in);
+        ll_button_group.setLayoutAnimation(layoutAnimationController);
+        ll_button_group.startLayoutAnimation();
+
+        /*方法二*/
+//        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+//        LayoutAnimationController layoutAnimationController1 = new LayoutAnimationController(animation);
+//        layoutAnimationController1.setDelay(0.5f);
+//        layoutAnimationController1.setOrder(LayoutAnimationController.ORDER_NORMAL);
+//        layoutAnimationController1.setInterpolator(new AccelerateDecelerateInterpolator());
+//        ll_button_group.setLayoutAnimation(layoutAnimationController1);
+//        ll_button_group.startLayoutAnimation();
+
 
     }
 }
