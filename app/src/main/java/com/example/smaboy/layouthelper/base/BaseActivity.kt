@@ -80,13 +80,13 @@ abstract class BaseActivity : FragmentActivity() {
     override fun startActivity(intent: Intent?) {
         super.startActivity(intent)
 
-        overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit)
+        overridePendingTransition(R.anim.activity_enter,R.anim.acitivity_exit_fade)
     }
 
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit)
+        overridePendingTransition(R.anim.activity_enter_fade, R.anim.activity_exit)
     }
 
 }
