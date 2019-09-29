@@ -9,6 +9,7 @@ import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
 import com.example.smaboy.layouthelper.view.CameraPreview;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import butterknife.BindView;
@@ -61,4 +62,11 @@ public class CameraActivity extends BaseActivity {
     }
 
 
+
+    @NotNull
+    @Override
+    public Class initViewModel() {
+
+        return getClass();
+    }
 }

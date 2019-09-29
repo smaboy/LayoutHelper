@@ -2,10 +2,8 @@ package com.example.smaboy.layouthelper.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +17,7 @@ import com.gavin.com.library.listener.PowerGroupListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -96,4 +95,11 @@ public class StickyActivity extends BaseActivity {
 
     }
 
+
+    @NotNull
+    @Override
+    public Class initViewModel() {
+
+        return getClass();
+    }
 }

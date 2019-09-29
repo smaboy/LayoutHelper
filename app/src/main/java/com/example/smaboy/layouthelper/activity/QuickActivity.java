@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -31,4 +32,11 @@ public class QuickActivity extends BaseActivity {
 
     }
 
+
+    @NotNull
+    @Override
+    public Class initViewModel() {
+
+        return getClass();
+    }
 }

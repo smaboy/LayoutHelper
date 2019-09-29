@@ -2,7 +2,6 @@ package com.example.smaboy.layouthelper.activity;
 
 import android.Manifest;
 import android.animation.AnimatorSet;
-import android.animation.FloatArrayEvaluator;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -41,6 +40,7 @@ import org.altbeacon.beacon.Region;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -508,4 +508,11 @@ public class BluetoothActivity extends BaseActivity implements BeaconConsumer {
         }
     }
 
+
+    @NotNull
+    @Override
+    public Class initViewModel() {
+
+        return getClass();
+    }
 }

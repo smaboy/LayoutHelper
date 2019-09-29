@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
@@ -16,6 +14,7 @@ import android.widget.Toast;
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Timer;
@@ -171,5 +170,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         return super.onKeyDown(keyCode, event);
 
+    }
+
+
+    @NotNull
+    @Override
+    public Class initViewModel() {
+
+        return MainActivity.class;
     }
 }

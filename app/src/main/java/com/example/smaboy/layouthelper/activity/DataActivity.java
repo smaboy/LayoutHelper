@@ -10,9 +10,9 @@ import android.widget.Toast;
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
 import com.example.smaboy.layouthelper.util.ChinaDataUtils;
-import com.example.smaboy.layouthelper.util.DataUtils;
 import com.example.smaboy.layouthelper.view.MonthView;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
@@ -229,5 +229,12 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                 break;
         }
 
+    }
+
+    @NotNull
+    @Override
+    public Class initViewModel() {
+
+        return getClass();
     }
 }

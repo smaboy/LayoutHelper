@@ -2,15 +2,16 @@ package com.example.smaboy.layouthelper.base
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.example.smaboy.layouthelper.R
-import com.example.smaboy.layouthelper.util.DisplayUtils
+import com.trello.rxlifecycle3.components.support.RxFragmentActivity
 import com.yanzhenjie.sofia.Bar
 import com.yanzhenjie.sofia.Sofia
-import org.greenrobot.eventbus.EventBus
+import com.example.smaboy.layouthelper.viewmodel.FlowActivityViewModule as FlowActivityViewModule
 
 /**
  *
@@ -27,7 +28,9 @@ import org.greenrobot.eventbus.EventBus
  *
  *
  */
-abstract class BaseActivity : FragmentActivity() {
+abstract class BaseActivity<T : BaseViewModel> : RxFragmentActivity() {
+
+    lateinit var mViewModel: T
     lateinit var bar: Bar
     lateinit var mUnbinder: Unbinder
 
@@ -53,6 +56,12 @@ abstract class BaseActivity : FragmentActivity() {
 //            .invasionNavigationBar()//内容入侵导航栏
 
 
+        //初始化viewmodel
+        if (initViewModel() is BaseViewModel) mViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(initViewModel())
+
+        //设置观察者
+        setObserver()
+
         //设置数据
         setData()
 
@@ -67,6 +76,12 @@ abstract class BaseActivity : FragmentActivity() {
 
     //设置数据
     abstract fun setData()
+
+    //初始化ViewModel,子类如果传入的类型不是BaseViewModel的子类，则不去初始化
+    abstract fun initViewModel(): Class<T>
+
+    //设置观察者
+    protected open fun setObserver(){}
 
 
     override fun onDestroy() {

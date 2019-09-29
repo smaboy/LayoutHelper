@@ -13,11 +13,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.base.BaseActivity;
 import com.example.smaboy.layouthelper.util.DisplayUtils;
 import com.example.smaboy.layouthelper.view.MyFlowLayout;
+import com.example.smaboy.layouthelper.viewmodel.FlowActivityViewModule;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -26,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
  * 作者: Smaboy
  * 创建时间: 2018/12/20 14:49
  */
-public class FlowActivity extends BaseActivity implements View.OnClickListener {
+public class FlowActivity extends BaseActivity<FlowActivityViewModule> implements View.OnClickListener {
 
     private MyFlowLayout myflowlayout;
     private ScrollView sv_scroll;
@@ -82,13 +87,13 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
             public void onClick(View v, int position) {
 
                 try {
-                    TextView textView= (TextView) v;
+                    TextView textView = (TextView) v;
                     textView.setText("我被改变了");
                 } catch (Exception e) {
                     Toast.makeText(FlowActivity.this, "不是TextView类型不能做相关操作", Toast.LENGTH_SHORT).show();
                 }
 
-                Toast.makeText(FlowActivity.this, "您点击了我"+position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(FlowActivity.this, "您点击了我" + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -105,19 +110,19 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         int childCount = myflowlayout.getChildCount();
         switch (v.getId()) {
-            case R.id.left :
+            case R.id.left:
 
                 myflowlayout.setGravity(MyFlowLayout.LEFT);
                 break;
 
-            case R.id.right :
+            case R.id.right:
                 myflowlayout.setGravity(MyFlowLayout.RIGHT);
                 break;
-            case R.id.center :
+            case R.id.center:
                 myflowlayout.setGravity(MyFlowLayout.CENTER);
                 break;
-            case R.id.add :
-                if(TextUtils.isEmpty(et_add.getText().toString())) {
+            case R.id.add:
+                if (TextUtils.isEmpty(et_add.getText().toString())) {
                     Toast.makeText(FlowActivity.this, "请输入内容进行添加", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -125,28 +130,29 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
                 textView.setText(et_add.getText().toString());
                 textView.setBackgroundResource(R.drawable.shaped);
                 ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-                marginLayoutParams.setMargins(DisplayUtils.dp2px(this,10),DisplayUtils.dp2px(this,10),DisplayUtils.dp2px(this,10),DisplayUtils.dp2px(this,10));
-                textView.setPadding(DisplayUtils.dp2px(this,5),DisplayUtils.dp2px(this,5),DisplayUtils.dp2px(this,5),DisplayUtils.dp2px(this,5));
+                marginLayoutParams.setMargins(DisplayUtils.dp2px(this, 10), DisplayUtils.dp2px(this, 10), DisplayUtils.dp2px(this, 10), DisplayUtils.dp2px(this, 10));
+                textView.setPadding(DisplayUtils.dp2px(this, 5), DisplayUtils.dp2px(this, 5), DisplayUtils.dp2px(this, 5), DisplayUtils.dp2px(this, 5));
                 textView.setLayoutParams(marginLayoutParams);
-
-
 
 
                 myflowlayout.addView(textView);
                 break;
-            case R.id.delete :
-                if(childCount<=0) {
+            case R.id.delete:
+                if (childCount <= 0) {
                     Toast.makeText(FlowActivity.this, "已经没有子view咯，请添加后再进行删除吧", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                myflowlayout.removeViewAt(childCount-1);
+                myflowlayout.removeViewAt(childCount - 1);
                 break;
-            case R.id.delete_all :
-                if(childCount<=0) {
-                    Toast.makeText(FlowActivity.this, "已经没有子view咯，请添加后再进行删除吧", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                myflowlayout.removeAllViews();
+            case R.id.delete_all:
+//                if (childCount <= 0) {
+//                    Toast.makeText(FlowActivity.this, "已经没有子view咯，请添加后再进行删除吧", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                myflowlayout.removeAllViews();
+                mViewModel.getTestInfo("哈哈");
+//                mViewModel.getTest().setValue("小样");
+//                Toast.makeText(FlowActivity.this, mViewModel.getTest().getValue(), Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -155,15 +161,16 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 显示长按删除弹窗
+     *
      * @param position 位置
      */
     @SuppressLint("SetTextI18n")
     private void showDeleteDialog(int position) {
-        final Dialog dialog=new Dialog(FlowActivity.this, R.style.Dialog_Fullscreen);
+        final Dialog dialog = new Dialog(FlowActivity.this, R.style.Dialog_Fullscreen);
 //                final Dialog dialog=new Dialog(FlowActivity.this);
         dialog.setContentView(R.layout.sign_up_dialog);
         title = dialog.findViewById(R.id.title);
-        content = dialog. findViewById(R.id.content);
+        content = dialog.findViewById(R.id.content);
         login = dialog.findViewById(R.id.login);
 
         //设置数据
@@ -173,7 +180,7 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
         //设置监听
         login.setOnClickListener(v -> {
             myflowlayout.removeViewAt(position);
-            if(dialog.isShowing()) {
+            if (dialog.isShowing()) {
                 dialog.dismiss();
             }
         });
@@ -182,4 +189,28 @@ public class FlowActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
+
+    @NotNull
+    @Override
+    public Class<FlowActivityViewModule> initViewModel() {
+        mViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(FlowActivityViewModule.class);
+
+        return FlowActivityViewModule.class;
+    }
+
+
+    /**
+     * 设置观察者
+     */
+    @Override
+    protected void setObserver() {
+        super.setObserver();
+
+        mViewModel.getTest().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(FlowActivity.this, s, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
