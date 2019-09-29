@@ -1,13 +1,9 @@
 package com.example.smaboy.layouthelper.activity;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,7 +11,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.smaboy.layouthelper.R;
@@ -45,9 +40,6 @@ public class FlowActivity extends BaseActivity<FlowActivityViewModule> implement
     private Button delete;
     private Button delete_all;
     private EditText et_add;
-    private TextView title;
-    private TextView content;
-    private TextView login;
 
     @Override
     public int getLayoutViewId() {
@@ -101,7 +93,8 @@ public class FlowActivity extends BaseActivity<FlowActivityViewModule> implement
             @Override
             public boolean onLongClick(View v, final int position) {
 
-                showDeleteDialog(position);
+                mViewModel.showDeleteDialog(FlowActivity.this, myflowlayout, position);
+
 
                 return false;
             }
@@ -147,50 +140,15 @@ public class FlowActivity extends BaseActivity<FlowActivityViewModule> implement
                 myflowlayout.removeViewAt(childCount - 1);
                 break;
             case R.id.delete_all:
-//                if (childCount <= 0) {
-//                    Toast.makeText(FlowActivity.this, "已经没有子view咯，请添加后再进行删除吧", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                myflowlayout.removeAllViews();
-                mViewModel.getTestInfo("哈哈");
-//                mViewModel.getTest().setValue("小样");
-//                Toast.makeText(FlowActivity.this, mViewModel.getTest().getValue(), Toast.LENGTH_SHORT).show();
+                if (childCount <= 0) {
+                    Toast.makeText(FlowActivity.this, "已经没有子view咯，请添加后再进行删除吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                myflowlayout.removeAllViews();
                 break;
         }
 
     }
-
-
-    /**
-     * 显示长按删除弹窗
-     *
-     * @param position 位置
-     */
-    @SuppressLint("SetTextI18n")
-    private void showDeleteDialog(int position) {
-        final Dialog dialog = new Dialog(FlowActivity.this, R.style.Dialog_Fullscreen);
-//                final Dialog dialog=new Dialog(FlowActivity.this);
-        dialog.setContentView(R.layout.sign_up_dialog);
-        title = dialog.findViewById(R.id.title);
-        content = dialog.findViewById(R.id.content);
-        login = dialog.findViewById(R.id.login);
-
-        //设置数据
-        title.setText("删除提示");
-        content.setText("您确定要删除该项吗？\n删除后不可恢复，但您可以通过添加按钮添加子view进来，不过添加进来的子view的样式是被固定的。\n如果您已知晓,请按确认键进行删除该view。");
-        login.setText("确定");
-        dialog.setCanceledOnTouchOutside(true);
-        //设置监听
-        login.setOnClickListener(v -> {
-            myflowlayout.removeViewAt(position);
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
 
 
     @NotNull
@@ -209,11 +167,5 @@ public class FlowActivity extends BaseActivity<FlowActivityViewModule> implement
     protected void setObserver() {
         super.setObserver();
 
-        mViewModel.getTest().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                Toast.makeText(FlowActivity.this, s, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

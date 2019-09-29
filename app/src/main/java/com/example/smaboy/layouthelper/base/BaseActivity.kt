@@ -2,8 +2,6 @@ package com.example.smaboy.layouthelper.base
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import butterknife.ButterKnife
 import butterknife.Unbinder
@@ -11,7 +9,6 @@ import com.example.smaboy.layouthelper.R
 import com.trello.rxlifecycle3.components.support.RxFragmentActivity
 import com.yanzhenjie.sofia.Bar
 import com.yanzhenjie.sofia.Sofia
-import com.example.smaboy.layouthelper.viewmodel.FlowActivityViewModule as FlowActivityViewModule
 
 /**
  *
@@ -95,7 +92,7 @@ abstract class BaseActivity<T : BaseViewModel> : RxFragmentActivity() {
     override fun startActivity(intent: Intent?) {
         super.startActivity(intent)
 
-        overridePendingTransition(R.anim.activity_enter,R.anim.acitivity_exit_fade)
+        overridePendingTransition(R.anim.activity_enter,R.anim.activity_exit_fade)
     }
 
 
