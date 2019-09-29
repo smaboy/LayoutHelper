@@ -89,13 +89,18 @@ abstract class BaseActivity<T : BaseViewModel> : RxFragmentActivity() {
     }
 
 
-    override fun startActivity(intent: Intent?) {
-        super.startActivity(intent)
-
+    /**
+     *  由于startactivity也会调用该方法，故将启动动画的方法放在此处理
+     */
+    override fun startActivityForResult(intent: Intent?, requestCode: Int) {
+        super.startActivityForResult(intent, requestCode)
         overridePendingTransition(R.anim.activity_enter,R.anim.activity_exit_fade)
     }
 
 
+    /**
+     * 添加activity结束时的动画
+     */
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.activity_enter_fade, R.anim.activity_exit)
