@@ -1,78 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#55000000"
-    xmlns:tools="http://schemas.android.com/tools">
+        android:layout_height="match_parent">
+    <!--    android:background="#55000000"-->
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:layout_margin="25dp"
-        android:background="@drawable/rect_round_white_bg"
-        android:gravity="center">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="25dp"
+            android:background="@drawable/rect_round_white_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
         <ImageView
                 android:id="@+id/cancel"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:scaleType="fitStart"
-                app:srcCompat="@mipmap/ic_launcher"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="13dp"
-                tools:ignore="ContentDescription"/>
+                android:scaleType="fitStart"
+                app:srcCompat="@mipmap/ic_launcher"
+                tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="温馨提示"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="56dp"
-            />
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="56dp"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                tools:text="温馨提示" />
 
         <TextView
-            android:id="@+id/content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="您确定删除此按钮吗？\n删除后将不可恢复！！"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp"
-            android:layout_marginTop="19dp"
-            android:layout_marginBottom="35dp"
-            android:layout_below="@id/title"
-            />
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="28dp"
+                android:layout_marginBottom="35dp"
+                tools:text="您确定删除此按钮吗？\n删除后将不可恢复！！" />
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/content"
-            android:background="@drawable/rect_round_gray_white_bg"
-            >
-
-            <TextView
-                android:id="@+id/login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="登录"
-                android:textSize="15sp"
-                android:textColor="#ffffff"
-                android:layout_marginStart="28dp"
-                android:layout_marginEnd="28dp"
-                android:layout_marginBottom="18dp"
-                android:layout_marginTop="17dp"
-                android:padding="10dp"
-                android:gravity="center"
-                android:background="#1A3B64"
-                />
+                android:layout_below="@id/content"
+                android:background="@drawable/rect_round_gray_white_bg">
+
+            <TextView
+                    android:id="@+id/login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginEnd="28dp"
+                    android:layout_marginBottom="18dp"
+                    android:background="#1A3B64"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp"
+                    tools:text="登录" />
 
         </FrameLayout>
-
 
 
     </RelativeLayout>
