@@ -22,6 +22,8 @@ import com.example.smaboy.layouthelper.viewmodel.FlowActivityViewModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import butterknife.ButterKnife;
+
 /**
  * 类名: FlowActivity
  * 类作用描述: java类作用描述
@@ -71,7 +73,7 @@ public class FlowActivity extends BaseActivity<FlowActivityViewModule> implement
     @Override
     public void setData() {
         //处理沉浸式状态栏，基类中状态栏导航栏默认是透明的
-        bar
+        getBar()
                 .invasionStatusBar()
                 .navigationBarBackground(getResources().getColor(android.R.color.holo_orange_dark));
 
@@ -93,7 +95,7 @@ public class FlowActivity extends BaseActivity<FlowActivityViewModule> implement
             @Override
             public boolean onLongClick(View v, final int position) {
 
-                mViewModel.showDeleteDialog(FlowActivity.this, myflowlayout, position);
+                getViewModel().showDeleteDialog(FlowActivity.this, myflowlayout, position);
 
 
                 return false;
@@ -154,7 +156,6 @@ public class FlowActivity extends BaseActivity<FlowActivityViewModule> implement
     @NotNull
     @Override
     public Class<FlowActivityViewModule> initViewModel() {
-        mViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(FlowActivityViewModule.class);
 
         return FlowActivityViewModule.class;
     }

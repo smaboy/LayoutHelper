@@ -27,40 +27,23 @@ import com.yanzhenjie.sofia.Sofia
  */
 abstract class BaseActivity<T : BaseViewModel> : RxFragmentActivity() {
 
-    lateinit var mViewModel: T
-    lateinit var bar: Bar
-    lateinit var mUnbinder: Unbinder
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         //设置内容
         setContentView(getLayoutViewId())
 
-        //控件绑定
-        mUnbinder = ButterKnife.bind(this)
+        //注解控件绑定
+        ButterKnife.bind(this)
 
         //初始化内容
         init(savedInstanceState)
 
-
-        //设置沉浸式状态栏
-        bar = Sofia.with(this)
-            .statusBarDarkFont()//状态栏深色字体
-            .statusBarBackgroundAlpha(0)//状态栏透明度为0
-            .navigationBarBackgroundAlpha(0)//导航栏透明度为0
-//            .invasionStatusBar()//内容入侵状态栏
-//            .invasionNavigationBar()//内容入侵导航栏
-
-
-        //初始化viewmodel
-        if (initViewModel() is BaseViewModel) mViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(initViewModel())
+        //设置数据
+        setData()
 
         //设置观察者
         setObserver()
-
-        //设置数据
-        setData()
 
     }
 
@@ -78,15 +61,7 @@ abstract class BaseActivity<T : BaseViewModel> : RxFragmentActivity() {
     abstract fun initViewModel(): Class<T>
 
     //设置观察者
-    protected open fun setObserver(){}
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        //解绑
-        mUnbinder.unbind()
-    }
+    protected open fun setObserver() {}
 
 
     /**
@@ -94,7 +69,7 @@ abstract class BaseActivity<T : BaseViewModel> : RxFragmentActivity() {
      */
     override fun startActivityForResult(intent: Intent?, requestCode: Int) {
         super.startActivityForResult(intent, requestCode)
-        overridePendingTransition(R.anim.activity_enter,R.anim.activity_exit_fade)
+        overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit_fade)
     }
 
 
@@ -104,6 +79,30 @@ abstract class BaseActivity<T : BaseViewModel> : RxFragmentActivity() {
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.activity_enter_fade, R.anim.activity_exit)
+    }
+
+    /**
+     * 获取viewmodel
+     */
+    fun getViewModel(): T {
+
+        return if (initViewModel() is BaseViewModel) {
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+                .create(initViewModel())
+        } else {
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+                .create(initViewModel())
+        }
+    }
+
+    fun getBar(): Bar {
+
+        return Sofia.with(this)
+            .statusBarDarkFont()//状态栏深色字体
+            .statusBarBackgroundAlpha(0)//状态栏透明度为0
+            .navigationBarBackgroundAlpha(0)//导航栏透明度为0
+//            .invasionStatusBar()//内容入侵状态栏
+//            .invasionNavigationBar()//内容入侵导航栏
     }
 
 }

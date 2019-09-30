@@ -28,7 +28,7 @@ public class QuickActivity extends BaseActivity {
 
     @Override
     public void setData() {
-        bar.invasionNavigationBar();
+        getBar().invasionNavigationBar();
 
     }
 

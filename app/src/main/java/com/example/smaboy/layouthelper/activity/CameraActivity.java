@@ -43,7 +43,7 @@ public class CameraActivity extends BaseActivity {
     public void setData() {
         svSurface.setVisibility(View.GONE);
 
-        bar
+        getBar()
                 .invasionStatusBar()
                 .invasionNavigationBar();
 
