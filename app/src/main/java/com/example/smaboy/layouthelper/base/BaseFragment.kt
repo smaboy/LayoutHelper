@@ -21,7 +21,6 @@ import butterknife.Unbinder
  */
 abstract class BaseFragment : Fragment() {
     lateinit var mRootView : View
-    lateinit var mUnbinder :Unbinder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +32,7 @@ abstract class BaseFragment : Fragment() {
         mRootView = inflater.inflate(getContentViewId(), container, false)
 
         //黄油刀绑定
-        mUnbinder = ButterKnife.bind(this, mRootView)
+        ButterKnife.bind(this, mRootView)
 
         //初始化操作
         init(savedInstanceState)
@@ -45,8 +44,6 @@ abstract class BaseFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        //解绑
-        mUnbinder.unbind()
     }
 
     /**

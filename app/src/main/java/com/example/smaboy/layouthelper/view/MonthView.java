@@ -327,9 +327,7 @@ public class MonthView extends View {
         //默认去的日期为当前的日期
         calendar = Calendar.getInstance();
         //初始化相关参数
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH);
-        date = calendar.get(Calendar.DATE);
+        initYMD(calendar);
 
         //初始化画笔工具
         initPaint();
@@ -338,6 +336,12 @@ public class MonthView extends View {
         currentMonthDays = new ArrayList<>();
 
 
+    }
+
+    private void initYMD(Calendar calendar) {
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        date = calendar.get(Calendar.DATE);
     }
 
     /**
@@ -1108,9 +1112,7 @@ public class MonthView extends View {
     public MonthView setCalendar(Calendar calendar) {
         this.calendar = calendar;
         //初始化相关参数
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH);
-        date = calendar.get(Calendar.DATE);
+        initYMD(calendar);
 
         return this;
     }

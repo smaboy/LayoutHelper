@@ -123,6 +123,7 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                 tv_selected_info.setText(ChinaDataUtils.today());
                 month.setCalendar(Calendar.getInstance());
                 month.setDefSelectedDay(Calendar.getInstance());
+                month.requestLayout();
                 month.invalidate();
 
                 break;
