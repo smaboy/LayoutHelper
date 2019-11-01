@@ -27,6 +27,32 @@ import com.yanzhenjie.sofia.Sofia
  */
 abstract class BaseActivity<T : BaseViewModel> : RxFragmentActivity() {
 
+
+    /**
+     * 状态栏设置实例
+     *
+     */
+    val bar: Bar
+        get() = Sofia.with(this)
+            .statusBarDarkFont()//状态栏深色字体
+            .statusBarBackgroundAlpha(0)//状态栏透明度为0
+            .navigationBarBackgroundAlpha(0)//导航栏透明度为0
+//            .invasionStatusBar()//内容入侵状态栏
+//            .invasionNavigationBar()//内容入侵导航栏
+
+
+    /**
+     * ViewModel的实例
+     *
+     */
+    val viewModel: T
+        get() {
+            return ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(
+                initViewModel()
+            )
+        }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -79,30 +105,6 @@ abstract class BaseActivity<T : BaseViewModel> : RxFragmentActivity() {
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.activity_enter_fade, R.anim.activity_exit)
-    }
-
-    /**
-     * 获取viewmodel
-     */
-    fun getViewModel(): T {
-
-        return if (initViewModel() is BaseViewModel) {
-            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-                .create(initViewModel())
-        } else {
-            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-                .create(initViewModel())
-        }
-    }
-
-    fun getBar(): Bar {
-
-        return Sofia.with(this)
-            .statusBarDarkFont()//状态栏深色字体
-            .statusBarBackgroundAlpha(0)//状态栏透明度为0
-            .navigationBarBackgroundAlpha(0)//导航栏透明度为0
-//            .invasionStatusBar()//内容入侵状态栏
-//            .invasionNavigationBar()//内容入侵导航栏
     }
 
 }
