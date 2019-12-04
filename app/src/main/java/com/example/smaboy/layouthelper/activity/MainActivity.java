@@ -121,6 +121,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.material_page://material页面
                 Toast.makeText(MainActivity.this, "我是material页面", Toast.LENGTH_SHORT).show();
+                break;
 
             case R.id.bluetooth_page://material页面
                 startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
