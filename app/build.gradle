@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
+    buildToolsVersion = '28.0.3'
+
     defaultConfig {
         applicationId "com.example.smaboy.layouthelper"
         minSdkVersion 17
@@ -14,6 +16,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,11 +31,11 @@ android {
         def adb = android.getAdbExe().toString()
         commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.example.smaboy.layouthelper/com.example.smaboy.layouthelper.activity.MainActivity'
     }
+
     compileOptions {
         targetCompatibility = "1.8"
         sourceCompatibility = "1.8"
     }
-    buildToolsVersion = '28.0.3'
 }
 
 dependencies {
