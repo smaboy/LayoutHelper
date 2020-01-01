@@ -5,13 +5,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion Config.compileSdkVersion
     defaultConfig {
-        applicationId "com.example.smaboy.layouthelper"
-        minSdkVersion 17
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        applicationId Config.applicationId
+        minSdkVersion Config.minSdkVersion
+        targetSdkVersion Config.targetSdkVersion
+        versionCode Config.versionCode
+        versionName Config.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,7 +32,7 @@ android {
         targetCompatibility = "1.8"
         sourceCompatibility = "1.8"
     }
-    buildToolsVersion = '28.0.3'
+    buildToolsVersion = Config.buildToolsVersion
 }
 
 dependencies {
