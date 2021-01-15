@@ -20,6 +20,11 @@ android {
         }
     }
 
+    buildFeatures{
+        //开启viewBinding
+        viewBinding true
+    }
+
 
     //打debug包的命令
     task appStart(type: Exec, dependsOn: 'installDebug') {

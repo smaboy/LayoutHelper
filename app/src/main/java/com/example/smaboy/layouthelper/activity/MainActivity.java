@@ -1,21 +1,21 @@
 package com.example.smaboy.layouthelper.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.smaboy.layouthelper.R;
-import com.example.smaboy.layouthelper.base.BaseActivity;
+import com.example.smaboy.layouthelper.databinding.ActivityMainBinding;
+import com.trello.rxlifecycle3.components.support.RxFragmentActivity;
+import com.yanzhenjie.sofia.Sofia;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,70 +26,48 @@ import java.util.TimerTask;
  * 作者: Smaboy
  * 创建时间: 2018/11/30 12:45
  */
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends RxFragmentActivity implements View.OnClickListener {
 
 
-    private LinearLayout ll_title;
-    private TextView tv_title;
-    private Button flow;
-    private Button quick;
-    private Button stick;
-    private Button menu;
-    private Button custom_photo;
-    private Button h5_page;
-    private Button material_page;
-    private Button skeleton;
-    private Button bluetooth_page;
-    private LinearLayout ll_button_group;
     private boolean mBackKeyPressed;
+    private ActivityMainBinding binding;
 
 
     @Override
-    public int getLayoutViewId() {
-        return R.layout.activity_main;
-    }
+    protected void onCreate(@androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Override
-    public void init(@Nullable Bundle savedInstanceState) {
-        ll_title = findViewById(R.id.ll_title);
-        tv_title = findViewById(R.id.tv_title);
-        flow = findViewById(R.id.flow);
-        quick = findViewById(R.id.quick);
-        stick = findViewById(R.id.stick);
-        menu = findViewById(R.id.menu);
-        custom_photo = findViewById(R.id.custom_photo);
-        h5_page = findViewById(R.id.h5_page);
-        material_page = findViewById(R.id.material_page);
-        skeleton = findViewById(R.id.skeleton);
-        bluetooth_page = findViewById(R.id.bluetooth_page);
-        ll_button_group = findViewById(R.id.ll_button_group);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        flow.setOnClickListener(this);
-        quick.setOnClickListener(this);
-        stick.setOnClickListener(this);
-        menu.setOnClickListener(this);
-        custom_photo.setOnClickListener(this);
-        h5_page.setOnClickListener(this);
-        material_page.setOnClickListener(this);
-        skeleton.setOnClickListener(this);
-        bluetooth_page.setOnClickListener(this);
-    }
+        binding.flow.setOnClickListener(this);
+        binding.quick.setOnClickListener(this);
+        binding.stick.setOnClickListener(this);
+        binding.menu.setOnClickListener(this);
+        binding.customPhoto.setOnClickListener(this);
+        binding.h5Page.setOnClickListener(this);
+        binding.materialPage.setOnClickListener(this);
+        binding.skeleton.setOnClickListener(this);
+        binding.bluetoothPage.setOnClickListener(this);
 
-    @Override
-    public void setData() {
 
         //处理沉浸式状态栏，基类中状态栏导航栏默认是透明的
-        getBar()
-                .statusBarBackground(getResources().getDrawable(android.R.color.holo_orange_dark))
+        Sofia.with(this)
+                .statusBarDarkFont()//状态栏深色字体
+                .statusBarBackgroundAlpha(0)//状态栏透明度为0
+                .navigationBarBackgroundAlpha(0)//导航栏透明度为0
+                .invasionStatusBar()
+                .statusBarBackground(getResources().getColor(android.R.color.holo_orange_dark))
                 .navigationBarBackground(getResources().getColor(android.R.color.holo_orange_dark));
+//            .invasionStatusBar()//内容入侵状态栏
+//            .invasionNavigationBar()//内容入侵导航栏
 
         //添加布局动画
         startAnimation();
-
-
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
 
@@ -110,7 +88,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
             case R.id.skeleton://骨架屏
-                Toast.makeText(MainActivity.this, "我是骨架屏", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "我是骨架屏", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("smaboy://com.example.test:8888/myTest")));
                 break;
             case R.id.custom_photo://自定义拍照
                 startActivity(new Intent(MainActivity.this, CameraActivity.class));
@@ -135,8 +114,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         /*方法一*/
         LayoutAnimationController layoutAnimationController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fade_in);
-        ll_button_group.setLayoutAnimation(layoutAnimationController);
-        ll_button_group.startLayoutAnimation();
+        binding.llButtonGroup.setLayoutAnimation(layoutAnimationController);
+        binding.llButtonGroup.startLayoutAnimation();
 
         /*方法二*/
 //        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
@@ -171,13 +150,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         return super.onKeyDown(keyCode, event);
 
-    }
-
-
-    @NotNull
-    @Override
-    public Class initViewModel() {
-
-        return MainActivity.class;
     }
 }
