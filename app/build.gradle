@@ -12,6 +12,7 @@ android {
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -71,4 +72,8 @@ dependencies {
 
     // If you want pre-written Activities and Fragments you can subclass as providers
     implementation 'com.trello.rxlifecycle3:rxlifecycle-components:3.1.0'
+
+    implementation project(path: ':lib_http')
+
+    implementation 'com.android.support:multidex:1.0.0'
 }

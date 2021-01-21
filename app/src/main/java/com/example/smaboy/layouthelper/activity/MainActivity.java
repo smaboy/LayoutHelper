@@ -12,6 +12,10 @@ import android.widget.Toast;
 
 import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.databinding.ActivityMainBinding;
+import com.smaboy.lib_http.HomeService;
+import com.smaboy.lib_http.HttpClient;
+import com.smaboy.lib_http.LogUtil;
+import com.smaboy.lib_http.entity.responses.HomeArticleListResp;
 import com.trello.rxlifecycle3.components.support.RxFragmentActivity;
 import com.yanzhenjie.sofia.Sofia;
 
@@ -19,6 +23,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * 类名: MainActivity
@@ -100,10 +110,42 @@ public class MainActivity extends RxFragmentActivity implements View.OnClickList
                 break;
             case R.id.material_page://material页面
                 Toast.makeText(MainActivity.this, "我是material页面", Toast.LENGTH_SHORT).show();
+
+
                 break;
 
             case R.id.bluetooth_page://material页面
-                startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
+//                startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
+                HomeService homeService = HttpClient.Companion.getInstance().getClient().create(HomeService.class);
+
+                homeService.getHomeArticleList(0)
+                        .observeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<HomeArticleListResp>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                LogUtil.d(this,"onSubscribe");
+
+                            }
+
+                            @Override
+                            public void onNext(@NonNull HomeArticleListResp homeArticleListResp) {
+                                LogUtil.d(this,"onNext");
+                                LogUtil.d(this,homeArticleListResp.toString());
+
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                LogUtil.d(this,"onError");
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                LogUtil.d(this,"onComplete");
+                            }
+                        });
+
 
                 break;
         }
