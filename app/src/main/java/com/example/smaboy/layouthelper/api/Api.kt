@@ -1,12 +1,12 @@
-package com.smaboy.lib_http
+package com.example.smaboy.layouthelper.api
 
-import com.smaboy.lib_http.entity.responses.HomeArticleListResp
+import com.example.smaboy.layouthelper.Entity.responses.HomeArticleListResp
+import com.smaboy.lib_http.constant.APIConstant
 import io.reactivex.rxjava3.core.Observable
-import okhttp3.Response
-import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Path
-import java.util.*
 
 /**
  * 类名: Apt
@@ -35,9 +35,11 @@ object Api {
 
 interface HomeService{
 
-
     @GET(Api.HOME_ARTICLE_LIST)
     fun getHomeArticleList(@Path("page") page: Int) : Observable<HomeArticleListResp>
 
+    @Headers("${APIConstant.BASE_URL_NAME}:${APIConstant.BASE_URL_PAY}")
+    @GET(Api.HOME_ARTICLE_LIST)
+    fun getHomeArticleList2(@Path("page") page: Int) : Observable<HomeArticleListResp>
 
 }

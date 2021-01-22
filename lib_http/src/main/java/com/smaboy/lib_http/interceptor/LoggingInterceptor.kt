@@ -1,5 +1,6 @@
-package com.smaboy.lib_http
+package com.smaboy.lib_http.interceptor
 
+import com.smaboy.lib_http.utils.LogUtil
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -36,8 +37,8 @@ class LoggingInterceptor : Interceptor {
                 response.headers()
             )
         )
-        LogUtil.d(this,"响应体内容如下:")
-        LogUtil.json(this,response.peekBody((1024*1024).toLong()).string())
+        LogUtil.d(this, "响应体内容如下:")
+        LogUtil.json(this, response.peekBody((1024 * 1024).toLong()).string())
 
 
         return response

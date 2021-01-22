@@ -10,16 +10,13 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
+import com.example.smaboy.layouthelper.Entity.responses.HomeArticleListResp;
 import com.example.smaboy.layouthelper.R;
+import com.example.smaboy.layouthelper.api.HomeService;
 import com.example.smaboy.layouthelper.databinding.ActivityMainBinding;
-import com.smaboy.lib_http.HomeService;
 import com.smaboy.lib_http.HttpClient;
-import com.smaboy.lib_http.LogUtil;
-import com.smaboy.lib_http.entity.responses.HomeArticleListResp;
 import com.trello.rxlifecycle3.components.support.RxFragmentActivity;
 import com.yanzhenjie.sofia.Sofia;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -118,36 +115,36 @@ public class MainActivity extends RxFragmentActivity implements View.OnClickList
 //                startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
                 HomeService homeService = HttpClient.Companion.getInstance().getClient().create(HomeService.class);
 
-                homeService.getHomeArticleList(0)
-                        .observeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<HomeArticleListResp>() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable d) {
-                                LogUtil.d(this,"onSubscribe");
-
-                            }
-
-                            @Override
-                            public void onNext(@NonNull HomeArticleListResp homeArticleListResp) {
-                                LogUtil.d(this,"onNext");
-                                LogUtil.d(this,homeArticleListResp.toString());
-
-                            }
-
-                            @Override
-                            public void onError(@NonNull Throwable e) {
-                                LogUtil.d(this,"onError");
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                LogUtil.d(this,"onComplete");
-                            }
-                        });
+                homeService.getHomeArticleList(0).subscribe();
+//                homeService.getHomeArticleList2(0).subscribe();
 
 
-                break;
+//                homeService.getHomeArticleList(0)
+//                        .observeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new Observer<HomeArticleListResp>() {
+//                            @Override
+//                            public void onSubscribe(@NonNull Disposable d) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onNext(@NonNull HomeArticleListResp homeArticleListResp) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(@NonNull Throwable e) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onComplete() {
+//
+//                            }
+//                        });
+//
+//                break;
         }
 
     }

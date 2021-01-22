@@ -1,4 +1,4 @@
-package com.smaboy.lib_http
+package com.smaboy.lib_http.gson
 
 import com.google.gson.*
 import java.lang.ClassCastException

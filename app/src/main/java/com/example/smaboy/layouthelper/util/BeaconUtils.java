@@ -145,7 +145,7 @@ public class BeaconUtils {
 	    attributes.put("00002a27-0000-1000-8000-00805f9b34fb", "Hardware Revision String");
 	    attributes.put("00002a28-0000-1000-8000-00805f9b34fb", "Software Revision String");
 	    attributes.put("00002a29-0000-1000-8000-00805f9b34fb", "Manufacturer Name String");
-	    attributes.put("00002a2a-0000-1000-8000-00805f9b34fb", "IEEE 11073-20601 Regulatory Certification Data List");
+	    attributes.put("00002a2a-0000-1000-8000-00805f9b34fb", "IEEE 11073-20601 Regulatory Certification com.example.smaboy.layouthelper.Entity.responses.Data List");
 	    attributes.put("00002a2b-0000-1000-8000-00805f9b34fb", "Current Time");
 	    attributes.put("00002a31-0000-1000-8000-00805f9b34fb", "Scan Refresh");
 	    attributes.put("00002a32-0000-1000-8000-00805f9b34fb", "Boot Keyboard Output Report");

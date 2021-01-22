@@ -1,5 +1,9 @@
 package com.smaboy.lib_http
 
+import com.smaboy.lib_http.constant.APIConstant
+import com.smaboy.lib_http.gson.CustomGson
+import com.smaboy.lib_http.interceptor.BaseUrlInterceptor
+import com.smaboy.lib_http.interceptor.LoggingInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
@@ -31,7 +35,7 @@ class HttpClient private constructor(){
 
         client =  Retrofit.Builder().apply {
             //设置服务器(这里采用玩安卓的开发api)
-            baseUrl(Api.BASE_URL)
+            baseUrl(APIConstant.BaseUrlType.DEF_BASE_URL.url())
             //设置http客户端
             client(okHttpClient)
             //添加转化工厂
@@ -53,6 +57,7 @@ class HttpClient private constructor(){
 
             return OkHttpClient.Builder().apply {
                 //添加拦截器
+                addInterceptor(BaseUrlInterceptor())
                 addInterceptor(LoggingInterceptor())
                 //设置回调时间和连接时间
                 callTimeout(300, TimeUnit.SECONDS)

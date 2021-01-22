@@ -1,10 +1,11 @@
-package com.smaboy.lib_http
+package com.smaboy.lib_http.utils
 
 import android.util.Log
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.LogStrategy
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
+import com.smaboy.lib_http.BuildConfig
 
 
 /**
