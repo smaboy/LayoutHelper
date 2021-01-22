@@ -1,9 +1,11 @@
 package com.smaboy.lib_http.gson
 
 import com.google.gson.*
-import java.lang.ClassCastException
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
+import com.google.gson.stream.JsonWriter
+import java.io.IOException
 import java.lang.reflect.Type
-import kotlin.jvm.Throws
 
 /**
  * 类名: CustomGson
@@ -251,40 +253,27 @@ class DoubleDefAdapter : JsonDeserializer<Double>, JsonSerializer<Double> {
  * String默认适配器
  * 如果后台返回的是null，我们将它转化为""
  */
-class StringDefAdapter : JsonDeserializer<String>, JsonSerializer<String> {
+class StringDefAdapter : TypeAdapter<String>() {
 
-    /**
-     * 反序列化
-     */
-    @Throws(
-        ClassCastException::class,
-        IllegalAccessException::class,
-        JsonParseException::class,
-        JsonSyntaxException::class
-    )
-    override fun deserialize(
-        json: JsonElement?,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?
-    ): String {
-        //定义为Boolean类型,如果后台返回""或者null,则返回false
-        return if ("null" == json?.asString) {
-            ""
-        } else {
-            json?.asString ?: ""
+
+    @Throws(IOException::class)
+    override fun read(jsonReader: JsonReader): String? {
+        if (jsonReader.peek() === JsonToken.NULL) { //反序列化使用的是read方法
+            jsonReader.nextNull()
+            return ""
         }
+        return jsonReader.nextString()
     }
 
-    /**
-     * 序列化
-     */
-    override fun serialize(
-        src: String?,
-        typeOfSrc: Type?,
-        context: JsonSerializationContext?
-    ): JsonElement {
-        return JsonPrimitive(src)
-    }
+    @Throws(IOException::class)
+    override fun write(jsonWriter: JsonWriter?, value: String?) {
+        if (value == null) { //序列化使用的是adapter的write方法
+            //jsonWriter.nullValue();//这个方法是错的，而是应该将null转成""
+            jsonWriter?.value("")
+            return
+        }
+        jsonWriter?.value(value)
 
+    }
 
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -15,6 +16,7 @@ import com.example.smaboy.layouthelper.R;
 import com.example.smaboy.layouthelper.api.HomeService;
 import com.example.smaboy.layouthelper.databinding.ActivityMainBinding;
 import com.smaboy.lib_http.HttpClient;
+import com.smaboy.lib_http.utils.LogUtil;
 import com.trello.rxlifecycle3.components.support.RxFragmentActivity;
 import com.yanzhenjie.sofia.Sofia;
 
@@ -112,13 +114,9 @@ public class MainActivity extends RxFragmentActivity implements View.OnClickList
                 break;
 
             case R.id.bluetooth_page://material页面
-//                startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
-                HomeService homeService = HttpClient.Companion.getInstance().getClient().create(HomeService.class);
-
-                homeService.getHomeArticleList(0).subscribe();
-//                homeService.getHomeArticleList2(0).subscribe();
-
-
+                startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
+//                HomeService homeService = HttpClient.Companion.getInstance().getClient().create(HomeService.class);
+//
 //                homeService.getHomeArticleList(0)
 //                        .observeOn(Schedulers.io())
 //                        .observeOn(AndroidSchedulers.mainThread())
@@ -130,6 +128,7 @@ public class MainActivity extends RxFragmentActivity implements View.OnClickList
 //
 //                            @Override
 //                            public void onNext(@NonNull HomeArticleListResp homeArticleListResp) {
+//                                LogUtil.d(this,homeArticleListResp.toString());
 //
 //                            }
 //
