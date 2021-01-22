@@ -115,35 +115,35 @@ public class MainActivity extends RxFragmentActivity implements View.OnClickList
 
             case R.id.bluetooth_page://material页面
                 startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
-//                HomeService homeService = HttpClient.Companion.getInstance().getClient().create(HomeService.class);
-//
-//                homeService.getHomeArticleList(0)
-//                        .observeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Observer<HomeArticleListResp>() {
-//                            @Override
-//                            public void onSubscribe(@NonNull Disposable d) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onNext(@NonNull HomeArticleListResp homeArticleListResp) {
-//                                LogUtil.d(this,homeArticleListResp.toString());
-//
-//                            }
-//
-//                            @Override
-//                            public void onError(@NonNull Throwable e) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onComplete() {
-//
-//                            }
-//                        });
-//
-//                break;
+                HomeService homeService = HttpClient.Companion.getInstance().getClient().create(HomeService.class);
+
+                homeService.getHomeArticleList(0)
+                        .observeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<HomeArticleListResp>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onNext(@NonNull HomeArticleListResp homeArticleListResp) {
+                                LogUtil.d(this,homeArticleListResp.toString());
+
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+
+                break;
         }
 
     }

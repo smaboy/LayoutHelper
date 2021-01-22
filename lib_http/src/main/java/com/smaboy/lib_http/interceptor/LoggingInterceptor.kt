@@ -27,17 +27,15 @@ class LoggingInterceptor : Interceptor {
         //收到响应的时间
         val n2 = System.nanoTime()
         //这里不能直接使用response.body().string()的方式输出日志
-        //因为response.body().string()之后，response中的流会被关闭，程序会报错，我们需要创建出一
-        //个新的response给应用层处理
+        //因为response.body().string()之后，response中的流会被关闭，程序会报错，我们需要创建出一个新的response给应用层处理
         LogUtil.d(
             this, String.format(
-                "接收响应: [%s] %n响应时长：%.1fms %n响应头：%n%s",
+                "接收响应: [%s] %n响应时长：%.1fms %n响应头：%n%s %n响应体内容如下:",
                 response.request().url(),
                 (n2 - n1) / 1e6,
                 response.headers()
             )
         )
-        LogUtil.d(this, "响应体内容如下:")
         LogUtil.json(this, response.peekBody((1024 * 1024).toLong()).string())
 
 

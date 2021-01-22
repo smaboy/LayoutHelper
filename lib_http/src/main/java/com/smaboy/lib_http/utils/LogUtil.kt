@@ -29,7 +29,7 @@ object LogUtil {
             .tag("smaboy")
             .build()
 
-        Logger.addLogAdapter(object : AndroidLogAdapter() {
+        Logger.addLogAdapter(object : AndroidLogAdapter(strategy) {
             override fun isLoggable(priority: Int, tag: String?): Boolean {
                 return BuildConfig.DEBUG
             }

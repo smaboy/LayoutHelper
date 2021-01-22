@@ -25,6 +25,7 @@ class HttpClient private constructor(){
     var  client : Retrofit
 
     companion object {
+        @JvmStatic
         val instance: HttpClient by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             HttpClient() }
     }
