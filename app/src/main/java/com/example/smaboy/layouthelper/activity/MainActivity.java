@@ -23,6 +23,7 @@ import com.yanzhenjie.sofia.Sofia;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.flutter.embedding.android.FlutterActivity;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
@@ -105,7 +106,10 @@ public class MainActivity extends RxFragmentActivity implements View.OnClickList
                 break;
             case R.id.h5_page://h5页面
 
-                Toast.makeText(MainActivity.this, "我是h5页面", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "我是h5页面", Toast.LENGTH_SHORT).show();
+                //默认启动一个flutter页面
+//                startActivity(FlutterActivity.createDefaultIntent(this));
+                startActivity(FlutterActivity.withCachedEngine("my_engine_id").build(this));
                 break;
             case R.id.material_page://material页面
                 Toast.makeText(MainActivity.this, "我是material页面", Toast.LENGTH_SHORT).show();
